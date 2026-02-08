@@ -1,0 +1,21 @@
+/* TEAM */
+Maintainer: hyperpolymath
+GitHub: https://github.com/hyperpolymath
+Location: Earth
+
+/* SITE */
+Software: wp-resurrect (SOCP)
+Language: Rust, Nickel, Guile Scheme, SaltStack
+Standards: RSR (Rhodium Standard Repository)
+
+/* TECHNOLOGY */
+- Rust (ratatui) for TUI
+- Nickel for configuration
+- SaltStack for infrastructure management
+- OpenZiti for SDP
+- PowerDNS for hidden primary DNS
+- Guile Scheme for state management
+
+/* PHILOSOPHY */
+Security first. Configuration as code.
+Zero trust. Defense in depth.

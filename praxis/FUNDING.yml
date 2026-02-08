@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-FileCopyrightText: 2025 WP Praxis Contributors
+#
+# Funding and sponsorship information for WP Praxis
+
+# GitHub Sponsors
+github: # Replace with up to 4 GitHub Sponsors-enabled usernames
+  - hyperpolymath
+
+# Community funding platforms
+open_collective: # Replace with Open Collective username
+patreon: # Replace with Patreon username
+liberapay: # Replace with Liberapay username
+ko_fi: # Replace with Ko-fi username
+
+# Custom funding URLs
+custom:
+  - "https://github.com/sponsors/hyperpolymath"
+  - "https://github.com/hyperpolymath/wp-praxis"
+
+# Solidarity Economics Framework
+#
+# WP Praxis follows solidarity economics principles:
+# - Transparent funding
+# - Fair compensation for contributors
+# - Community-driven development
+# - Open source sustainability
+#
+# All funding goes toward:
+# 1. Maintainer compensation (40%)
+# 2. Contributor rewards (30%)
+# 3. Infrastructure costs (20%)
+# 4. Community initiatives (10%)
+#
+# Financial transparency reports published quarterly in FUNDING_TRANSPARENCY.md

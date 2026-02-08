@@ -1,0 +1,124 @@
+{
+  "test_symbols": [
+    {
+      "name": "test_symbol_1",
+      "type": "action",
+      "context": "wordpress",
+      "dispatch": "php_engine",
+      "parameters": {
+        "hook": "init",
+        "priority": 10
+      }
+    },
+    {
+      "name": "test_symbol_2",
+      "type": "query",
+      "context": "database",
+      "dispatch": "php_engine",
+      "parameters": {
+        "query": "SELECT * FROM wp_posts LIMIT 10",
+        "cache_enabled": true
+      }
+    },
+    {
+      "name": "test_symbol_3",
+      "type": "transform",
+      "context": "data",
+      "dispatch": "rust_injector",
+      "parameters": {
+        "input_format": "json",
+        "output_format": "yaml"
+      }
+    }
+  ],
+  "test_workflows": [
+    {
+      "id": "workflow_1",
+      "name": "Basic Workflow",
+      "version": "1.0.0",
+      "symbols": ["test_symbol_1", "test_symbol_2"]
+    },
+    {
+      "id": "workflow_2",
+      "name": "Complex Workflow",
+      "version": "1.0.0",
+      "symbols": ["test_symbol_1", "test_symbol_2", "test_symbol_3"]
+    }
+  ],
+  "test_executions": [
+    {
+      "workflow_id": "workflow_1",
+      "status": "completed",
+      "started_at": "2025-11-22T10:00:00Z",
+      "completed_at": "2025-11-22T10:00:05Z",
+      "results": {
+        "symbols_executed": 2,
+        "success_count": 2,
+        "failure_count": 0
+      }
+    }
+  ],
+  "edge_cases": {
+    "empty_parameters": {},
+    "nested_parameters": {
+      "level1": {
+        "level2": {
+          "level3": {
+            "value": "deep"
+          }
+        }
+      }
+    },
+    "special_characters": {
+      "unicode": "Hello 世界 🌍",
+      "escaped": "Line1\nLine2\tTabbed",
+      "quotes": "She said \"Hello\""
+    },
+    "large_array": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "boolean_values": {
+      "true_value": true,
+      "false_value": false
+    },
+    "null_values": {
+      "null_field": null,
+      "undefined_equivalent": null
+    },
+    "numeric_types": {
+      "integer": 42,
+      "float": 3.14159,
+      "negative": -100,
+      "zero": 0
+    }
+  },
+  "security_test_cases": [
+    {
+      "name": "sql_injection_attempt",
+      "input": "'; DROP TABLE wp_posts; --",
+      "expected_sanitized": "DROP TABLE wp_posts --"
+    },
+    {
+      "name": "xss_attempt",
+      "input": "<script>alert('XSS')</script>",
+      "expected_sanitized": "alert('XSS')"
+    },
+    {
+      "name": "path_traversal",
+      "input": "../../etc/passwd",
+      "expected_sanitized": "etcpasswd"
+    }
+  ],
+  "performance_test_data": {
+    "small_dataset": {
+      "size": 10,
+      "symbols": []
+    },
+    "medium_dataset": {
+      "size": 100,
+      "symbols": []
+    },
+    "large_dataset": {
+      "size": 1000,
+      "symbols": []
+    }
+  }
+}

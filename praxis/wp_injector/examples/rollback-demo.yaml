@@ -1,0 +1,35 @@
+# Rollback Demonstration Manifest
+# This manifest shows different rollback strategies
+
+metadata:
+  name: "Rollback Strategy Demo"
+  version: "1.0.0"
+  description: "Demonstrates different rollback strategies"
+
+symbols:
+  # Snapshot rollback - stores previous value
+  - name: safe_option_change
+    type: option
+    context: wordpress
+    rollback: snapshot
+    parameters:
+      option_name: blogname
+      option_value: "WP Praxis Demo Site"
+
+  # Another snapshot rollback
+  - name: theme_modification
+    type: option
+    context: wordpress
+    rollback: snapshot
+    parameters:
+      option_name: template
+      option_value: "twentytwentyfour"
+
+  # No rollback - use for idempotent operations
+  - name: cache_clear_flag
+    type: option
+    context: wordpress
+    rollback: none
+    parameters:
+      option_name: wp_praxis_cache_cleared
+      option_value: "true"

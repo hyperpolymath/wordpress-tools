@@ -1,0 +1,51 @@
+{
+  "name": "@wp-praxis/dashboard",
+  "version": "0.1.0",
+  "description": "WP Praxis Symbolic Engine Dashboard - Real-time monitoring and control interface",
+  "type": "module",
+  "main": "src/api-server.ts",
+  "scripts": {
+    "dev": "bun run --watch src/api-server.ts",
+    "start": "bun run src/api-server.ts",
+    "build": "bun build src/api-server.ts --outdir=dist --target=bun",
+    "build:frontend": "bun build js/dashboard.ts js/workflow-visualizer.ts js/symbol-inspector.ts --outdir=dist/public/js --target=browser",
+    "build:injector": "bun build injector/js/injector.ts --outdir=dist/public/injector/js --target=browser",
+    "build:all": "bun run build && bun run build:frontend && bun run build:injector",
+    "test": "bun test",
+    "lint": "eslint src/**/*.ts js/**/*.ts injector/**/*.ts",
+    "format": "prettier --write \"**/*.{ts,js,json,css,html}\""
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.0.0",
+    "@elysiajs/html": "^1.0.0",
+    "@elysiajs/static": "^1.0.0",
+    "@elysiajs/websocket": "^1.0.0",
+    "elysia": "^1.0.0",
+    "postgres": "^3.4.3",
+    "ws": "^8.16.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "bun-types": "latest",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4"
+  },
+  "keywords": [
+    "wp-praxis",
+    "symbolic-engine",
+    "dashboard",
+    "monitoring",
+    "workflow",
+    "wordpress"
+  ],
+  "author": "WP Praxis Project",
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  }
+}

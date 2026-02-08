@@ -1,0 +1,220 @@
+{
+  "catalog": "IndieWeb-Compatible WordPress Themes",
+  "updated": "2025-11-23",
+  "count": 8,
+  "themes": [
+    {
+      "name": "Independent Publisher",
+      "slug": "independent-publisher",
+      "version": "1.7",
+      "license": "GPL-2.0-or-later",
+      "url": "https://github.com/raamdev/independent-publisher",
+      "wordpress_url": "https://wordpress.org/themes/independent-publisher/",
+      "author": "Raam Dev",
+      "features": [
+        "webmention",
+        "microformats2",
+        "indieauth",
+        "post-kinds",
+        "single-column",
+        "minimalist"
+      ],
+      "indieweb_level": 4,
+      "maintained": true,
+      "last_updated": "2023-05-15",
+      "notes": "One of the most popular IndieWeb themes"
+    },
+    {
+      "name": "Independent Publisher 2",
+      "slug": "independent-publisher-2",
+      "version": "2.1",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/independent-publisher-2/",
+      "author": "Automattic",
+      "features": [
+        "webmention",
+        "microformats2",
+        "post-kinds",
+        "responsive",
+        "accessibility-ready",
+        "custom-colors"
+      ],
+      "indieweb_level": 4,
+      "maintained": true,
+      "last_updated": "2024-03-20",
+      "notes": "Updated version with better accessibility"
+    },
+    {
+      "name": "SemPress",
+      "slug": "sempress",
+      "version": "2.4.0",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/sempress/",
+      "author": "Matthias Pfefferle",
+      "features": [
+        "microformats2",
+        "semantic-html",
+        "schema-org",
+        "webmention-ready",
+        "minimal"
+      ],
+      "indieweb_level": 3,
+      "maintained": true,
+      "last_updated": "2024-01-10",
+      "notes": "Semantic web focused, created by IndieWeb plugin author"
+    },
+    {
+      "name": "Autonomie",
+      "slug": "autonomie",
+      "version": "1.5.1",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/autonomie/",
+      "author": "Matthias Pfefferle",
+      "features": [
+        "microformats2",
+        "indieweb-friendly",
+        "responsive",
+        "clean-design"
+      ],
+      "indieweb_level": 3,
+      "maintained": true,
+      "last_updated": "2023-11-05",
+      "notes": "Sister theme to SemPress"
+    },
+    {
+      "name": "Doublespace",
+      "slug": "doublespace",
+      "version": "1.0.0",
+      "license": "MIT",
+      "url": "https://github.com/cleverdevil/doublespace",
+      "author": "Jonathan LaCour (cleverdevil)",
+      "features": [
+        "microformats2",
+        "micropub",
+        "webmention",
+        "indieauth",
+        "post-kinds",
+        "medium-style"
+      ],
+      "indieweb_level": 4,
+      "maintained": false,
+      "last_updated": "2018-06-20",
+      "notes": "Inactive but good reference implementation"
+    },
+    {
+      "name": "Autonomie",
+      "slug": "autonomie",
+      "version": "1.5.1",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/autonomie/",
+      "author": "Matthias Pfefferle",
+      "features": [
+        "microformats2",
+        "indieweb-plugins",
+        "responsive",
+        "accessibility-ready"
+      ],
+      "indieweb_level": 3,
+      "maintained": true,
+      "last_updated": "2023-11-05",
+      "notes": "Clean, minimal design with IndieWeb support"
+    },
+    {
+      "name": "Susty",
+      "slug": "susty",
+      "version": "1.0.0",
+      "license": "GPL-2.0-or-later",
+      "url": "https://github.com/jacklenox/susty",
+      "author": "Jack Lenox",
+      "features": [
+        "sustainable",
+        "minimal-css",
+        "performance",
+        "microformats2",
+        "accessibility"
+      ],
+      "indieweb_level": 2,
+      "maintained": false,
+      "last_updated": "2019-04-15",
+      "notes": "Ultra-minimal, sustainable web focus (4.4KB total)"
+    },
+    {
+      "name": "Anders Norén Collection",
+      "slug": "anders-noren",
+      "version": "various",
+      "license": "GPL-2.0-or-later",
+      "url": "https://andersnoren.se/teman/",
+      "author": "Anders Norén",
+      "features": [
+        "multiple-themes",
+        "modern-design",
+        "microformats2-compatible",
+        "responsive",
+        "accessibility-focused"
+      ],
+      "indieweb_level": 2,
+      "maintained": true,
+      "last_updated": "2024-10-01",
+      "notes": "Collection of beautiful, IndieWeb-compatible themes (Chaplin, Baskerville, etc.)"
+    }
+  ],
+  "indieweb_levels": {
+    "1": "Basic microformats2 markup",
+    "2": "Microformats2 + semantic HTML",
+    "3": "Level 2 + Webmention support",
+    "4": "Level 3 + Micropub + IndieAuth"
+  },
+  "required_plugins": [
+    {
+      "name": "IndieWeb",
+      "slug": "indieweb",
+      "url": "https://wordpress.org/plugins/indieweb/",
+      "description": "Meta-plugin that installs IndieWeb suite"
+    },
+    {
+      "name": "Webmention",
+      "slug": "webmention",
+      "url": "https://wordpress.org/plugins/webmention/",
+      "description": "Webmention protocol support"
+    },
+    {
+      "name": "Micropub",
+      "slug": "micropub",
+      "url": "https://wordpress.org/plugins/micropub/",
+      "description": "Micropub publishing API"
+    },
+    {
+      "name": "IndieAuth",
+      "slug": "indieauth",
+      "url": "https://wordpress.org/plugins/indieauth/",
+      "description": "IndieAuth authentication"
+    },
+    {
+      "name": "Post Kinds",
+      "slug": "indieweb-post-kinds",
+      "url": "https://wordpress.org/plugins/indieweb-post-kinds/",
+      "description": "Semantic post types (likes, replies, etc.)"
+    }
+  ],
+  "resources": [
+    {
+      "title": "IndieWeb WordPress Themes",
+      "url": "https://indieweb.org/WordPress/Themes"
+    },
+    {
+      "title": "Microformats2 Markup",
+      "url": "https://microformats.org/wiki/microformats2"
+    },
+    {
+      "title": "IndieWebify.Me Testing Tool",
+      "url": "https://indiewebify.me/"
+    }
+  ],
+  "notes": [
+    "All themes listed have some level of IndieWeb support",
+    "Microformats2 is the minimum requirement for IndieWeb compatibility",
+    "Level 4 themes work seamlessly with IndieWeb plugins",
+    "Independent Publisher and its successor are the gold standard",
+    "SemPress and Autonomie are maintained by Matthias Pfefferle (creator of Webmention plugin)"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "config": {
+    "version": "0.1.0",
+    "description": "Simple symbolic workflow for testing",
+    "author": "WP Praxis"
+  },
+  "symbols": [
+    {
+      "name": "hello_world",
+      "type": "action",
+      "context": "wordpress",
+      "dispatch": "php",
+      "priority": 10,
+      "accepted_args": 1,
+      "parameters": {
+        "hook": "init"
+      },
+      "metadata": {
+        "description": "Simple hello world action"
+      }
+    },
+    {
+      "name": "test_filter",
+      "type": "filter",
+      "context": "wordpress",
+      "dispatch": "wordpress",
+      "priority": 10,
+      "accepted_args": 1,
+      "parameters": {
+        "hook": "the_title"
+      },
+      "metadata": {
+        "description": "Test title filter"
+      }
+    },
+    {
+      "name": "custom_operation",
+      "type": "custom",
+      "context": "cli",
+      "dispatch": "php",
+      "parameters": {
+        "operation": "test"
+      },
+      "metadata": {
+        "description": "Custom test operation"
+      }
+    }
+  ]
+}

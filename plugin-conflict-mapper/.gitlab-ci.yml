@@ -1,0 +1,245 @@
+# GitLab CI/CD Pipeline for WP Plugin Conflict Mapper
+# Runs tests, security checks, and compliance verification
+
+stages:
+  - lint
+  - test
+  - security
+  - compliance
+  - deploy
+
+variables:
+  WP_VERSION: "latest"
+  PHP_VERSION: "8.1"
+
+# Cache composer and WordPress
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - vendor/
+    - wordpress/
+
+# Lint PHP code
+lint:php:
+  stage: lint
+  image: php:${PHP_VERSION}
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq git curl libmcrypt-dev libjpeg-dev libpng-dev libfreetype6-dev libbz2-dev
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --dev --no-progress
+  script:
+    - vendor/bin/phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/* .
+  allow_failure: false
+
+# Check WordPress coding standards
+lint:wpcs:
+  stage: lint
+  image: php:${PHP_VERSION}
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq git curl
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar global require wp-coding-standards/wpcs
+    - phpcs --config-set installed_paths ~/.composer/vendor/wp-coding-standards/wpcs
+  script:
+    - phpcs --standard=WordPress-Core --extensions=php wp-plugin-conflict-mapper.php includes/ admin/
+  allow_failure: true
+
+# Run PHP unit tests
+test:phpunit:
+  stage: test
+  image: php:${PHP_VERSION}
+  services:
+    - mysql:8.0
+  variables:
+    MYSQL_ROOT_PASSWORD: wordpress
+    MYSQL_DATABASE: wordpress_test
+    MYSQL_USER: wordpress
+    MYSQL_PASSWORD: wordpress
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq git curl libmcrypt-dev libjpeg-dev libpng-dev libfreetype6-dev libbz2-dev subversion mysql-client
+    - docker-php-ext-install mysqli pdo pdo_mysql
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --dev --no-progress
+    # Install WordPress test suite
+    - bash bin/install-wp-tests.sh wordpress_test wordpress wordpress mysql ${WP_VERSION}
+  script:
+    - vendor/bin/phpunit
+  coverage: '/Code Coverage: \d+\.\d+%/'
+  allow_failure: false
+
+# Security scanning
+security:phpstan:
+  stage: security
+  image: php:${PHP_VERSION}
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar require --dev phpstan/phpstan
+  script:
+    - vendor/bin/phpstan analyse --level=5 includes/ admin/ wp-plugin-conflict-mapper.php
+  allow_failure: true
+
+# Check for security vulnerabilities in dependencies
+security:composer:
+  stage: security
+  image: php:${PHP_VERSION}
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --dev --no-progress
+  script:
+    - php composer.phar audit
+  allow_failure: true
+
+# Verify no dangerous functions
+security:dangerous-functions:
+  stage: security
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache grep
+  script:
+    - |
+      DANGEROUS_FUNCTIONS="eval|exec|system|shell_exec|passthru|proc_open|popen|base64_decode"
+      if grep -rn --include="*.php" -E "($DANGEROUS_FUNCTIONS)\s*\(" .; then
+        echo "ERROR: Dangerous functions found!"
+        exit 1
+      else
+        echo "SUCCESS: No dangerous functions detected"
+      fi
+  allow_failure: false
+
+# RSR Compliance Check
+compliance:rsr:
+  stage: compliance
+  image: alpine:latest
+  script:
+    - |
+      echo "=== RSR Compliance Verification ==="
+
+      # Check required files exist
+      echo "Checking required files..."
+      FILES=(
+        "README.md"
+        "LICENSE"
+        "CHANGELOG.md"
+        "SECURITY.md"
+        "CONTRIBUTING.md"
+        "CODE_OF_CONDUCT.md"
+        "MAINTAINERS.md"
+        ".well-known/security.txt"
+        ".well-known/ai.txt"
+        ".well-known/humans.txt"
+        ".gitignore"
+      )
+
+      MISSING=0
+      for file in "${FILES[@]}"; do
+        if [ ! -f "$file" ]; then
+          echo "❌ MISSING: $file"
+          MISSING=$((MISSING + 1))
+        else
+          echo "✅ FOUND: $file"
+        fi
+      done
+
+      if [ $MISSING -gt 0 ]; then
+        echo "ERROR: $MISSING required files missing"
+        exit 1
+      fi
+
+      echo ""
+      echo "=== RSR Compliance: PASSED ==="
+  allow_failure: false
+
+# Verify documentation completeness
+compliance:docs:
+  stage: compliance
+  image: alpine:latest
+  script:
+    - |
+      echo "Checking documentation..."
+
+      # Check README has required sections
+      SECTIONS=(
+        "Installation"
+        "Usage"
+        "Security"
+        "Contributing"
+        "License"
+      )
+
+      for section in "${SECTIONS[@]}"; do
+        if grep -q "$section" README.md; then
+          echo "✅ README contains $section section"
+        else
+          echo "❌ README missing $section section"
+          exit 1
+        fi
+      done
+  allow_failure: false
+
+# Check WordPress.org plugin guidelines compliance
+compliance:wordpress:
+  stage: compliance
+  image: alpine:latest
+  script:
+    - |
+      echo "Checking WordPress.org compliance..."
+
+      # Check no phone home / tracking
+      if grep -rn --include="*.php" -E "(wp_remote_get|wp_remote_post|curl_exec)" . | grep -v "vendor" | grep -v ".git"; then
+        echo "WARNING: External HTTP calls detected - verify these are necessary"
+      else
+        echo "✅ No external HTTP calls detected"
+      fi
+
+      # Check no obfuscated code
+      if grep -rn --include="*.php" -E "base64_decode|str_rot13|gzinflate" . | grep -v "vendor"; then
+        echo "WARNING: Potential obfuscation detected"
+      else
+        echo "✅ No code obfuscation detected"
+      fi
+  allow_failure: true
+
+# Create release package
+package:zip:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache zip
+  script:
+    - mkdir -p build
+    - zip -r build/wp-plugin-conflict-mapper.zip . -x "*.git*" "*.gitlab*" "node_modules/*" "vendor/*" "tests/*" "build/*"
+    - ls -lh build/
+  artifacts:
+    paths:
+      - build/wp-plugin-conflict-mapper.zip
+    expire_in: 1 week
+  only:
+    - tags
+    - main
+
+# Deploy to WordPress.org SVN (manual trigger)
+deploy:wordpress-org:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache subversion
+  script:
+    - echo "Deploy to WordPress.org would happen here"
+    - echo "Requires SVN credentials and manual approval"
+  when: manual
+  only:
+    - tags
+
+# Create GitHub release
+deploy:github-release:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "GitHub release creation would happen here"
+    - echo "Requires GitHub token"
+  when: manual
+  only:
+    - tags

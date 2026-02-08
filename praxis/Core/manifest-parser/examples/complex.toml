@@ -1,0 +1,143 @@
+# Complex WP Praxis Manifest Example (TOML)
+# This demonstrates advanced features and symbolic operations
+
+version = "1.0"
+format = "toml"
+
+[metadata]
+name = "Complex Example Manifest"
+description = "Advanced WP Praxis symbolic operations with macros"
+author = "WP Praxis Project"
+version = "0.2.0"
+license = "AGPL-3.0"
+tags = ["example", "advanced", "macros", "wordpress"]
+
+# Multiple symbol definitions using array of tables
+[[symbols]]
+name = "audit-security"
+type = "query"
+context = "wordpress"
+dispatch = "rust_injector"
+dependencies = []
+enabled = true
+
+[symbols.parameters]
+scan_depth = 3
+check_permissions = true
+report_format = "json"
+
+[symbols.metadata]
+description = "Security audit for WordPress installation"
+critical = true
+
+[[symbols]]
+name = "normalize-database"
+type = "action"
+context = "wordpress"
+dispatch = "php_engine"
+dependencies = ["audit-security"]
+enabled = true
+
+[symbols.parameters]
+optimization_level = "aggressive"
+backup_before = true
+repair_tables = true
+
+[[symbols]]
+name = "deploy-updates"
+type = "action"
+context = "wordpress"
+dispatch = "rust_injector"
+dependencies = ["audit-security", "normalize-database"]
+enabled = true
+
+[symbols.parameters]
+update_core = true
+update_plugins = true
+update_themes = true
+rollback_on_error = true
+
+# Workflow with parallel execution
+[[workflows]]
+name = "deployment-workflow"
+description = "Automated deployment with security checks"
+parallel = true
+
+[workflows.metadata]
+priority = "critical"
+require_approval = true
+
+[[workflows.steps]]
+symbol = "audit-security"
+
+[workflows.steps.parameters]
+full_scan = true
+
+[[workflows.steps]]
+symbol = "normalize-database"
+
+[workflows.steps.parameters]
+verify_integrity = true
+
+[[workflows.steps]]
+symbol = "deploy-updates"
+
+[workflows.steps.parameters]
+staged_deployment = true
+
+# Multiple contexts
+[[contexts]]
+name = "staging"
+type = "runtime"
+
+[contexts.configuration]
+environment = "staging"
+debug = true
+error_reporting = "verbose"
+
+[contexts.variables]
+wp_path = "/var/www/staging"
+php_version = "8.2"
+db_host = "localhost"
+db_name = "wp_staging"
+
+[[contexts]]
+name = "production"
+type = "runtime"
+
+[contexts.configuration]
+environment = "production"
+debug = false
+error_reporting = "minimal"
+
+[contexts.variables]
+wp_path = "/var/www/html"
+php_version = "8.1"
+db_host = "db.example.com"
+db_name = "wp_production"
+
+# Dispatch rules with conditions
+[[dispatches]]
+priority = 100
+
+[dispatches.pattern]
+type = "action"
+context = "wordpress"
+
+executor = "rust_injector"
+
+[dispatches.conditions]
+performance = "critical"
+system_load = "low"
+
+[[dispatches]]
+priority = 50
+
+[dispatches.pattern]
+type = "query"
+context = "wordpress"
+
+executor = "php_engine"
+
+[dispatches.conditions]
+performance = "normal"

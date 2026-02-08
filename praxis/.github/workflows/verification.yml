@@ -1,0 +1,119 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: Formal Verification
+
+on:
+  push:
+    branches: [main, master, claude/**]
+    paths:
+      - 'wp_praxis_core/**'
+      - '.github/workflows/verification.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'wp_praxis_core/**'
+  workflow_dispatch:
+
+jobs:
+  kani-verification:
+    name: Kani Formal Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Kani
+        run: |
+          echo "Installing Kani Rust Verifier..."
+          cargo install --locked kani-verifier
+          cargo kani setup
+
+      - name: Verify Kani installation
+        run: cargo kani --version
+
+      - name: Run Kani Verification
+        working-directory: wp_praxis_core
+        run: |
+          echo "Running formal verification with Kani..."
+          cargo kani --verbose --output-format terse 2>&1 | tee ../kani-results.txt
+
+      - name: Check verification results
+        run: |
+          if grep -q "VERIFICATION:- SUCCESSFUL" kani-results.txt; then
+            echo "✓ All Kani proofs verified successfully"
+            exit 0
+          elif grep -q "VERIFICATION FAILED" kani-results.txt; then
+            echo "✗ Kani verification failed"
+            cat kani-results.txt
+            exit 1
+          else
+            echo "⚠ Unable to determine verification status"
+            cat kani-results.txt
+            exit 1
+          fi
+
+      - name: Upload verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kani-verification-results
+          path: kani-results.txt
+          retention-days: 30
+
+      - name: Comment PR with verification results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = fs.readFileSync('kani-results.txt', 'utf8');
+            const succeeded = results.includes('VERIFICATION:- SUCCESSFUL');
+
+            const comment = `## Formal Verification Results (Kani)
+
+            ${succeeded ? '✅ **All proofs verified**' : '❌ **Verification failed**'}
+
+            <details>
+            <summary>Verification output</summary>
+
+            \`\`\`
+            ${results}
+            \`\`\`
+
+            </details>
+
+            See [FORMAL_VERIFICATION.md](../blob/main/wp_praxis_core/FORMAL_VERIFICATION.md) for details.
+            `;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+  summary:
+    name: Verification Summary
+    runs-on: ubuntu-latest
+    needs: [kani-verification]
+    if: always()
+
+    steps:
+      - name: Verification Summary
+        run: |
+          echo "## Formal Verification Summary"
+          echo ""
+          echo "- Kani Proofs: ${{ needs.kani-verification.result }}"
+          echo ""
+          if [ "${{ needs.kani-verification.result }}" = "success" ]; then
+            echo "✅ All formal verification passed"
+            exit 0
+          else
+            echo "❌ Some verification failed"
+            exit 1
+          fi

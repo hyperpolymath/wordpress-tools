@@ -1,0 +1,36 @@
+= wp-praxis - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{wp-praxis_2025,
+  author = {Polymath, Hyper},
+  title = {wp-praxis},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/wp-praxis},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _wp-praxis_ [Computer software]. Available at: https://github.com/hyperpolymath/wp-praxis
+
+== OSCOLA
+
+Hyper Polymath, 'wp-praxis' (2025) <https://github.com/hyperpolymath/wp-praxis>
+
+== MLA
+
+Polymath, Hyper. "wp-praxis." 2025, github.com/hyperpolymath/wp-praxis.
+
+== APA 7
+
+Polymath, H. (2025). _wp-praxis_ [Computer software]. GitHub. https://github.com/hyperpolymath/wp-praxis
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

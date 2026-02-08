@@ -1,0 +1,91 @@
+# Erlang/OTP build artifacts
+.eunit
+ebin/
+*.beam
+*.ez
+*.plt
+*.app
+
+# Rebar3
+.rebar3/
+_build/
+rebar3.crashdump
+rebar.lock
+
+# LFE
+*.lfe.fasl
+.lfe/
+erl_crash.dump
+
+# Dialyzer
+dialyzer_warnings.txt
+*.dialyzer_ok
+
+# Coverage
+.cover/
+*.coverdata
+cover/
+
+# Logs
+*.log
+log/
+logs/
+
+# Temporary files
+*.swp
+*.swo
+*~
+.*.sw?
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.iml
+.project
+.settings/
+*.sublime-*
+
+# Release artifacts
+rel/
+_rel/
+*.tar.gz
+*.zip
+
+# Documentation build
+doc/*.html
+doc/*.css
+doc/*.png
+doc/edoc-info
+.edoc/
+
+# Test artifacts
+test/*.beam
+test/erl_crash.dump
+.eunit/
+
+# Dependencies (managed by rebar3)
+deps/
+_deps/
+
+# OS specific
+.nfs*
+
+# Environment
+.env
+.envrc
+.tool-versions
+
+# Compiled schema files
+priv/schemas/*.beam
+
+# Cache
+.cache/
+*.cache
+
+# Benchmarks
+bench/results/
+
+# Generated files
+src/manifest_parser.app

@@ -1,0 +1,154 @@
+# WP Praxis Swarm Configuration
+#
+# This configuration file defines settings for the distributed symbolic
+# execution swarm system, including dispatcher, coordinator, worker nodes,
+# and backend engine configurations.
+
+# ==============================================================================
+# Dispatcher Configuration
+# ==============================================================================
+[dispatcher]
+# Coordinator WebSocket endpoint
+coordinator_endpoint = "ws://localhost:8080"
+
+# SQLite database path for state management
+state_db_path = "./swarm-state.db"
+
+# Enable WebSocket server for real-time communication
+enable_websocket = true
+
+# WebSocket server port
+websocket_port = 8080
+
+# Manifest path (optional - can be provided via CLI)
+# manifest_path = "./workflow.yaml"
+
+# Workflow name to execute (optional)
+# workflow_name = "my-workflow"
+
+# ==============================================================================
+# Coordinator Configuration
+# ==============================================================================
+[coordinator]
+# Maximum number of worker nodes
+max_workers = 100
+
+# Heartbeat interval in milliseconds (how often workers send heartbeats)
+heartbeat_interval = 5000
+
+# Heartbeat timeout in milliseconds (when to consider a worker offline)
+heartbeat_timeout = 15000
+
+# Maximum number of retry attempts for failed tasks
+task_retry_limit = 3
+
+# Enable load balancing across worker nodes
+enable_load_balancing = true
+
+# Enable priority-based task queue
+priority_queue_enabled = true
+
+# ==============================================================================
+# Worker Configuration
+# ==============================================================================
+[worker]
+# Unique worker node name (auto-generated if not provided)
+node_name = "worker-node-1"
+
+# Dispatcher WebSocket URL to connect to
+dispatcher_url = "ws://localhost:8080"
+
+# Heartbeat interval in milliseconds
+heartbeat_interval = 5000
+
+# Maximum number of concurrent tasks this worker can handle
+max_concurrent_tasks = 4
+
+# Worker node capabilities
+[worker.capabilities]
+# Can execute Rust injector operations
+rust = true
+
+# Can execute PHP engine operations
+php = true
+
+# Can execute PowerShell engine operations
+powershell = true
+
+# Maximum concurrent tasks (same as worker.max_concurrent_tasks)
+max_concurrent_tasks = 4
+
+# ==============================================================================
+# Backend Configurations
+# ==============================================================================
+
+# Rust Injector Backend
+[backends.rust_injector]
+# Enable Rust injector backend
+enabled = true
+
+# Path to wp_injector binary
+binary_path = "../../wp_injector/target/release/wp_injector"
+
+# Execution timeout in milliseconds
+timeout = 30000
+
+# PHP Engine Backend
+[backends.php_engine]
+# Enable PHP engine backend
+enabled = true
+
+# Path to PHP symbolic engine script
+script_path = "../../engine/php/symbolic-engine.php"
+
+# PHP binary path (use 'php' for system default)
+php_binary = "php"
+
+# Execution timeout in milliseconds
+timeout = 30000
+
+# PowerShell Engine Backend
+[backends.powershell_engine]
+# Enable PowerShell engine backend
+enabled = true
+
+# Path to PowerShell symbolic engine script
+script_path = "../../SymbolicEngine/core/symbolic.ps1"
+
+# PowerShell binary path (use 'pwsh' for PowerShell Core)
+pwsh_binary = "pwsh"
+
+# Execution timeout in milliseconds
+timeout = 30000
+
+# ==============================================================================
+# Logging Configuration
+# ==============================================================================
+[logging]
+# Log level: error, warn, info, debug, verbose
+level = "info"
+
+# Log file path (leave empty to disable file logging)
+file = "./swarm.log"
+
+# Enable console logging
+console = true
+
+# Log format: text or json
+format = "text"
+
+# ==============================================================================
+# Security Configuration (Optional)
+# ==============================================================================
+[security]
+# Enable authentication for WebSocket connections
+enable_auth = false
+
+# API key for authentication (required if enable_auth = true)
+# api_key = "your-secret-api-key-here"
+
+# Allowed hosts for WebSocket connections
+allowed_hosts = ["localhost", "127.0.0.1"]
+
+# Maximum WebSocket message size in bytes
+max_message_size = 1048576  # 1 MB

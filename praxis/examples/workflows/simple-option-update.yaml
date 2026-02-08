@@ -1,0 +1,196 @@
+# Simple WordPress Option Update Workflow
+# Demonstrates basic Rust injector integration with rollback capability
+
+version: "1.0"
+metadata:
+  name: "simple-option-update"
+  description: "Update WordPress options using symbolic dispatch to Rust injector"
+  author: "WP Praxis"
+  tags: ["basic", "wordpress", "options", "rust"]
+
+# Configuration for this workflow
+config:
+  wordpress:
+    path: "/var/www/html"
+    url: "https://example.com"
+  execution:
+    mode: "sequential"
+    timeout: 30
+    retry_on_failure: true
+    max_retries: 3
+
+# Define the symbols to execute
+symbols:
+  # Create a baseline before making changes
+  - name: "create_baseline"
+    type: "audit"
+    description: "Create baseline snapshot before option update"
+    dispatch: "powershell"
+    context: "wordpress"
+    parameters:
+      baseline_name: "pre_option_update"
+      include_options: true
+      include_posts: false
+      include_users: false
+    rollback:
+      enabled: false
+    outputs:
+      - baseline_id
+      - baseline_timestamp
+
+  # Update the site title using Rust injector
+  - name: "update_site_title"
+    type: "action"
+    description: "Update WordPress site title option"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    depends_on:
+      - "create_baseline"
+    parameters:
+      operation: "update_option"
+      option_name: "blogname"
+      option_value: "My Awesome WordPress Site"
+      autoload: true
+    rollback:
+      enabled: true
+      strategy: "restore_from_baseline"
+      baseline: "pre_option_update"
+    outputs:
+      - option_updated
+      - previous_value
+
+  # Update the site description
+  - name: "update_site_description"
+    type: "action"
+    description: "Update WordPress site description"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    depends_on:
+      - "update_site_title"
+    parameters:
+      operation: "update_option"
+      option_name: "blogdescription"
+      option_value: "Just another WordPress site powered by WP Praxis"
+      autoload: true
+    rollback:
+      enabled: true
+      strategy: "restore_from_baseline"
+      baseline: "pre_option_update"
+    outputs:
+      - option_updated
+      - previous_value
+
+  # Update posts per page setting
+  - name: "update_posts_per_page"
+    type: "action"
+    description: "Update posts per page setting"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    depends_on:
+      - "update_site_description"
+    parameters:
+      operation: "update_option"
+      option_name: "posts_per_page"
+      option_value: 15
+      autoload: true
+    rollback:
+      enabled: true
+      strategy: "restore_from_baseline"
+      baseline: "pre_option_update"
+    outputs:
+      - option_updated
+      - previous_value
+
+  # Verify the changes using PHP
+  - name: "verify_changes"
+    type: "validation"
+    description: "Verify all option updates were successful"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "update_site_title"
+      - "update_site_description"
+      - "update_posts_per_page"
+    parameters:
+      validation_type: "option_check"
+      expected_values:
+        blogname: "My Awesome WordPress Site"
+        blogdescription: "Just another WordPress site powered by WP Praxis"
+        posts_per_page: 15
+    rollback:
+      enabled: false
+    outputs:
+      - validation_passed
+      - validation_errors
+
+  # Create post-update baseline
+  - name: "create_post_baseline"
+    type: "audit"
+    description: "Create baseline snapshot after option updates"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "verify_changes"
+    parameters:
+      baseline_name: "post_option_update"
+      include_options: true
+      include_posts: false
+      include_users: false
+    rollback:
+      enabled: false
+    outputs:
+      - baseline_id
+      - baseline_timestamp
+
+  # Generate diff report
+  - name: "generate_diff_report"
+    type: "reporting"
+    description: "Generate visual diff between baselines"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "create_post_baseline"
+    parameters:
+      baseline_before: "pre_option_update"
+      baseline_after: "post_option_update"
+      output_format: "json"
+      include_visualization: true
+    rollback:
+      enabled: false
+    outputs:
+      - diff_report_path
+      - changes_count
+
+# Rollback configuration
+rollback:
+  on_error: "automatic"
+  preserve_baseline: true
+  notification:
+    enabled: true
+    channels: ["log", "webhook"]
+
+# Notifications
+notifications:
+  on_success:
+    - type: "log"
+      message: "WordPress options updated successfully"
+      level: "info"
+  on_failure:
+    - type: "log"
+      message: "WordPress option update failed, rollback initiated"
+      level: "error"
+  on_complete:
+    - type: "webhook"
+      url: "https://example.com/webhooks/workflow-complete"
+      method: "POST"
+      payload:
+        workflow: "simple-option-update"
+        status: "${workflow.status}"
+        duration: "${workflow.duration}"
+
+# Output configuration
+outputs:
+  format: "json"
+  destination: "./outputs/simple-option-update-${timestamp}.json"
+  include_metadata: true
+  include_timings: true

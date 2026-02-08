@@ -1,0 +1,75 @@
+# cargo-deny configuration for WP Praxis
+# Enforces dependency policies for supply chain security
+
+[graph]
+# Ensure we only use approved dependencies
+targets = []
+all-features = false
+no-default-features = false
+
+[advisories]
+# Security vulnerability database
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+vulnerability = "deny"
+unmaintained = "warn"
+yanked = "deny"
+notice = "warn"
+ignore = []
+
+[licenses]
+# License policy - ensure AGPL-3.0 compatibility
+unlicensed = "deny"
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "0BSD",
+    "Zlib",
+    "Unicode-DFS-2016",
+]
+deny = [
+    "GPL-2.0",          # Not compatible with AGPL-3.0
+    "GPL-3.0",          # Not compatible (use AGPL-3.0)
+    "LGPL-2.0",         # Not compatible
+    "LGPL-2.1",         # Not compatible
+    "LGPL-3.0",         # Not compatible
+]
+copyleft = "allow"      # We're AGPL, copyleft is fine
+allow-osi-fsf-free = "both"
+default = "deny"
+confidence-threshold = 0.8
+
+[licenses.private]
+ignore = false
+registries = []
+
+[bans]
+# Ban specific crates or versions
+multiple-versions = "warn"
+wildcards = "warn"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+allow = []
+deny = []
+
+# Skip dependencies we know have multiple versions
+skip = []
+
+# Skip build and dev dependencies
+skip-tree = []
+
+[sources]
+# Control where dependencies come from
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
+
+[sources.allow-org]
+# Allow orgs we trust (for GitHub dependencies)
+github = []

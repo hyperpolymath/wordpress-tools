@@ -1,0 +1,72 @@
+/**
+ * Accessibility Overrides for Sinople Theme
+ * WCAG 2.3 AAA specific styles
+ */
+
+/* High Contrast Mode */
+.high-contrast {
+  --color-text: #000000;
+  --color-bg: #FFFFFF;
+  --color-primary: #000000;
+  --color-link: #000000;
+  --color-border: #000000;
+}
+
+.high-contrast a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.high-contrast button,
+.high-contrast .button {
+  border-width: 3px;
+}
+
+/* Focus Visible Enhancements */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Screen Reader Text */
+.screen-reader-text {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+.screen-reader-text:focus {
+  clip: auto;
+  clip-path: none;
+  height: auto;
+  width: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+}
+
+/* Ensure sufficient line height for readability */
+p, li, dd {
+  line-height: 1.6;
+}
+
+/* Clear focus indicators for keyboard users */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Visible focus for all interactive elements */
+summary:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}

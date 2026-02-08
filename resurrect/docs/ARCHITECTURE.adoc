@@ -1,0 +1,484 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= WP-Resurrect: Site Operations Control Plane (SOCP)
+:toc:
+:sectnums:
+:icons: font
+
+== Overview
+
+WP-Resurrect is a **centralized site operations control plane** for managing multiple web properties (WordPress and beyond) through a single, hardened command center.
+
+=== Core Design Principles
+
+1. **Configuration as Code**: All site settings live in version-controlled Nickel configs
+2. **Defense in Depth**: Control plane hidden behind SDP, IPv6-only access
+3. **Granular Updates**: Push changes to all sites, specific groups, or individuals
+4. **Separation of Concerns**: Config management separated from the sites themselves
+5. **Observable**: ncurses dashboard provides real-time status across all sites
+
+== Architecture Layers
+
+[source]
+----
+┌─────────────────────────────────────────────────────────────────┐
+│                    OPERATOR INTERFACE                            │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  socp-tui (Rust/ratatui)                                   │ │
+│  │  • Real-time site status     • Configuration diffs         │ │
+│  │  • Health dashboards         • Deployment controls         │ │
+│  │  • Alert management          • Secret rotation status      │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│                    ORCHESTRATION LAYER                           │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌───────────────┐  │
+│  │ socp-api (Gleam) │  │ Config Compiler  │  │ State Manager │  │
+│  │ • REST/gRPC API  │  │ (Nickel → Salt)  │  │ (Guile)       │  │
+│  │ • WebSocket push │  │ • Validation     │  │ • STATE.scm   │  │
+│  │ • Auth/AuthZ     │  │ • Diff engine    │  │ • Checkpoints │  │
+│  └──────────────────┘  └──────────────────┘  └───────────────┘  │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│                    INFRASTRUCTURE LAYER                          │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │ SaltStack Master (Python - ALLOWED per CLAUDE.md)          │ │
+│  │ • salt-master: Central command/control                     │ │
+│  │ • salt-api: REST interface for orchestration               │ │
+│  │ • Salt pillars: Site-specific secrets (encrypted)          │ │
+│  │ • Salt states: Idempotent configuration application        │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│                    SECURITY PERIMETER                            │
+│  ┌──────────────┐  ┌─────────────┐  ┌─────────────────────────┐ │
+│  │ SDP Gateway  │  │ IPv6 Filter │  │ mTLS Certificate Chain  │ │
+│  │ • OpenZiti   │  │ • ip6tables │  │ • Client certs required │ │
+│  │ • Zero trust │  │ • No IPv4   │  │ • SPIFFE/SPIRE IDs      │ │
+│  └──────────────┘  └─────────────┘  └─────────────────────────┘ │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│                    MANAGED SITES                                 │
+│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐    │
+│  │ Site A │  │ Site B │  │ Site C │  │ Site D │  │ Site N │    │
+│  │ WP+PHP │  │ WP+PHP │  │ Static │  │ Custom │  │  ...   │    │
+│  │ nginx  │  │ Apache │  │ nginx  │  │ LS/OLS │  │        │    │
+│  └────────┘  └────────┘  └────────┘  └────────┘  └────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+----
+
+== Component Details
+
+=== socp-tui (Rust)
+
+The ncurses-style terminal interface built with `ratatui`.
+
+.Features
+* Real-time site health monitoring (response times, error rates)
+* Configuration drift detection and visualization
+* Secret rotation status and scheduling
+* Certificate expiry warnings
+* Deployment history and rollback controls
+* Alert management (acknowledgment, silencing)
+
+.Technology Stack
+* `ratatui` - TUI framework
+* `crossterm` - Terminal manipulation
+* `tokio` - Async runtime
+* `reqwest` - HTTP client for API calls
+* `tungstenite` - WebSocket for real-time updates
+
+=== socp-api (Gleam)
+
+Backend API service running on BEAM (Erlang VM) for fault tolerance.
+
+.Responsibilities
+* REST and gRPC endpoints for automation
+* WebSocket push for real-time updates
+* Authentication (mTLS, API keys)
+* Authorization (RBAC, site-level permissions)
+* Audit logging
+
+=== Configuration Compiler (Nickel)
+
+Transforms human-readable Nickel configs into SaltStack states.
+
+.Config Categories
+[cols="1,2,2"]
+|===
+|Category |Examples |Salt Target
+
+|DNS
+|Hidden primary, CNAME records, CAA
+|`socp.dns.*`
+
+|Web Server
+|nginx/Apache/LiteSpeed vhosts, SSL, headers
+|`socp.webserver.*`
+
+|PHP
+|php.ini, pool configs, opcache
+|`socp.php.*`
+
+|WordPress
+|wp-config.php, plugins, themes, cron
+|`socp.wordpress.*`
+
+|Database
+|MariaDB users, grants, tuning
+|`socp.database.*`
+
+|Cache
+|Redis, Varnish, object cache, page cache
+|`socp.cache.*`
+
+|Security
+|OWASP rules, fail2ban, CSP headers
+|`socp.security.*`
+
+|Mail
+|SPF, DKIM, DMARC, SMTP relay
+|`socp.mail.*`
+
+|Monitoring
+|Prometheus exporters, alerting rules
+|`socp.monitoring.*`
+
+|Secrets
+|API keys, passwords (encrypted pillars)
+|`socp.secrets.*`
+|===
+
+=== State Manager (Guile)
+
+Tracks the state of the entire system using Guile Scheme.
+
+.STATE.scm Structure
+[source,scheme]
+----
+(define socp-state
+  `((metadata
+     (updated . "2025-12-28T12:00:00Z")
+     (version . "1.0.0"))
+
+    (sites
+     ((id . "site-alpha")
+      (domain . "alpha.example.com")
+      (status . healthy)
+      (last-sync . "2025-12-28T11:55:00Z")
+      (config-hash . "sha256:abc123..."))
+     ((id . "site-beta")
+      (domain . "beta.example.com")
+      (status . drifted)
+      (last-sync . "2025-12-28T10:00:00Z")
+      (config-hash . "sha256:def456...")))
+
+    (pending-changes
+     ((target . ("site-alpha" "site-beta"))
+      (change . "security-headers-update")
+      (scheduled . "2025-12-29T02:00:00Z")))
+
+    (secrets
+     ((rotation-due . ("redis-password" "db-replica-user"))
+      (last-rotation . "2025-12-20T00:00:00Z")))))
+----
+
+== Security Architecture
+
+=== Software-Defined Perimeter (SDP)
+
+Using **OpenZiti** for zero-trust network access:
+
+1. **No exposed ports**: Control plane has no public network listeners
+2. **Identity-based access**: Only authenticated operators with valid certificates
+3. **Micro-segmentation**: Each site connection is individually authorized
+4. **Session encryption**: End-to-end encryption for all traffic
+
+=== IPv6-Only Access
+
+The control plane listens exclusively on IPv6:
+
+* Reduces attack surface (many bots IPv4-only)
+* Simpler firewall rules
+* Better address space for micro-segmentation
+* Works with SDP overlay network
+
+=== Hidden DNS Architecture
+
+[source]
+----
+┌──────────────────────────────────────────────────────────────┐
+│                     PUBLIC DNS                                │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Cloudflare / Route53 / Bunny (Secondary)               │  │
+│  │ • AXFR/IXFR from hidden primary                        │  │
+│  │ • Anycast for DDoS resilience                          │  │
+│  │ • No management access exposed                         │  │
+│  └──────────────────────────────────────────────────────────┘│
+│                            ↑ AXFR                            │
+│  ┌──────────────────────────────────────────────────────────┐│
+│  │ Hidden Primary DNS (PowerDNS + Control Plane)            ││
+│  │ • Only accessible via SDP                                ││
+│  │ • IPv6-only bind                                         ││
+│  │ • DNSSEC signing                                         ││
+│  │ • API-driven record management                           ││
+│  │ • Audit log of all changes                               ││
+│  └──────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────┘
+----
+
+== Configuration Schema (Nickel)
+
+=== Site Definition
+
+[source,nickel]
+----
+# config/sites/alpha.ncl
+let Site = import "../schema/site.ncl" in
+
+{
+  id = "site-alpha",
+  domain = "alpha.example.com",
+
+  webserver = {
+    type = 'nginx,
+    ssl = {
+      provider = 'letsencrypt,
+      hsts = true,
+      hsts_max_age = 31536000,
+    },
+    headers = import "../includes/security-headers-strict.ncl",
+  },
+
+  php = {
+    version = "8.3",
+    memory_limit = "256M",
+    upload_max_filesize = "64M",
+    opcache = { enable = true, memory = 128 },
+  },
+
+  wordpress = {
+    multisite = false,
+    debug = false,
+    auto_update_core = 'minor,
+    plugins = {
+      must_use = ["query-monitor", "wp-mail-smtp"],
+      active = ["yoast-seo", "woocommerce"],
+      disabled = ["hello-dolly"],
+    },
+  },
+
+  database = {
+    type = 'mariadb,
+    version = "11.4",
+    pool_size = 10,
+  },
+
+  cache = {
+    object_cache = 'redis,
+    page_cache = 'litespeed,
+    redis_db = 0,
+  },
+
+  security = {
+    waf = 'modsecurity,
+    owasp_crs = true,
+    fail2ban = true,
+    rate_limit = { requests_per_second = 50, burst = 100 },
+  },
+
+  dns = {
+    records = [
+      { type = 'A, name = "@", value = "203.0.113.10" },
+      { type = 'AAAA, name = "@", value = "2001:db8::1" },
+      { type = 'CNAME, name = "www", value = "@" },
+      { type = 'MX, name = "@", value = "mail.example.com", priority = 10 },
+      { type = 'TXT, name = "@", value = "v=spf1 include:_spf.google.com ~all" },
+    ],
+  },
+
+  secrets_ref = [
+    "db_password",
+    "redis_password",
+    "smtp_api_key",
+    "recaptcha_secret",
+  ],
+} | Site
+----
+
+=== Group Definition (for batch updates)
+
+[source,nickel]
+----
+# config/groups/production.ncl
+{
+  id = "production",
+  sites = ["site-alpha", "site-beta", "site-gamma"],
+
+  shared_config = {
+    security.headers = import "../includes/security-headers-strict.ncl",
+    php.opcache.enable = true,
+    wordpress.debug = false,
+  },
+
+  deployment = {
+    strategy = 'rolling,
+    batch_size = 1,
+    pause_between = "5m",
+    rollback_on_failure = true,
+  },
+}
+----
+
+== Deployment Flow
+
+[source]
+----
+1. Operator edits Nickel config
+        │
+        ▼
+2. `just validate-config` runs Nickel type checks
+        │
+        ▼
+3. `just diff-config` shows what will change
+        │
+        ▼
+4. `just apply-config [--group=X] [--site=Y]`
+        │
+        ▼
+5. Config Compiler: Nickel → Salt States
+        │
+        ▼
+6. socp-api: Schedules deployment via Salt API
+        │
+        ▼
+7. salt-master: Executes states on minions
+        │
+        ▼
+8. State Manager: Updates STATE.scm checkpoints
+        │
+        ▼
+9. socp-tui: Shows deployment progress in real-time
+----
+
+== Directory Structure
+
+[source]
+----
+wp-resurrect/
+├── config/                    # Nickel configurations
+│   ├── schema/                # Type definitions
+│   │   ├── site.ncl
+│   │   ├── webserver.ncl
+│   │   ├── wordpress.ncl
+│   │   └── ...
+│   ├── sites/                 # Per-site configs
+│   │   ├── alpha.ncl
+│   │   ├── beta.ncl
+│   │   └── ...
+│   ├── groups/                # Site groups
+│   │   ├── production.ncl
+│   │   ├── staging.ncl
+│   │   └── ...
+│   └── includes/              # Shared snippets
+│       ├── security-headers-strict.ncl
+│       ├── php-wordpress-defaults.ncl
+│       └── ...
+│
+├── salt/                      # SaltStack (Python allowed here)
+│   ├── master.d/              # Salt master config
+│   ├── pillar/                # Encrypted secrets
+│   ├── states/                # State files
+│   │   ├── socp/
+│   │   │   ├── dns/
+│   │   │   ├── webserver/
+│   │   │   ├── php/
+│   │   │   ├── wordpress/
+│   │   │   ├── database/
+│   │   │   ├── cache/
+│   │   │   └── security/
+│   │   └── top.sls
+│   └── grains/                # Minion classification
+│
+├── src/
+│   ├── socp-tui/              # Rust TUI application
+│   │   ├── Cargo.toml
+│   │   └── src/
+│   ├── socp-api/              # Gleam API service
+│   │   ├── gleam.toml
+│   │   └── src/
+│   └── socp-compile/          # Config compiler (Rust + Nickel bindings)
+│       ├── Cargo.toml
+│       └── src/
+│
+├── state/                     # Guile state management
+│   ├── STATE.scm              # Current state
+│   ├── ECOSYSTEM.scm          # Site relationships
+│   └── lib/                   # Guile helper modules
+│
+├── sdp/                       # Software-Defined Perimeter
+│   ├── ziti/                  # OpenZiti configs
+│   └── certs/                 # mTLS certificates (git-crypted)
+│
+├── docs/
+│   ├── ARCHITECTURE.adoc      # This file
+│   ├── OPERATIONS.adoc        # Runbooks
+│   └── SECURITY.adoc          # Security model
+│
+├── guix.scm                   # Guix package definition
+├── justfile                   # Task runner
+└── STATE.scm                  # Project-level state
+----
+
+== Getting Started
+
+[source,bash]
+----
+# Enter development environment
+guix shell -D -f guix.scm
+
+# Build all components
+just build
+
+# Start the TUI (connects to existing control plane)
+just tui
+
+# Or: Full local development stack
+just dev-stack
+----
+
+== Answers to "Can I Do This?"
+
+**Yes, absolutely.** This architecture provides:
+
+[cols="1,2"]
+|===
+|Requirement |Solution
+
+|Centralized updates
+|Nickel configs + SaltStack orchestration
+
+|Granular control
+|Site groups, rolling deployments, targeted applies
+
+|Hidden from sites
+|SDP + IPv6-only + hidden DNS primary
+
+|Highly guarded area
+|Zero-trust SDP, mTLS, no public ports
+
+|IPv6-only access
+|Control plane binds only to IPv6, firewall enforces
+
+|ncurses status
+|Rust TUI with ratatui, real-time via WebSocket
+
+|Consistent settings
+|Nickel schema validation, shared includes
+
+|API key management
+|Salt pillars (GPG encrypted), rotation scheduling
+|===

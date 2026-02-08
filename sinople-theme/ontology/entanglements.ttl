@@ -1,0 +1,158 @@
+# Sinople Entanglements Vocabulary
+# Relationships and connections between constructs
+#
+# This file defines example entanglements showing how constructs relate
+
+@prefix sn: <http://sinople.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================================
+# PHILOSOPHICAL ENTANGLEMENTS
+# ============================================================================
+
+sn:ConsciousnessFreeWill a sn:Entanglement ;
+    rdfs:label "Consciousness-Free Will Relationship"@en ;
+    rdfs:comment "The relationship between consciousness and the concept of free will"@en ;
+    sn:hasSource sn:ConsciousnessConstruct ;
+    sn:hasTarget sn:FreeWillConstruct ;
+    sn:relationshipType "prerequisite" ;
+    sn:strength 0.85 ;
+    sn:bidirectional false .
+
+sn:IdentityConsciousness a sn:Entanglement ;
+    rdfs:label "Identity-Consciousness Connection"@en ;
+    rdfs:comment "How consciousness relates to personal identity"@en ;
+    sn:hasSource sn:IdentityConstruct ;
+    sn:hasTarget sn:ConsciousnessConstruct ;
+    sn:relationshipType "depends on" ;
+    sn:strength 0.90 ;
+    sn:bidirectional false .
+
+# ============================================================================
+# SCIENTIFIC ENTANGLEMENTS
+# ============================================================================
+
+sn:EntropyTime a sn:Entanglement ;
+    rdfs:label "Entropy-Time Arrow"@en ;
+    rdfs:comment "The relationship between entropy increase and the arrow of time"@en ;
+    sn:hasSource sn:EntropyConstruct ;
+    sn:hasTarget sn:TimeConstruct ;
+    sn:relationshipType "defines" ;
+    sn:strength 0.90 ;
+    sn:bidirectional false .
+
+sn:GravitySpaceTime a sn:Entanglement ;
+    rdfs:label "Gravity-Spacetime Curvature"@en ;
+    rdfs:comment "How gravity relates to the curvature of spacetime"@en ;
+    sn:hasSource sn:GravityConstruct ;
+    sn:hasTarget sn:TimeSpaceEntanglement ;
+    sn:relationshipType "manifests as" ;
+    sn:strength 0.95 ;
+    sn:bidirectional false .
+
+sn:EvolutionTime a sn:Entanglement ;
+    rdfs:label "Evolution-Time Dependency"@en ;
+    rdfs:comment "Evolution requires time to operate"@en ;
+    sn:hasSource sn:EvolutionConstruct ;
+    sn:hasTarget sn:TimeConstruct ;
+    sn:relationshipType "requires" ;
+    sn:strength 1.0 ;
+    sn:bidirectional false .
+
+# ============================================================================
+# MATHEMATICAL ENTANGLEMENTS
+# ============================================================================
+
+sn:InfinityZero a sn:Entanglement ;
+    rdfs:label "Infinity-Zero Duality"@en ;
+    rdfs:comment "The mathematical relationship between infinity and zero"@en ;
+    sn:hasSource sn:InfinityConstruct ;
+    sn:hasTarget sn:ZeroConstruct ;
+    sn:relationshipType "complementary" ;
+    sn:strength 0.75 ;
+    sn:bidirectional true .
+
+# ============================================================================
+# LINGUISTIC ENTANGLEMENTS
+# ============================================================================
+
+sn:MetaphorMeaning a sn:Entanglement ;
+    rdfs:label "Metaphor-Meaning Construction"@en ;
+    rdfs:comment "How metaphors construct meaning"@en ;
+    sn:hasSource sn:MetaphorConstruct ;
+    sn:hasTarget sn:MeaningConstruct ;
+    sn:relationshipType "creates" ;
+    sn:strength 0.80 ;
+    sn:bidirectional false .
+
+# ============================================================================
+# CROSS-DOMAIN ENTANGLEMENTS
+# ============================================================================
+
+sn:MoneyValue a sn:Entanglement ;
+    rdfs:label "Money-Social Value"@en ;
+    rdfs:comment "Money as a representation of social value systems"@en ;
+    sn:hasSource sn:MoneyConstruct ;
+    sn:hasTarget sn:ZeroConstruct ;
+    sn:relationshipType "based on" ;
+    sn:strength 0.70 ;
+    sn:bidirectional false ;
+    rdfs:comment "Money's value depends on abstract numerical concepts including zero" .
+
+sn:JusticeSocial a sn:Entanglement ;
+    rdfs:label "Justice-Social Construction"@en ;
+    rdfs:comment "Justice as a socially constructed concept"@en ;
+    sn:hasSource sn:JusticeConstruct ;
+    sn:hasTarget sn:MeaningConstruct ;
+    sn:relationshipType "constructed through" ;
+    sn:strength 0.85 ;
+    sn:bidirectional false .
+
+sn:ConsciousnessEvolution a sn:Entanglement ;
+    rdfs:label "Consciousness-Evolution Link"@en ;
+    rdfs:comment "Consciousness as a product of biological evolution"@en ;
+    sn:hasSource sn:ConsciousnessConstruct ;
+    sn:hasTarget sn:EvolutionConstruct ;
+    sn:relationshipType "emerges from" ;
+    sn:strength 0.88 ;
+    sn:bidirectional false .
+
+sn:LanguageMind a sn:Entanglement ;
+    rdfs:label "Language-Consciousness Interface"@en ;
+    rdfs:comment "The relationship between linguistic structures and conscious thought"@en ;
+    sn:hasSource sn:MeaningConstruct ;
+    sn:hasTarget sn:ConsciousnessConstruct ;
+    sn:relationshipType "shapes" ;
+    sn:strength 0.82 ;
+    sn:bidirectional true .
+
+# ============================================================================
+# EMERGENT NETWORKS
+# ============================================================================
+
+sn:CognitionNetwork a owl:Class ;
+    rdfs:label "Cognition Network"@en ;
+    rdfs:comment "A network of constructs related to cognition and thought"@en ;
+    rdfs:subClassOf sn:Entanglement ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            [owl:onProperty sn:hasSource; owl:someValuesFrom sn:ConsciousnessConstruct]
+            [owl:onProperty sn:hasTarget; owl:someValuesFrom sn:PhilosophicalConstruct]
+        )
+    ] .
+
+sn:PhysicalRealityNetwork a owl:Class ;
+    rdfs:label "Physical Reality Network"@en ;
+    rdfs:comment "A network of constructs describing physical reality"@en ;
+    rdfs:subClassOf sn:Entanglement ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            [owl:onProperty sn:hasSource; owl:someValuesFrom sn:ScientificConstruct]
+            [owl:onProperty sn:hasTarget; owl:someValuesFrom sn:ScientificConstruct]
+        )
+    ] .

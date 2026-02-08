@@ -1,0 +1,214 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2025 WP Praxis Contributors
+
+= WP Praxis Governance Model
+:toc:
+:toclevels: 3
+
+== Overview
+
+WP Praxis operates under a *meritocratic governance model* based on the **Tri-Perimeter Contribution Framework (TPCF)**.
+
+== Decision-Making Structure
+
+=== Core Team (Perimeter 1)
+
+**Authority**: Final decision on architectural changes, releases, and project direction
+
+**Members**:
+* Project Lead (Benevolent Dictator for Life model, temporary)
+* Core Maintainers (2+ years of consistent contributions)
+
+**Selection**: Unanimous vote by existing Core Team members
+
+**Responsibilities**:
+* Release management
+* Security response
+* Architectural decisions
+* Conflict resolution (final arbiter)
+
+=== Expert Contributors (Perimeter 2)
+
+**Authority**: Domain-specific decisions, code review, mentor new contributors
+
+**Requirements**:
+* 50+ merged pull requests OR
+* 6+ months of consistent contributions OR
+* Recognized expertise in specific domain (formal verification, security, etc.)
+
+**Selection**: Nominated by Core Team or 3+ Expert Contributors, approved by Core Team
+
+**Responsibilities**:
+* Code review (binding approval)
+* Mentorship of Community Contributors
+* RFC shepherding
+* Documentation ownership
+
+=== Community Contributors (Perimeter 3)
+
+**Authority**: Submit proposals, contribute code, participate in discussions
+
+**Requirements**:
+* Accept Code of Conduct
+* Sign Developer Certificate of Origin (DCO)
+* Follow contribution guidelines
+
+**Responsibilities**:
+* Submit pull requests
+* Report bugs and issues
+* Participate in RFC discussions
+* Improve documentation
+
+== Decision-Making Process
+
+=== Consensus Model
+
+1. **Proposal**: Anyone can submit via RFC (Request for Comments)
+2. **Discussion**: 7-day minimum comment period
+3. **Consensus**: Core Team seeks agreement, considers all feedback
+4. **Decision**: Core Team makes final call if consensus not reached
+5. **Appeal**: Any contributor can appeal to entire Core Team
+
+=== Voting (when required)
+
+**Quorum**: 50% + 1 of Core Team members
+**Threshold**:
+* Simple changes: Majority (50% + 1)
+* Breaking changes: Supermajority (66% + 1)
+* Governance changes: Supermajority (75% + 1)
+
+**Veto Power**: Project Lead can veto, but must provide written justification
+
+== RFC Process
+
+All significant changes require an RFC:
+
+1. **Draft**: Create `docs/rfcs/NNNN-title.adoc`
+2. **Feedback**: 7-day comment period minimum
+3. **Revision**: Author addresses feedback
+4. **Decision**: Core Team accepts/rejects/defers
+5. **Implementation**: Approved RFCs move to implementation
+
+**Significant changes** include:
+* Breaking API changes
+* New major features
+* Architectural shifts
+* Dependency additions (>10MB or security-sensitive)
+
+== Conflict Resolution
+
+1. **Discussion**: Parties discuss directly
+2. **Mediation**: Expert Contributor mediates
+3. **Arbitration**: Core Team arbitrates
+4. **Final Appeal**: Project Lead (rarely used)
+
+**Code of Conduct violations** bypass this process → immediate enforcement.
+
+== Financial Governance
+
+=== Funding Allocation
+
+Decisions on funding require Core Team approval:
+
+[source]
+----
+| Category                | % of Total | Decision Authority |
+|-------------------------|------------|--------------------|
+| Maintainer Compensation | 40%        | Core Team          |
+| Contributor Rewards     | 30%        | Expert + Core      |
+| Infrastructure          | 20%        | Core Team          |
+| Community Initiatives   | 10%        | Community vote     |
+----
+
+=== Transparency
+
+* Quarterly financial reports in `FUNDING_TRANSPARENCY.md`
+* All expenses >$500 require public justification
+* Annual audit (if budget >$50k/year)
+
+== Succession Planning
+
+=== Project Lead Succession
+
+**Triggers**:
+* Voluntary step-down
+* 6+ months inactivity
+* Core Team unanimous vote (only for severe CoC violations)
+
+**Process**:
+1. Core Team nominates candidates
+2. 14-day community feedback period
+3. Core Team votes (supermajority required)
+4. Transition period: 30 days
+
+=== Maintainer Succession
+
+**Inactive Maintainer** (no activity for 12+ months):
+* Status changed to "Emeritus"
+* Write access retained (read-only until return)
+* Core Team may appoint replacement
+
+**Graceful Exit**:
+* 30-day notice preferred
+* Knowledge transfer to designated successor
+* Emeritus status with recognition
+
+== Amendment Process
+
+This governance document can be amended:
+
+1. **Proposal**: RFC with rationale
+2. **Discussion**: 14-day minimum comment period
+3. **Vote**: Core Team supermajority (75% + 1)
+4. **Appeal Period**: 7 days for community appeals
+5. **Ratification**: Merge governance amendment
+
+**No amendments** that:
+* Violate Code of Conduct principles
+* Contradict AGPL-3.0 license
+* Remove transparency requirements
+
+== Emergency Procedures
+
+=== Security Incidents
+
+**Authority**: Security Team (subset of Core Team) acts immediately
+**Process**: See `SECURITY.md`
+**Notification**: Public disclosure after fix is released
+
+=== Infrastructure Failures
+
+**Authority**: Infrastructure Lead (Core Team member) acts immediately
+**Backup**: Full infrastructure runbook in private repository
+**Communication**: Status page updates every 2 hours
+
+=== Legal Issues
+
+**Authority**: Project Lead consults legal counsel
+**Communication**: Core Team informed immediately
+**Public**: Only after legal clearance
+
+== Dissolution Policy
+
+If project must be dissolved:
+
+1. **Vote**: Core Team unanimous OR community petition (50+ contributors)
+2. **Notice**: 90 days minimum
+3. **Archive**: All code, docs, history preserved (not deleted)
+4. **Assets**: Remaining funds donated to FSF or equivalent
+5. **Succession**: Identify fork/successor project (optional)
+
+== Contact
+
+**Governance Questions**: Open issue with `governance` label
+**Private Inquiries**: governance@wp-praxis.dev
+**Code of Conduct**: conduct@wp-praxis.dev
+
+---
+
+**Version**: 1.0.0 +
+**Effective Date**: 2025-11-23 +
+**Last Updated**: 2025-11-23 +
+**Next Review**: 2026-11-23 (Annual)
+
+"Good governance is the foundation of sustainable open source."

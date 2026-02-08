@@ -1,0 +1,24 @@
+# Simple WordPress Option Injection Example
+# This manifest demonstrates basic option modification
+
+[metadata]
+name = "Simple Option Update"
+version = "1.0.0"
+description = "Update WordPress site tagline"
+author = "WP Praxis"
+
+# Single symbol to update the site tagline
+[[symbols]]
+name = "update_tagline"
+type = "option"
+context = "wordpress"
+dispatch = "rust_injector"
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "blogdescription"
+option_value = "Powered by WP Praxis Symbolic Engine"
+
+# Optional validation rules
+[symbols.validation]
+wordpress_version = ">=5.0"

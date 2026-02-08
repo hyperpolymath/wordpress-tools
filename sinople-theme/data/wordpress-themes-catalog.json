@@ -1,0 +1,180 @@
+{
+  "catalog": "WordPress Official Themes (2003-Present)",
+  "updated": "2025-11-23",
+  "count": 18,
+  "themes": [
+    {
+      "year": 2003,
+      "name": "Default (Kubrick)",
+      "slug": "kubrick",
+      "license": "GPL-2.0-or-later",
+      "url": "https://codex.wordpress.org/Using_Themes/Theme_List#Kubrick",
+      "features": ["classic", "sidebar", "fixed-width"],
+      "status": "deprecated"
+    },
+    {
+      "year": 2010,
+      "name": "Twenty Ten",
+      "slug": "twentyten",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyten/",
+      "features": ["custom-header", "custom-background", "threaded-comments"],
+      "status": "maintained"
+    },
+    {
+      "year": 2011,
+      "name": "Twenty Eleven",
+      "slug": "twentyeleven",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyeleven/",
+      "features": ["dark-colorscheme", "custom-colors", "post-formats"],
+      "status": "maintained"
+    },
+    {
+      "year": 2012,
+      "name": "Twenty Twelve",
+      "slug": "twentytwelve",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwelve/",
+      "features": ["responsive", "mobile-first", "custom-header"],
+      "status": "maintained"
+    },
+    {
+      "year": 2013,
+      "name": "Twenty Thirteen",
+      "slug": "twentythirteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentythirteen/",
+      "features": ["single-column", "post-formats", "custom-colors"],
+      "status": "maintained"
+    },
+    {
+      "year": 2014,
+      "name": "Twenty Fourteen",
+      "slug": "twentyfourteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyfourteen/",
+      "features": ["magazine", "grid-layout", "featured-content"],
+      "status": "maintained"
+    },
+    {
+      "year": 2015,
+      "name": "Twenty Fifteen",
+      "slug": "twentyfifteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyfifteen/",
+      "features": ["blog-focused", "language-support", "sidebar-right"],
+      "status": "maintained"
+    },
+    {
+      "year": 2016,
+      "name": "Twenty Sixteen",
+      "slug": "twentysixteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentysixteen/",
+      "features": ["horizontal-layout", "content-sidebar", "custom-colors"],
+      "status": "maintained"
+    },
+    {
+      "year": 2017,
+      "name": "Twenty Seventeen",
+      "slug": "twentyseventeen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyseventeen/",
+      "features": ["business", "video-header", "front-page-template"],
+      "status": "maintained"
+    },
+    {
+      "year": 2019,
+      "name": "Twenty Nineteen",
+      "slug": "twentynineteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentynineteen/",
+      "features": ["gutenberg-ready", "accessibility-ready", "custom-colors"],
+      "status": "maintained"
+    },
+    {
+      "year": 2020,
+      "name": "Twenty Twenty",
+      "slug": "twentytwenty",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwenty/",
+      "features": ["block-editor", "accessibility-ready", "custom-logo"],
+      "status": "maintained"
+    },
+    {
+      "year": 2021,
+      "name": "Twenty Twenty-One",
+      "slug": "twentytwentyone",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwentyone/",
+      "features": ["block-styles", "accessibility-ready", "dark-mode"],
+      "status": "maintained"
+    },
+    {
+      "year": 2022,
+      "name": "Twenty Twenty-Two",
+      "slug": "twentytwentytwo",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwentytwo/",
+      "features": ["full-site-editing", "block-patterns", "template-editing"],
+      "status": "active",
+      "notes": "First FSE block theme"
+    },
+    {
+      "year": 2023,
+      "name": "Twenty Twenty-Three",
+      "slug": "twentytwentythree",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwentythree/",
+      "features": ["full-site-editing", "style-variations", "accessibility-ready"],
+      "status": "active"
+    },
+    {
+      "year": 2024,
+      "name": "Twenty Twenty-Four",
+      "slug": "twentytwentyfour",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentytwentyfour/",
+      "features": ["full-site-editing", "pattern-library", "style-variations"],
+      "status": "active",
+      "notes": "Latest default theme"
+    },
+    {
+      "year": 2018,
+      "name": "Twenty Eighteen",
+      "slug": "twentyeighteen",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/twentyeighteen/",
+      "features": ["gutenberg-ready", "custom-colors", "flexible-layout"],
+      "status": "maintained"
+    },
+    {
+      "year": 2005,
+      "name": "Classic",
+      "slug": "classic",
+      "license": "GPL-2.0-or-later",
+      "url": "https://wordpress.org/themes/classic/",
+      "features": ["simple", "minimalist", "clean"],
+      "status": "deprecated"
+    },
+    {
+      "year": 2009,
+      "name": "Default (WordPress 2.x)",
+      "slug": "default-wp2",
+      "license": "GPL-2.0-or-later",
+      "url": "https://codex.wordpress.org/Using_Themes",
+      "features": ["classic", "sidebar", "widgets"],
+      "status": "deprecated"
+    }
+  ],
+  "downloadTemplate": "https://downloads.wordpress.org/theme/{slug}.latest.zip",
+  "previewTemplate": "https://wp-themes.com/{slug}/",
+  "notes": [
+    "All WordPress.org themes are GPL-2.0-or-later licensed",
+    "Twenty Twenty-Two (2022) was the first full-site editing (FSE) block theme",
+    "Themes from 2010-2021 are classic PHP-based themes",
+    "Themes from 2022+ are block themes using theme.json",
+    "Some years (2006-2009) did not have official 'Twenty X' themes"
+  ]
+}

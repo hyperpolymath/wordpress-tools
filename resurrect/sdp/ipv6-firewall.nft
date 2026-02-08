@@ -1,0 +1,105 @@
+#!/usr/sbin/nft -f
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# nftables rules for IPv6-only control plane access
+#
+# This configuration:
+# - Blocks all IPv4 traffic to management interfaces
+# - Only allows IPv6 from trusted sources
+# - Integrates with OpenZiti SDP
+
+table inet socp {
+    # Sets for dynamic IP management
+    set trusted_operators {
+        type ipv6_addr
+        flags timeout
+        # Operators are added dynamically via API
+        # timeout 8h  # Auto-expire after 8 hours
+    }
+
+    set trusted_minions {
+        type ipv6_addr
+        flags interval
+        # Salt minions' IPv6 addresses
+    }
+
+    set blocked_ips {
+        type ipv6_addr
+        flags interval
+    }
+
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        # Allow established connections
+        ct state established,related accept
+
+        # Allow loopback
+        iif lo accept
+
+        # ICMPv6 for neighbor discovery
+        icmpv6 type { nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit, nd-router-advert } accept
+        icmpv6 type echo-request limit rate 10/second accept
+
+        # Block known bad IPs
+        ip6 saddr @blocked_ips drop
+
+        # Allow SSH only from trusted operators
+        tcp dport 22 ip6 saddr @trusted_operators accept
+
+        # Salt master ports (only from minions)
+        tcp dport { 4505, 4506 } ip6 saddr @trusted_minions accept
+
+        # SOCP API (only from trusted operators via Ziti tunnel)
+        tcp dport 8443 ip6 saddr @trusted_operators accept
+
+        # PowerDNS (only zone transfers from secondaries)
+        tcp dport 53 ip6 saddr @trusted_minions accept
+        udp dport 53 ip6 saddr @trusted_minions accept
+
+        # OpenZiti router
+        tcp dport 8442 accept
+
+        # Log and drop everything else
+        log prefix "SOCP-DROP: " level info
+        drop
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        # Only allow forwarding through Ziti tunnel
+        iifname "ziti*" accept
+        oifname "ziti*" accept
+
+        drop
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}
+
+# IPv4 table - drop everything except local
+table ip socp_ipv4_block {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        # Only allow localhost
+        iif lo accept
+
+        # Drop all other IPv4
+        log prefix "SOCP-IPv4-DROP: " level info
+        drop
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+
+        # Block outbound IPv4 to public addresses (allow local only)
+        ip daddr != { 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } drop
+    }
+}

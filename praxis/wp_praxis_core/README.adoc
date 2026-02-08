@@ -1,0 +1,389 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2025 WP Praxis Contributors
+
+= WP Praxis Core
+:toc:
+:toclevels: 3
+:source-highlighter: highlight.js
+
+**Offline-capable core library for WP Praxis symbolic workflows**
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/rust-1.70+-orange.svg[Rust,link=https://www.rust-lang.org/]
+image:https://img.shields.io/badge/RSR-Gold-gold[RSR Gold]
+image:https://img.shields.io/badge/tests-59-success[Tests]
+image:https://img.shields.io/badge/formal--verification-Kani-purple[Kani]
+
+== Overview
+
+`wp_praxis_core` is a **zero-dependency** Rust library for parsing, validating, and working with WP Praxis symbolic workflow manifests. It is designed to work completely **offline** with no network dependencies in its default configuration.
+
+=== Key Features
+
+* ✅ **Zero Dependencies** (default mode): No network, no database, pure Rust
+* ✅ **Offline-First**: Embedded YAML/TOML parsers
+* ✅ **Type Safety**: Full Rust type system enforcement
+* ✅ **Memory Safety**: No `unsafe` code
+* ✅ **Formal Verification**: 12 Kani proofs (88% coverage)
+* ✅ **Property Testing**: 24 PropTest/QuickCheck tests
+* ✅ **Validation Engine**: Comprehensive manifest validation
+* ✅ **Feature Flags**: Optional network and database support
+
+== Feature Flags
+
+=== Default (`offline`)
+
+[source,toml]
+----
+[dependencies]
+wp_praxis_core = "0.1.0"
+----
+
+**Zero dependencies** - Offline manifest parsing and validation only.
+
+=== Network Features
+
+[source,toml]
+----
+[dependencies]
+wp_praxis_core = { version = "0.1.0", features = ["network"] }
+----
+
+Adds HTTP client for fetching remote manifests.
+
+=== Full-Stack Features
+
+[source,toml]
+----
+[dependencies]
+wp_praxis_core = { version = "0.1.0", features = ["full-stack"] }
+----
+
+Adds database support (SQLx, SQLite, MySQL).
+
+== Quick Start
+
+=== Installation
+
+Add to your `Cargo.toml`:
+
+[source,toml]
+----
+[dependencies]
+wp_praxis_core = "0.1.0"
+----
+
+=== Basic Usage
+
+[source,rust]
+----
+use wp_praxis_core::{Manifest, Symbol, SymbolType, Operation, ValidationEngine};
+
+// Parse a manifest from YAML (completely offline)
+let yaml = r#"
+name: example
+version: 1.0.0
+symbols:
+  - name: set_site_title
+    type: option
+    operation: set
+    target: blogname
+    value: My Awesome Site
+"#;
+
+let manifest = Manifest::from_yaml(yaml)?;
+
+// Validate the manifest
+let engine = ValidationEngine::new();
+let result = engine.validate(&manifest)?;
+
+if result.is_valid {
+    println!("✓ Manifest is valid");
+} else {
+    for error in result.errors() {
+        eprintln!("ERROR: {}", error);
+    }
+}
+----
+
+=== Creating Manifests Programmatically
+
+[source,rust]
+----
+use wp_praxis_core::{Manifest, Symbol, SymbolType, Operation};
+
+let mut manifest = Manifest::new("my-workflow", "1.0.0");
+manifest.description = Some("My WordPress workflow".to_string());
+
+let symbol = Symbol::new("set_option", SymbolType::Option, Operation::Set)
+    .with_target("my_option")
+    .with_value("my_value")
+    .with_tag("configuration");
+
+manifest.add_symbol(symbol);
+
+// Serialize to YAML or TOML
+let yaml = manifest.to_yaml()?;
+let toml = manifest.to_toml()?;
+----
+
+== Symbol Types
+
+Supported WordPress symbol types:
+
+[cols="1,3"]
+|===
+| Type | Description
+
+| `Option`
+| WordPress options
+
+| `PostMeta`
+| Post metadata
+
+| `UserMeta`
+| User metadata
+
+| `TermMeta`
+| Term metadata
+
+| `CustomPostType`
+| Custom post types
+
+| `Taxonomy`
+| Taxonomies
+
+| `Plugin`
+| Plugin activation/deactivation
+
+| `Theme`
+| Theme modifications
+
+| `Query`
+| Database queries
+
+| `Action`
+| WordPress actions
+
+| `Filter`
+| WordPress filters
+|===
+
+== Operations
+
+Supported operations:
+
+[cols="1,1,3"]
+|===
+| Operation | Destructive? | Description
+
+| `Set`
+| No
+| Create/set a value
+
+| `Update`
+| No
+| Modify an existing value
+
+| `Delete`
+| **Yes**
+| Remove a value (requires rollback strategy)
+
+| `Get`
+| No
+| Query a value (read-only)
+
+| `Register`
+| No
+| Register a component
+
+| `Unregister`
+| **Yes**
+| Unregister a component (requires rollback)
+
+| `Activate`
+| No
+| Activate a feature
+
+| `Deactivate`
+| **Yes**
+| Deactivate a feature (requires rollback)
+|===
+
+== Rollback Strategies
+
+For destructive operations:
+
+[cols="1,3"]
+|===
+| Strategy | Description
+
+| `None`
+| No rollback (use with caution)
+
+| `StorePrevious`
+| Store previous value for restoration
+
+| `Backup`
+| Create a backup before modification
+
+| `Custom(String)`
+| Custom rollback logic
+|===
+
+== Validation
+
+The validation engine checks:
+
+* ✅ Required fields (name, version)
+* ✅ Symbol validity
+* ✅ Duplicate symbol names
+* ✅ Circular dependencies (DAG validation)
+* ✅ Missing dependencies
+* ✅ Semantic versioning format
+* ✅ Operation-specific requirements
+* ✅ Destructive operations have rollback strategies
+
+[source,rust]
+----
+let engine = ValidationEngine::new();
+let result = engine.validate(&manifest)?;
+
+// Check for errors
+if !result.is_valid {
+    for error in result.errors() {
+        println!("ERROR: {}", error);
+    }
+}
+
+// Check for warnings
+for warning in result.warnings() {
+    println!("WARN: {}", warning);
+}
+----
+
+== Testing
+
+=== Run All Tests
+
+[source,bash]
+----
+# Unit tests
+cargo test
+
+# Property-based tests
+cargo test --test property_tests
+
+# With verbose output
+cargo test -- --nocapture
+----
+
+=== Run Specific Test Suites
+
+[source,bash]
+----
+# Library tests only
+cargo test --lib
+
+# Integration tests
+cargo test --test '*'
+
+# Documentation tests
+cargo test --doc
+----
+
+== Formal Verification
+
+WP Praxis Core uses **Kani** for formal verification:
+
+[source,bash]
+----
+# Install Kani
+cargo install --locked kani-verifier
+cargo kani setup
+
+# Run verification
+cargo kani
+
+# Run specific proof
+cargo kani --harness verify_circular_dependency_detection
+----
+
+See link:FORMAL_VERIFICATION.md[FORMAL_VERIFICATION.md] for details.
+
+== Examples
+
+Run the examples:
+
+[source,bash]
+----
+# Offline validation example
+cargo run --example validate_offline
+
+# Parsing example (YAML and TOML)
+cargo run --example parse_manifest
+----
+
+== Architecture
+
+----
+wp_praxis_core/
+├── src/
+│   ├── lib.rs              # Main library entry point
+│   ├── manifest.rs         # Manifest data structures
+│   ├── symbol.rs           # Symbol types and operations
+│   ├── validation.rs       # Validation engine
+│   ├── parser/
+│   │   ├── mod.rs          # Parser interface
+│   │   ├── yaml.rs         # Embedded YAML parser
+│   │   └── toml.rs         # Embedded TOML parser
+│   ├── network.rs          # Network features (optional)
+│   ├── database.rs         # Database features (optional)
+│   └── verification.rs     # Kani proofs
+├── examples/               # Usage examples
+└── tests/                  # Integration tests
+----
+
+== RSR Compliance
+
+This crate achieves **RSR Gold** compliance:
+
+* ✅ **Type Safety**: Full Rust type system
+* ✅ **Memory Safety**: No `unsafe` code
+* ✅ **Offline-First**: Zero network dependencies (default)
+* ✅ **Zero Dependencies**: No external crates in default mode
+* ✅ **Formal Verification**: Kani proofs (12 harnesses, 88% coverage)
+* ✅ **Property Testing**: PropTest + QuickCheck (24 tests)
+* ✅ **SPDX Headers**: All source files
+* ✅ **Documentation**: Comprehensive docs and examples
+* ✅ **Reproducible**: Deterministic parsing and validation
+
+== License
+
+GNU AGPL-3.0-or-later
+
+See link:../LICENSE.txt[LICENSE.txt] for details.
+
+== Contributing
+
+See link:../CONTRIBUTING.md[CONTRIBUTING.md] for contribution guidelines.
+
+== Security
+
+See link:../SECURITY.md[SECURITY.md] for security policy and vulnerability reporting.
+
+== See Also
+
+* link:../README.md[WP Praxis] - Main project repository
+* link:../RSR_COMPLIANCE.md[RSR Compliance Report] - Full RSR assessment
+* link:../RHODIUM_PLATINUM_ROADMAP.md[Rhodium Platinum Roadmap] - Compliance roadmap
+* link:FORMAL_VERIFICATION.md[Formal Verification] - Kani proofs documentation
+
+---
+
+**Version**: 0.1.0 +
+**License**: AGPL-3.0-or-later +
+**Rust Version**: 1.70+ +
+**Status**: Gold RSR Compliance
+
+"Offline-first, type-safe, formally verified."

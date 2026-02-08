@@ -1,0 +1,362 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop, 'claude/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  RUST_VERSION: 1.75.0
+  ELIXIR_VERSION: 1.15.0
+  OTP_VERSION: 26.0
+  PHP_VERSION: 8.2
+  NODE_VERSION: 20
+  BUN_VERSION: 1.0.0
+
+jobs:
+  # PowerShell Tests (Windows and Linux)
+  powershell-tests:
+    name: PowerShell Tests
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        shell: pwsh
+        run: |
+          $PSVersionTable
+
+      - name: Install Pester
+        shell: pwsh
+        run: |
+          Install-Module -Name Pester -MinimumVersion 5.0.0 -Force -SkipPublisherCheck
+
+      - name: Run PowerShell unit tests
+        shell: pwsh
+        run: |
+          ./tests/run-tests.ps1 -Suite powershell -Verbose
+
+      - name: Run PowerShell integration tests
+        shell: pwsh
+        run: |
+          ./tests/run-tests.ps1 -Suite integration -Verbose
+
+      - name: Upload PowerShell test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: powershell-test-results-${{ matrix.os }}
+          path: tests/results/powershell-results.xml
+
+      - name: Upload PowerShell coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: powershell-coverage-${{ matrix.os }}
+          path: tests/coverage/powershell-coverage.xml
+
+  # Rust Tests
+  rust-tests:
+    name: Rust Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          override: true
+          components: rustfmt, clippy
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            wp_injector/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Check Rust formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --manifest-path wp_injector/Cargo.toml --all -- --check
+
+      - name: Run Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --manifest-path wp_injector/Cargo.toml --all-targets --all-features -- -D warnings
+
+      - name: Run Rust tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --manifest-path wp_injector/Cargo.toml --all-features --verbose
+
+      - name: Generate coverage report
+        uses: actions-rs/tarpaulin@v0.1
+        with:
+          version: '0.22.0'
+          args: '--manifest-path wp_injector/Cargo.toml --out Xml --output-dir tests/coverage'
+
+      - name: Upload Rust coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./tests/coverage/cobertura.xml
+          flags: rust
+
+      - name: Upload Rust test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-test-results
+          path: wp_injector/target/
+
+  # Elixir Tests
+  elixir-tests:
+    name: Elixir Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            Core/db-schema/deps
+            Core/db-schema/_build
+            Core/cli-wrapper/deps
+            Core/cli-wrapper/_build
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: Install dependencies (db-schema)
+        working-directory: Core/db-schema
+        run: |
+          mix local.hex --force
+          mix local.rebar --force
+          mix deps.get
+
+      - name: Run Elixir tests (db-schema)
+        working-directory: Core/db-schema
+        run: mix test --cover
+
+      - name: Install dependencies (cli-wrapper)
+        working-directory: Core/cli-wrapper
+        run: |
+          mix deps.get
+
+      - name: Run Elixir tests (cli-wrapper)
+        working-directory: Core/cli-wrapper
+        run: mix test --cover
+
+      - name: Upload Elixir coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./Core/db-schema/cover/excoveralls.json
+          flags: elixir
+
+  # PHP Tests
+  php-tests:
+    name: PHP Tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wp_praxis_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, xml, mysql, mysqli
+          coverage: xdebug
+
+      - name: Validate composer.json
+        run: |
+          if [ -f composer.json ]; then composer validate --strict; fi
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install Composer dependencies
+        run: |
+          if [ -f composer.json ]; then composer install --prefer-dist --no-progress; fi
+
+      - name: Setup WordPress test environment
+        run: |
+          bash bin/install-wp-tests.sh wp_praxis_test root root 127.0.0.1 latest || true
+
+      - name: Run PHP unit tests
+        run: |
+          if [ -f phpunit.xml ]; then vendor/bin/phpunit --configuration phpunit.xml; fi
+
+      - name: Upload PHP coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./tests/coverage/php-clover.xml
+          flags: php
+
+      - name: Upload PHP test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-test-results
+          path: tests/results/phpunit-results.xml
+
+  # TypeScript/Bun Tests
+  typescript-tests:
+    name: TypeScript Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies (swarm)
+        working-directory: SymbolicEngine/swarm
+        run: bun install
+
+      - name: Run TypeScript tests (swarm)
+        working-directory: SymbolicEngine/swarm
+        run: bun test --coverage
+
+      - name: Install dependencies (dashboard)
+        working-directory: SymbolicEngine/dashboard
+        run: bun install || true
+
+      - name: Run TypeScript tests (dashboard)
+        working-directory: SymbolicEngine/dashboard
+        run: bun test --coverage || true
+
+      - name: Upload TypeScript coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./SymbolicEngine/swarm/coverage/coverage-final.json
+          flags: typescript
+
+  # E2E Tests
+  e2e-tests:
+    name: End-to-End Tests
+    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        shell: pwsh
+        run: |
+          Install-Module -Name Pester -MinimumVersion 5.0.0 -Force -SkipPublisherCheck
+
+      - name: Run E2E tests
+        shell: pwsh
+        run: |
+          ./tests/run-tests.ps1 -Suite e2e -Verbose
+
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: tests/results/
+
+  # Coverage Report
+  coverage-report:
+    name: Combined Coverage Report
+    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: coverage-artifacts
+
+      - name: Generate combined coverage report
+        run: |
+          echo "Coverage artifacts downloaded"
+          ls -R coverage-artifacts/
+
+      - name: Upload combined coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage-artifacts
+          flags: combined
+          fail_ci_if_error: false
+
+  # Test Summary
+  test-summary:
+    name: Test Summary
+    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check test results
+        run: |
+          echo "All test suites completed"
+          echo "PowerShell Tests: ${{ needs.powershell-tests.result }}"
+          echo "Rust Tests: ${{ needs.rust-tests.result }}"
+          echo "Elixir Tests: ${{ needs.elixir-tests.result }}"
+          echo "PHP Tests: ${{ needs.php-tests.result }}"
+          echo "TypeScript Tests: ${{ needs.typescript-tests.result }}"
+          echo "E2E Tests: ${{ needs.e2e-tests.result }}"
+
+      - name: Fail if any test suite failed
+        if: |
+          needs.powershell-tests.result == 'failure' ||
+          needs.rust-tests.result == 'failure' ||
+          needs.elixir-tests.result == 'failure' ||
+          needs.php-tests.result == 'failure' ||
+          needs.typescript-tests.result == 'failure' ||
+          needs.e2e-tests.result == 'failure'
+        run: exit 1

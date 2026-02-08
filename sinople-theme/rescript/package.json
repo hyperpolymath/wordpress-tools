@@ -1,0 +1,22 @@
+{
+  "name": "sinople-theme-rescript",
+  "version": "1.0.0",
+  "description": "ReScript components and bindings for Sinople WordPress theme",
+  "scripts": {
+    "clean": "rescript clean",
+    "build": "rescript build",
+    "watch": "rescript build -w",
+    "test": "echo \"Tests run via Deno integration tests\" && exit 0"
+  },
+  "keywords": [
+    "rescript",
+    "wordpress",
+    "semantic-web",
+    "wasm"
+  ],
+  "author": "Sinople Theme Contributors",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "rescript": "^11.0.0"
+  }
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Praxis - Injector Dashboard</title>
+    <meta name="description" content="Symbolic injection and rollback interface for WP Praxis">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/injector/css/injector.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>WP Praxis Injector</h1>
+                <span class="subtitle">Symbolic Injection & Rollback</span>
+            </div>
+
+            <div class="header-actions">
+                <a href="/" class="btn btn-secondary">
+                    ← Back to Dashboard
+                </a>
+                <button id="theme-toggle" class="btn btn-secondary" title="Toggle Theme">
+                    <span class="icon">🌓</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="injector-container">
+        <!-- Left Panel - Injection Form -->
+        <section class="panel panel-primary">
+            <h2>Symbolic Injection</h2>
+
+            <!-- Manifest Upload -->
+            <div class="form-section">
+                <h3>1. Load Manifest</h3>
+                <div class="upload-area" id="manifest-upload">
+                    <div class="upload-prompt">
+                        <span class="icon">📄</span>
+                        <p>Drop manifest file here or click to browse</p>
+                        <small>Supports YAML and TOML formats</small>
+                    </div>
+                    <input type="file" id="manifest-file" accept=".yml,.yaml,.toml" hidden>
+                </div>
+                <div id="manifest-preview" class="manifest-preview" style="display: none;">
+                    <h4>Manifest Preview</h4>
+                    <pre id="manifest-content"></pre>
+                </div>
+            </div>
+
+            <!-- Symbol Selection -->
+            <div class="form-section">
+                <h3>2. Configure Injection</h3>
+                <div class="form-group">
+                    <label for="target-workflow">Target Workflow</label>
+                    <select id="target-workflow" class="form-control">
+                        <option value="">Select workflow...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="injection-mode">Injection Mode</label>
+                    <select id="injection-mode" class="form-control">
+                        <option value="safe">Safe (with backup)</option>
+                        <option value="direct">Direct (no backup)</option>
+                        <option value="dry-run">Dry Run (preview only)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="target-env">Target Environment</label>
+                    <select id="target-env" class="form-control">
+                        <option value="development">Development</option>
+                        <option value="staging">Staging</option>
+                        <option value="production">Production</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="validate-before" checked>
+                        Validate before injection
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="create-baseline" checked>
+                        Create baseline snapshot
+                    </label>
+                </div>
+            </div>
+
+            <!-- Injection Actions -->
+            <div class="form-section">
+                <h3>3. Execute</h3>
+                <div class="action-buttons">
+                    <button id="validate-btn" class="btn btn-secondary">
+                        Validate Manifest
+                    </button>
+                    <button id="inject-btn" class="btn btn-primary">
+                        <span class="icon">💉</span>
+                        Inject Symbols
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel - Status & History -->
+        <section class="panel panel-secondary">
+            <!-- Injection Status -->
+            <div class="status-section">
+                <h2>Injection Status</h2>
+                <div id="injection-status" class="status-display">
+                    <div class="status-idle">
+                        <span class="icon">⏸️</span>
+                        <p>No active injection</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Log -->
+            <div class="log-section">
+                <h3>Progress Log</h3>
+                <div id="progress-log" class="log-display">
+                    <div class="log-placeholder">Waiting for injection...</div>
+                </div>
+            </div>
+
+            <!-- Injection History -->
+            <div class="history-section">
+                <h3>Recent Injections</h3>
+                <div id="injection-history" class="history-list">
+                    <div class="history-placeholder">No injection history</div>
+                </div>
+            </div>
+
+            <!-- Rollback Section -->
+            <div class="rollback-section">
+                <h3>Rollback</h3>
+                <div class="form-group">
+                    <label for="rollback-select">Select snapshot to restore</label>
+                    <select id="rollback-select" class="form-control">
+                        <option value="">No snapshots available</option>
+                    </select>
+                </div>
+                <button id="rollback-btn" class="btn btn-warning" disabled>
+                    <span class="icon">↶</span>
+                    Rollback
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Diff Viewer Modal -->
+    <div id="diff-modal" class="modal-container">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Injection Preview</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="diff-viewer"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDiffModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInjection()">Proceed with Injection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="/injector/js/injector.js"></script>
+</body>
+</html>

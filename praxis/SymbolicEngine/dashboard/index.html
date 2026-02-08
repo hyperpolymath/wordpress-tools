@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Praxis - Symbolic Engine Dashboard</title>
+    <meta name="description" content="Real-time monitoring and control interface for WP Praxis Symbolic Engine">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/dashboard.css">
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>WP Praxis</h1>
+                <span class="subtitle">Symbolic Engine Dashboard</span>
+            </div>
+
+            <div class="header-actions">
+                <button id="refresh-btn" class="btn btn-secondary" title="Refresh Dashboard">
+                    <span class="icon">⟳</span>
+                </button>
+                <button id="theme-toggle" class="btn btn-secondary" title="Toggle Theme">
+                    <span class="icon">🌓</span>
+                </button>
+                <div class="connection-status" id="connection-status">
+                    <span class="status-dot" data-status="disconnected"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-view="overview">
+                    <span class="icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="#workflows" class="nav-item" data-view="workflows">
+                    <span class="icon">⚙️</span>
+                    <span>Workflows</span>
+                </a>
+                <a href="#executions" class="nav-item" data-view="executions">
+                    <span class="icon">▶️</span>
+                    <span>Executions</span>
+                </a>
+                <a href="#symbols" class="nav-item" data-view="symbols">
+                    <span class="icon">🔣</span>
+                    <span>Symbols</span>
+                </a>
+                <a href="#audits" class="nav-item" data-view="audits">
+                    <span class="icon">🔍</span>
+                    <span>Audits</span>
+                </a>
+                <a href="#baselines" class="nav-item" data-view="baselines">
+                    <span class="icon">📏</span>
+                    <span>Baselines</span>
+                </a>
+                <a href="/injector" class="nav-item">
+                    <span class="icon">💉</span>
+                    <span>Injector</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Overview View -->
+            <section id="view-overview" class="view active">
+                <h2 class="view-title">Dashboard Overview</h2>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Workflows</h3>
+                            <span class="icon">⚙️</span>
+                        </div>
+                        <div class="stat-value" id="stat-workflows-total">-</div>
+                        <div class="stat-details">
+                            <span class="stat-item">
+                                <span class="label">Active:</span>
+                                <span id="stat-workflows-active">-</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="label">Paused:</span>
+                                <span id="stat-workflows-paused">-</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Executions</h3>
+                            <span class="icon">▶️</span>
+                        </div>
+                        <div class="stat-value" id="stat-executions-total">-</div>
+                        <div class="stat-details">
+                            <span class="stat-item">
+                                <span class="label">Running:</span>
+                                <span id="stat-executions-running">-</span>
+                            </span>
+                            <span class="stat-item success">
+                                <span class="label">Success Rate:</span>
+                                <span id="stat-executions-success">-%</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Audits</h3>
+                            <span class="icon">🔍</span>
+                        </div>
+                        <div class="stat-value" id="stat-audits-total">-</div>
+                        <div class="stat-details">
+                            <span class="stat-item warning">
+                                <span class="label">Deviations:</span>
+                                <span id="stat-audits-deviations">-</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="label">Compliance:</span>
+                                <span id="stat-audits-compliance">-%</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>System</h3>
+                            <span class="icon">💻</span>
+                        </div>
+                        <div class="stat-value" id="stat-system-uptime">-</div>
+                        <div class="stat-details">
+                            <span class="stat-item">
+                                <span class="label">Memory:</span>
+                                <span id="stat-system-memory">- MB</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="label">Connections:</span>
+                                <span id="stat-system-connections">-</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <h3>Execution Timeline</h3>
+                        <canvas id="execution-timeline-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Workflow Status</h3>
+                        <canvas id="workflow-status-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h3>Recent Activity</h3>
+                    <div id="recent-activity" class="activity-list">
+                        <div class="activity-placeholder">Loading activity...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflows View -->
+            <section id="view-workflows" class="view">
+                <div class="view-header">
+                    <h2 class="view-title">Workflows</h2>
+                    <button class="btn btn-primary" id="create-workflow-btn">
+                        <span class="icon">+</span> Create Workflow
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="workflows-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Last Execution</th>
+                                <th>Symbols</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workflows-tbody">
+                            <tr>
+                                <td colspan="5" class="loading">Loading workflows...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Executions View -->
+            <section id="view-executions" class="view">
+                <div class="view-header">
+                    <h2 class="view-title">Executions</h2>
+                    <div class="view-filters">
+                        <select id="execution-status-filter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="running">Running</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="executions-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Workflow</th>
+                                <th>Status</th>
+                                <th>Started</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="executions-tbody">
+                            <tr>
+                                <td colspan="6" class="loading">Loading executions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Symbols View -->
+            <section id="view-symbols" class="view">
+                <div class="view-header">
+                    <h2 class="view-title">Symbol Registry</h2>
+                    <div class="view-search">
+                        <input type="text" id="symbol-search" class="search-input" placeholder="Search symbols...">
+                    </div>
+                </div>
+
+                <div class="symbols-grid" id="symbols-grid">
+                    <div class="loading-placeholder">Loading symbols...</div>
+                </div>
+            </section>
+
+            <!-- Audits View -->
+            <section id="view-audits" class="view">
+                <h2 class="view-title">Audit Reports</h2>
+
+                <div class="table-container">
+                    <table class="data-table" id="audits-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Workflow</th>
+                                <th>Deviations</th>
+                                <th>Compliance</th>
+                                <th>Started</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audits-tbody">
+                            <tr>
+                                <td colspan="6" class="loading">Loading audits...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Baselines View -->
+            <section id="view-baselines" class="view">
+                <div class="view-header">
+                    <h2 class="view-title">Baselines</h2>
+                    <button class="btn btn-primary" id="create-baseline-btn">
+                        <span class="icon">+</span> Create Baseline
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="baselines-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Workflow</th>
+                                <th>Normative</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="baselines-tbody">
+                            <tr>
+                                <td colspan="5" class="loading">Loading baselines...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-container"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>

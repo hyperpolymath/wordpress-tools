@@ -1,0 +1,356 @@
+= WP Praxis - Symbolic Workflow System for WordPress
+
+image:[Palimpsest-MPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"] 
+
+*A polyglot meta-programming framework for WordPress automation through declarative symbolic workflows*
+
+[![License: PMPL 1.0]()](https://github.com/hyperpolymath/palimpsest-license)
+[![RSR Bronze](https://img.shields.io/badge/RSR-Bronze-cd7f32)](https://github.com/hyperpolymath/wp-praxis/blob/master/RSR_COMPLIANCE.md)
+[![Tests](https://img.shields.io/badge/tests-245%2B-success)](https://github.com/hyperpolymath/wp-praxis/tree/master/tests)
+[![Coverage](https://img.shields.io/badge/coverage-78%25-yellowgreen)](https://github.com/hyperpolymath/wp-praxis/tree/master/tests)
+
+== What is WP Praxis?
+
+WP Praxis transforms WordPress development by allowing you to define complex workflows declaratively in YAML/TOML manifests and execute them across multiple programming languages while preserving semantic meaning at every layer.
+
+=== Key Features
+
+- *🎯 Declarative Workflows* - Define WordPress operations in YAML/TOML, not code
+- *🌐 True Polyglot* - 8 languages working together (Rust, Elixir, TypeScript, PHP, PowerShell, LFE, Racket, SQL)
+- *🔄 Symbolic Dispatch* - Route operations based on semantic tags and context
+- *🛡️ Safe Execution* - Rollback support, transaction-like behavior, audit trails
+- *📊 Real-Time Monitoring* - WebSocket dashboards, GraphQL API, live statistics
+- *🔍 Deep Introspection* - Racket-powered recursive semantic analysis
+- *⚡ Distributed Execution* - Swarm coordination across multiple worker nodes
+- *✅ Production Ready* - 245+ tests, comprehensive error handling, security hardened
+
+== Quick Start
+
+=== Prerequisites
+
+- *Rust* >= 1.70
+- *Elixir* >= 1.15 with Erlang/OTP >= 25
+- *Bun* >= 1.0
+- *PowerShell Core* >= 7.0
+- *PHP* >= 7.4 (for WordPress integration)
+- *PostgreSQL* >= 13 (for state management)
+- *Optional*: Racket >= 8.10, LFE/Rebar3
+
+=== Installation
+
+==== Option 1: Quick Start Script (Recommended)
+```bash
+cd examples/quickstart
+chmod +x quickstart.sh
+./quickstart.sh
+```
+
+==== Option 2: Docker
+```bash
+cd examples/demos/full-stack-demo
+docker-compose up -d
+
+= Access services:
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+= Dashboard: http://localhost:3000
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+= GraphQL: http://localhost:4000/graphql
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+= WordPress: http://localhost:8080
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+```
+
+==== Option 3: Manual Setup
+```bash
+= 1. Build Rust injector
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+cd wp_injector
+cargo build --release
+
+= 2. Setup database
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+cd ../Core/db-schema
+mix deps.get
+mix ecto.setup
+
+= 3. Install TypeScript dependencies
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+cd ../SymbolicEngine/swarm && bun install
+cd ../dashboard && bun install
+cd ../graphql && bun install
+
+= 4. Start services
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+cd ../..
+pwsh SymbolicEngine/core/symbolic.ps1 -Operation Interactive
+```
+
+== Example Workflow
+
+Create a YAML workflow to update WordPress options:
+
+```yaml
+workflow:
+  name: "Update Site Configuration"
+  version: "1.0.0"
+
+symbols:
+  - name: update_site_title
+    type: action
+    context: wordpress
+    dispatch: rust_injector
+    parameters:
+      option_name: blogname
+      option_value: "My Awesome Site"
+    rollback: snapshot
+
+  - name: update_tagline
+    type: action
+    context: wordpress
+    dispatch: rust_injector
+    parameters:
+      option_name: blogdescription
+      option_value: "Powered by WP Praxis"
+    depends_on: [update_site_title]
+```
+
+Execute the workflow:
+
+```bash
+= Using PowerShell engine
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+pwsh SymbolicEngine/core/symbolic.ps1 -ManifestPath workflow.yaml -Operation Execute
+
+= Using Rust injector directly
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+./wp_injector/target/release/wp_injector inject --manifest workflow.yaml --wp-root /var/www/html
+
+= Using swarm for distributed execution
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+cd SymbolicEngine/swarm
+bun run bin/swarm-cli.ts deploy ../../workflow.yaml
+```
+
+== Architecture
+
+WP Praxis uses a layered polyglot architecture where each language serves a specific purpose:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     User Interfaces                          │
+├─────────────┬────────────┬──────────────┬──────────────────┤
+│ WordPress   │ Dashboard  │ GraphQL API  │ CLI Tools         │
+│ Admin UI    │ (Web UI)   │ (Playground) │ (PowerShell/Bun) │
+└──────┬──────┴─────┬──────┴──────┬───────┴────────┬─────────┘
+       │            │             │                │
+       ▼            ▼             ▼                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  Orchestration Layer                         │
+├─────────────┬────────────┬──────────────┬──────────────────┤
+│ PowerShell  │ Swarm      │ LFE Parser   │ Racket           │
+│ Engine      │ Coordinator│ (Lisp Macros)│ Introspection    │
+└──────┬──────┴─────┬──────┴──────┬───────┴────────┬─────────┘
+       │            │             │                │
+       ▼            ▼             ▼                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   Execution Layer                            │
+├─────────────┬────────────┬──────────────┬──────────────────┤
+│ Rust        │ PHP        │ Elixir       │ PowerShell       │
+│ Injector    │ Engine     │ (Future)     │ Scripts          │
+└──────┬──────┴─────┬──────┴──────┬───────┴────────┬─────────┘
+       │            │             │                │
+       ▼            ▼             ▼                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      Data Layer                              │
+├─────────────┬────────────┬──────────────┬──────────────────┤
+│ PostgreSQL  │ SQLite     │ WordPress DB │ JSON/TOML        │
+│ (Ecto)      │ (Swarm)    │ (MySQL)      │ (State Files)    │
+└─────────────┴────────────┴──────────────┴──────────────────┘
+```
+
+=== Component Overview
+
+| Component | Language | Purpose |
+|-----------|----------|---------|
+| *Symbolic Engine* | PowerShell | Core workflow orchestration and dispatch |
+| *Injector* | Rust | High-performance WordPress database operations |
+| *Swarm System* | TypeScript/Bun | Distributed execution coordinator |
+| *Manifest Parser* | LFE (Lisp) | YAML/TOML parsing with macro expansion |
+| *Introspection* | Racket | Recursive semantic analysis and feedback |
+| *Database Schema* | Elixir/Ecto | State management and persistence |
+| *GraphQL API* | TypeScript | Unified API layer with subscriptions |
+| *Dashboard* | TypeScript/HTML | Real-time monitoring and control |
+| *WordPress Plugin* | PHP | WordPress integration and admin UI |
+
+== Documentation
+
+- *[Quick Start](examples/QUICKSTART.md)* - Get started in 5 minutes
+- *[FAQ](examples/FAQ.md)* - 47 frequently asked questions
+- *[Troubleshooting](examples/TROUBLESHOOTING.md)* - Common issues and solutions
+- *[Examples](examples/README.md)* - 5 complete workflow examples + 5 tutorials
+- *[CLAUDE.md](CLAUDE.md)* - AI assistant development guide
+- *[Implementation Summary](IMPLEMENTATION_SUMMARY.md)* - Complete feature overview
+- *[Contributing](CONTRIBUTING.md)* - How to contribute
+- *[Security](SECURITY.md)* - Security policy and reporting
+- *[Code of Conduct](CODE_OF_CONDUCT.md)* - Community guidelines
+
+=== Component Documentation
+
+- [PowerShell Engine](SymbolicEngine/core/README.md)
+- [Rust Injector](wp_injector/README.md)
+- [Swarm System](SymbolicEngine/swarm/README.md)
+- [GraphQL API](SymbolicEngine/graphql/README.md)
+- [Dashboard](SymbolicEngine/dashboard/README.md)
+- [Database Schema](Core/db-schema/README.md)
+- [Manifest Parser](Core/manifest-parser/README.md)
+- [Introspection](Core/introspection/README.md)
+- [WordPress Plugin](plugin/README.md)
+
+== Use Cases
+
+=== WordPress Migration
+```yaml
+= Symbolic workflow for site migration
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+symbols:
+  - name: export_content
+    dispatch: php_engine
+  - name: transform_urls
+    dispatch: rust_injector
+  - name: import_to_target
+    dispatch: php_engine
+    depends_on: [export_content, transform_urls]
+```
+
+=== Custom Post Type Setup
+```toml
+= Create custom post types with taxonomies
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+[[symbols]]
+name = "register_product_cpt"
+type = "action"
+context = "wordpress"
+dispatch = "php_engine"
+
+[[symbols]]
+name = "add_product_taxonomy"
+type = "action"
+depends_on = ["register_product_cpt"]
+```
+
+=== Distributed Content Processing
+```yaml
+= Process across multiple workers
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+symbols:
+  - name: process_images
+    dispatch: swarm
+    parallelism: 10
+  - name: generate_thumbnails
+    dispatch: swarm
+    depends_on: [process_images]
+```
+
+== Testing
+
+```bash
+= Run all tests with coverage
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+pwsh tests/run-tests.ps1 -Suite all -Coverage
+
+= Run specific test suites
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+pwsh tests/run-tests.ps1 -Suite powershell  # PowerShell tests
+cd wp_injector && cargo test                # Rust tests
+cd Core/db-schema && mix test               # Elixir tests
+cd plugin && composer test                  # PHP tests
+cd SymbolicEngine/swarm && bun test         # TypeScript tests
+```
+
+*Test Coverage*: 245+ tests across all layers (~78% coverage)
+
+== RSR Compliance
+
+WP Praxis aims for *Bronze-level* [Rhodium Standard Repository (RSR)](https://example.com/rsr) compliance:
+
+- ✅ Type safety (Rust, TypeScript strict mode, Elixir specs)
+- ✅ Memory safety (Rust ownership, no unsafe blocks in critical paths)
+- ⚠️ Offline-first (Partial - some components require network/database)
+- ✅ Complete documentation (20+ docs, tutorials, examples)
+- ✅ .well-known/ directory (security.txt, ai.txt, humans.txt)
+- ✅ Build system (justfile, Nix flake, GitHub Actions CI)
+- ✅ 100% test pass rate (245+ passing tests)
+- ✅ TPCF Perimeter 3 (Community Sandbox) - open contribution
+
+*Note*: Full Bronze requires zero network dependencies, which conflicts with WordPress database integration. See [RSR_COMPLIANCE.md](RSR_COMPLIANCE.md) for detailed analysis.
+
+== Security
+
+- WordPress nonce verification and capability checks
+- SQL injection protection (prepared statements)
+- Input sanitization and output escaping
+- Role-based access control (RBAC)
+- JWT authentication for APIs
+- Audit logging of all operations
+
+Report security vulnerabilities to: *security@wp-praxis.dev* (See [SECURITY.md](SECURITY.md))
+
+== Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+
+- Code of Conduct
+- Development setup
+- Coding standards
+- Pull request process
+- TPCF contribution model (3-tier perimeter system)
+
+== License
+
+*Palimpsest-MPL License v3.0 (PMPL-1.0)*
+
+WP Praxis is free software: you can redistribute it and/or modify it under the terms of the PMPL as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+*Important*: AGPL requires that if you run modified versions on a network server, you must provide the source code to users. See [LICENSE](LICENSE) for full terms.
+
+== Maintainers
+
+- See [MAINTAINERS.md](MAINTAINERS.md) for current maintainer list
+- Join development: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+== Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
+
+== Acknowledgments
+
+Built with:
+- Rust, Elixir, TypeScript/Bun, PHP, PowerShell, LFE, Racket
+- PostgreSQL, SQLite, MySQL
+- Apollo Server, Elysia, Chart.js
+- WordPress, Ecto, Pester, PHPUnit
+
+Special thanks to the open source community and all contributors.
+
+---
+
+*Status*: Production Ready (v0.1.0)
+*Website*: https://wp-praxis.dev (coming soon)
+*Docs*: https://docs.wp-praxis.dev (coming soon)
+*Support*: https://github.com/hyperpolymath/wp-praxis/discussions

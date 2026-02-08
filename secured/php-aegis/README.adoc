@@ -1,0 +1,364 @@
+= php-aegis
+
+image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[MPL-2.0,link="https://opensource.org/licenses/MPL-2.0"]
+image:https://img.shields.io/badge/Philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
+
+
+:toc:
+:toc-title: Contents
+:sectnums:
+:source-highlighter: highlight.js
+
+image:https://img.shields.io/badge/PHP-8.1+-blue.svg[PHP 8.1+]
+image:https://img.shields.io/badge/RSR-Compliant-gold.svg[RSR Compliant]
+
+**A PHP security and hardening toolkit providing input validation, sanitization, and security utilities.**
+
+== Overview
+
+php-aegis provides a collection of security-focused utilities for PHP applications. Named after the mythological shield of Zeus, it aims to protect your applications from common web vulnerabilities.
+
+=== Best For
+
+* **API services** without view layers
+* **CLI tools** and microservices
+* **Semantic web applications** (RDF/Turtle escaping - unique to php-aegis)
+* **Vanilla PHP** applications without frameworks
+* **Framework gaps** - validation/features that WordPress/Laravel/Symfony lack
+
+=== Not Needed For
+
+* **WordPress plugins/themes** - Use WordPress core functions (`esc_html()`, `esc_attr()`, etc.)
+* **Laravel views** - Use Blade's auto-escaping
+* **Symfony/Twig** - Use Twig's escaping
+
+See link:POSITIONING.md[POSITIONING.md] for detailed guidance.
+
+=== Key Features
+
+* **Input Validation** - Strict validation for emails, URLs, IPs, UUIDs, and more
+* **Context-Aware Sanitization** - HTML, JS, CSS, URL, and JSON output escaping
+* **Security Headers** - Easy CSP, HSTS, X-Frame-Options, and more
+* **Rate Limiting** - Token bucket algorithm with file/memory backends
+* **IndieWeb Security** - Micropub, IndieAuth, Webmention with SSRF prevention
+* **RDF/Turtle Escaping** - Unique W3C-compliant semantic web security (no other PHP lib does this)
+* **Cerro Torre Integration** - Verified container packaging with cryptographic provenance
+* **WordPress Integration** - 23 adapter functions + MU-plugin
+* **Type Safety** - Full `strict_types` enforcement throughout
+* **Modern PHP** - Requires PHP 8.1+ for latest security features
+* **Zero Dependencies** - Core library has no external dependencies
+* **PSR-12 Compliant** - Follows PHP-FIG coding standards
+
+=== Philosophy
+
+[quote]
+Defense in depth: multiple layers of validation and sanitization.
+
+php-aegis follows the principle that security should be:
+
+. **Simple** - Easy to use correctly, hard to misuse
+. **Strict** - Fail closed rather than fail open
+. **Composable** - Combine utilities for layered protection
+
+== Installation
+
+=== Via Composer
+
+[source,bash]
+----
+composer require hyperpolymath/php-aegis
+----
+
+=== Requirements
+
+* PHP 8.1 or higher
+* No additional extensions required
+
+== Quick Start
+
+[source,php]
+----
+<?php
+
+declare(strict_types=1);
+
+use PhpAegis\Validator;
+use PhpAegis\Sanitizer;
+use PhpAegis\Headers;
+
+// Apply security headers (call before any output)
+Headers::secure();
+
+// Validate user input
+$email = $_POST['email'] ?? '';
+if (!Validator::email($email)) {
+    throw new InvalidArgumentException('Invalid email address');
+}
+
+// Sanitize for HTML output
+$userContent = $_POST['comment'] ?? '';
+$safeHtml = Sanitizer::html($userContent);
+echo "<p>{$safeHtml}</p>";
+----
+
+=== Semantic Web (RDF/Turtle)
+
+[source,php]
+----
+<?php
+
+use PhpAegis\TurtleEscaper;
+
+// Safe Turtle string literal
+$label = TurtleEscaper::string($userInput);
+echo '"' . $label . '"@en';
+
+// Safe IRI
+$uri = TurtleEscaper::iri($userProvidedUri);
+echo '<' . $uri . '>';
+
+// Complete triple
+echo TurtleEscaper::triple(
+    'https://example.org/resource/1',
+    'http://www.w3.org/2000/01/rdf-schema#label',
+    $userLabel,
+    'en'
+);
+----
+
+== API Reference
+
+=== Validator
+
+The `Validator` class provides strict input validation methods (all static).
+
+==== Core Validators
+
+[source,php]
+----
+Validator::email('user@example.com');     // true
+Validator::url('https://example.com');    // true
+Validator::httpsUrl('http://insecure');   // false (requires HTTPS)
+----
+
+==== Network Validators
+
+[source,php]
+----
+Validator::ip('192.168.1.1');             // true (v4 or v6)
+Validator::ipv4('192.168.1.1');           // true
+Validator::ipv6('::1');                   // true
+----
+
+==== Format Validators
+
+[source,php]
+----
+Validator::uuid('550e8400-e29b-41d4-a716-446655440000');  // true
+Validator::slug('my-post-title');                         // true
+Validator::json('{"valid": true}');                       // true
+Validator::int('42');                                     // true
+Validator::int('5', min: 1, max: 10);                     // true
+Validator::domain('example.com');                         // true
+Validator::hostname('example.com');                       // true (domain or IP)
+Validator::semver('1.2.3-beta.1');                        // true
+Validator::iso8601('2024-01-15T10:30:00Z');               // true
+Validator::hexColor('#ff5733');                           // true
+----
+
+==== Security Validators
+
+[source,php]
+----
+Validator::noNullBytes("safe\x00string");  // false (null byte!)
+Validator::safeFilename('../../../etc/passwd');  // false
+Validator::safeFilename('document.pdf');         // true
+Validator::printable("Hello World!");             // true (ASCII only)
+----
+
+=== Sanitizer
+
+The `Sanitizer` class provides context-aware output escaping (all static).
+
+==== HTML Context
+
+[source,php]
+----
+Sanitizer::html('<script>alert("xss")</script>');
+// Returns: &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
+
+Sanitizer::stripTags('<p>Hello <b>World</b></p>');
+// Returns: Hello World
+----
+
+==== Other Contexts
+
+[source,php]
+----
+Sanitizer::js("user's input");       // Safe for JS strings
+Sanitizer::css("malicious;color:red");  // Safe for CSS
+Sanitizer::url("path with spaces");  // URL encoded
+Sanitizer::json(['key' => 'value']); // Safe JSON
+Sanitizer::filename("../../../etc/passwd");  // Returns: etc_passwd
+----
+
+=== Headers
+
+Security headers helper (call before output).
+
+[source,php]
+----
+// Apply all recommended headers at once
+Headers::secure();
+
+// Or configure individually
+Headers::contentSecurityPolicy([
+    'default-src' => ["'self'"],
+    'script-src'  => ["'self'", 'https://cdn.example.com'],
+    'style-src'   => ["'self'", "'unsafe-inline'"],
+]);
+Headers::strictTransportSecurity(maxAge: 31536000, preload: true);
+Headers::frameOptions('SAMEORIGIN');
+Headers::referrerPolicy('strict-origin-when-cross-origin');
+Headers::permissionsPolicy([
+    'geolocation' => [],
+    'camera' => [],
+]);
+Headers::removeInsecureHeaders();  // Removes X-Powered-By, Server
+----
+
+=== TurtleEscaper
+
+W3C-compliant RDF Turtle escaping for semantic web applications.
+
+[source,php]
+----
+// Escape string literals
+TurtleEscaper::string('Hello "World"');
+// Returns: Hello \"World\"
+
+// Escape IRIs
+TurtleEscaper::iri('https://example.org/resource#1');
+
+// Build complete literals with language/datatype
+TurtleEscaper::literal('Bonjour', language: 'fr');
+// Returns: "Bonjour"@fr
+
+TurtleEscaper::literal('42', datatype: 'http://www.w3.org/2001/XMLSchema#integer');
+// Returns: "42"^^xsd:integer
+
+// Build complete triples
+TurtleEscaper::triple(
+    'https://example.org/person/1',
+    'http://xmlns.com/foaf/0.1/name',
+    'Alice',
+    'en'
+);
+// Returns: <https://example.org/person/1> <http://xmlns.com/foaf/0.1/name> "Alice"@en .
+----
+
+== Security Considerations
+
+=== What php-aegis Does
+
+* Validates input formats (email, URL, etc.)
+* Sanitizes output for HTML contexts
+* Enforces type safety
+
+=== What php-aegis Does NOT Do
+
+* SQL injection prevention (use PDO prepared statements)
+* CSRF protection (use framework tokens)
+* Authentication/Authorization
+* Encryption/Hashing (use `password_hash()`, `sodium_*`)
+
+=== Best Practices
+
+[source,php]
+----
+// Always validate before processing
+if (!$validator->email($input)) {
+    // Reject early
+    return;
+}
+
+// Always sanitize before output
+echo $sanitizer->html($userContent);
+
+// Layer your defenses
+$clean = $sanitizer->stripTags($input);  // Remove tags
+$safe = $sanitizer->html($clean);         // Then encode
+----
+
+== Development
+
+=== Setup
+
+[source,bash]
+----
+git clone https://github.com/hyperpolymath/php-aegis.git
+cd php-aegis
+composer install
+----
+
+=== Commands
+
+[source,bash]
+----
+# Using just (recommended)
+just test      # Run tests
+just analyze   # Static analysis
+just lint      # Check formatting
+just fmt       # Fix formatting
+
+# Using composer directly
+vendor/bin/phpunit
+vendor/bin/phpstan analyse src
+vendor/bin/php-cs-fixer fix --dry-run
+----
+
+== Roadmap
+
+See link:ROADMAP_PRIORITY.md[ROADMAP_PRIORITY.md] for the detailed, integration-informed roadmap.
+
+=== Recently Completed (v0.1.1)
+
+* [x] Extended validators (IP, UUID, slug, JSON, filename safety)
+* [x] Context-aware sanitizers (JS, CSS, URL, JSON, filename)
+* [x] Security headers module (CSP, HSTS, X-Frame-Options, etc.)
+* [x] RDF/Turtle escaping (unique differentiator)
+* [x] Static methods (no instance required)
+* [x] SPDX license headers
+
+=== Next Up
+
+* [ ] IndieWeb security helpers (Micropub, IndieAuth, Webmention)
+* [ ] Rate limiting with file/memory backends
+* [ ] CSRF token generation and validation
+* [ ] Input filtering chains
+
+== Related Projects
+
+* https://github.com/hyperpolymath/sanctify-php[sanctify-php] - Static analysis for PHP security (complementary tool)
+* https://github.com/hyperpolymath/wp-audit-toolkit[wp-audit-toolkit] - WordPress security auditing
+* https://github.com/hyperpolymath/proof-of-work[proof-of-work] - Proof-of-work spam prevention
+
+=== Integration Notes
+
+For teams using both `php-aegis` and `sanctify-php`, see link:HANDOVER_SANCTIFY.md[HANDOVER_SANCTIFY.md] for integration guidance and coordinated workflows.
+
+== License
+
+MIT License - See link:LICENSE.txt[LICENSE.txt] for details.
+
+== Contributing
+
+Contributions welcome! Please read link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] first.
+
+For security vulnerabilities, see link:SECURITY.adoc[SECURITY.adoc].
+
+== RSR Compliance
+
+This repository follows https://github.com/hyperpolymath/rhodium-standard-repositories[Rhodium Standard Repository] guidelines.
+
+PHP is permitted under RSR as a Tier Exception for security-specific tooling.

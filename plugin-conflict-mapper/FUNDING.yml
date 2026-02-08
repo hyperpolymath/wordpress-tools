@@ -1,0 +1,49 @@
+# Funding Configuration for WP Plugin Conflict Mapper
+# This file is used by GitLab and GitHub to display sponsor information
+
+# Solidarity Economics Framework
+# We believe in collective prosperity and mutual support
+
+# Primary funding platforms
+open_collective: hyperpolymath
+liberapay: hyperpolymath
+# patreon: hyperpolymath
+
+# Cryptocurrency (for sovereignty and censorship resistance)
+# custom: ["https://donate.hyperpolymath.com"]
+
+# Community funding
+# ko_fi: hyperpolymath
+
+# Note: Replace usernames above with actual platform accounts when available
+
+# Funding Principles:
+# 1. Transparency: All funding is publicly disclosed
+# 2. Sustainability: Focus on long-term project health
+# 3. Community: Prioritize contributors and users
+# 4. Independence: Maintain project autonomy
+# 5. Reciprocity: Support the broader ecosystem
+
+# How Funds Are Used:
+# - Development time and infrastructure
+# - Security audits and penetration testing
+# - Documentation and accessibility improvements
+# - Community events and contributor recognition
+# - Upstream dependency support
+
+# Sponsorship Tiers (suggested):
+# - $5/month: Supporter (recognition in humans.txt)
+# - $25/month: Bronze Sponsor (recognition in README)
+# - $100/month: Silver Sponsor (priority support)
+# - $500/month: Gold Sponsor (feature influence)
+# - $2000/month: Platinum Sponsor (advisory board)
+
+# Alternative Contributions:
+# - Code contributions
+# - Documentation improvements
+# - Bug reports and testing
+# - Community support
+# - Translations
+
+# For custom sponsorship or enterprise support:
+# Contact: sponsor@hyperpolymath.com

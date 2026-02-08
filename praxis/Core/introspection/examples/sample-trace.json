@@ -1,0 +1,82 @@
+{
+  "trace-data": [
+    {
+      "layer": "manifest",
+      "operation": "parse-yaml",
+      "input-symbols": [],
+      "output-symbols": ["parsed-symbols"],
+      "context": {
+        "file": "workflow.toml"
+      },
+      "timestamp": 1700000000.0,
+      "duration-ms": 5.2,
+      "semantic-delta": 0.0
+    },
+    {
+      "layer": "parser",
+      "operation": "validate-manifest",
+      "input-symbols": ["parsed-symbols"],
+      "output-symbols": ["validated-symbols"],
+      "context": {
+        "validation": "schema"
+      },
+      "timestamp": 1700000005.2,
+      "duration-ms": 8.7,
+      "semantic-delta": 0.05
+    },
+    {
+      "layer": "orchestrator",
+      "operation": "dispatch-symbols",
+      "input-symbols": ["validated-symbols"],
+      "output-symbols": ["dispatch-plan"],
+      "context": {
+        "strategy": "topological"
+      },
+      "timestamp": 1700000013.9,
+      "duration-ms": 12.3,
+      "semantic-delta": 0.1
+    },
+    {
+      "layer": "symbolic",
+      "operation": "process-symbolic-operations",
+      "input-symbols": ["dispatch-plan"],
+      "output-symbols": ["symbolic-results"],
+      "context": {
+        "engine": "powershell"
+      },
+      "timestamp": 1700000026.2,
+      "duration-ms": 45.6,
+      "semantic-delta": 0.15
+    },
+    {
+      "layer": "injector",
+      "operation": "inject-operations",
+      "input-symbols": ["symbolic-results"],
+      "output-symbols": ["injected-operations"],
+      "context": {
+        "runtime": "rust"
+      },
+      "timestamp": 1700000071.8,
+      "duration-ms": 23.4,
+      "semantic-delta": 0.2
+    },
+    {
+      "layer": "wordpress",
+      "operation": "execute-wordpress-hooks",
+      "input-symbols": ["injected-operations"],
+      "output-symbols": ["final-state"],
+      "context": {
+        "hooks": "applied"
+      },
+      "timestamp": 1700000095.2,
+      "duration-ms": 67.8,
+      "semantic-delta": 0.25
+    }
+  ],
+  "statistics": {
+    "total-steps": 6,
+    "total-duration-ms": 162.9,
+    "avg-step-duration-ms": 27.15,
+    "layers-traversed": ["manifest", "parser", "orchestrator", "symbolic", "injector", "wordpress"]
+  }
+}

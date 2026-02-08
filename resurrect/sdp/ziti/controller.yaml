@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# OpenZiti Controller Configuration for SOCP
+# This creates the zero-trust overlay network for the control plane
+
+v: 3
+
+# Network configuration
+network:
+  name: socp-network
+
+# Controller identity
+identity:
+  cert: /etc/ziti/controller/ctrl.cert
+  server_cert: /etc/ziti/controller/ctrl.server.chain.cert
+  key: /etc/ziti/controller/ctrl.key
+  ca: /etc/ziti/controller/ctrl.cas
+
+# Controller API endpoints
+ctrl:
+  listener: tls:127.0.0.1:6262
+
+# Edge configuration (client-facing API)
+edge:
+  api:
+    listener: tls:[::]:1280
+    options:
+      advertise: socp-controller.internal:1280
+  enrollment:
+    signingCert:
+      cert: /etc/ziti/controller/edge.signer.cert
+      key: /etc/ziti/controller/edge.signer.key
+    edgeIdentity:
+      duration: 1440m  # 24 hours
+    edgeRouter:
+      duration: 1440m
+
+# Web console for management
+web:
+  - name: client-management
+    bindPoints:
+      - interface: 0.0.0.0:1281
+        address: socp-controller.internal:1281
+    identity:
+      cert: /etc/ziti/controller/web.cert
+      server_cert: /etc/ziti/controller/web.server.chain.cert
+      key: /etc/ziti/controller/web.key
+      ca: /etc/ziti/controller/web.cas
+    options:
+      idleTimeout: 5000ms
+      readTimeout: 5000ms
+      writeTimeout: 100000ms
+      minTLSVersion: TLS1.2
+      maxTLSVersion: TLS1.3
+    apis:
+      - binding: edge-management
+        options: {}
+      - binding: edge-client
+        options: {}
+
+# Database
+db: /var/lib/ziti/controller.db
+
+# Timeouts
+healthChecks:
+  boltCheck:
+    interval: 30s
+    timeout: 20s
+
+# Profiling (disabled in production)
+profile:
+  memory:
+    path: /tmp/ziti-controller-memory.pprof
+  cpu:
+    path: /tmp/ziti-controller-cpu.pprof

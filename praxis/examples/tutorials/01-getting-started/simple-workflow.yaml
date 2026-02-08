@@ -1,0 +1,116 @@
+# Simple Workflow - Your First WP Praxis Workflow
+# This workflow demonstrates basic WP Praxis concepts
+
+version: "1.0"
+metadata:
+  name: "my-first-workflow"
+  description: "A simple workflow to get started with WP Praxis"
+  author: "WP Praxis Tutorial"
+  tags: ["beginner", "tutorial", "getting-started"]
+
+config:
+  wordpress:
+    path: "/var/www/html"
+    url: "http://localhost"
+  execution:
+    mode: "sequential"
+    timeout: 60
+
+symbols:
+  # Symbol 1: Read basic WordPress site information
+  - name: "read_site_info"
+    type: "query"
+    description: "Read basic WordPress site information"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    parameters:
+      operation: "get_options"
+      option_names:
+        - "blogname"
+        - "blogdescription"
+        - "siteurl"
+        - "home"
+        - "admin_email"
+        - "posts_per_page"
+        - "timezone_string"
+    rollback:
+      enabled: false
+    outputs:
+      - site_info
+
+  # Symbol 2: Count published posts
+  - name: "count_posts"
+    type: "query"
+    description: "Count published posts"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "read_site_info"
+    parameters:
+      operation: "count_posts"
+      post_type: "post"
+      post_status: "publish"
+    rollback:
+      enabled: false
+    outputs:
+      - post_count
+
+  # Symbol 3: Count pages
+  - name: "count_pages"
+    type: "query"
+    description: "Count published pages"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "read_site_info"
+    parameters:
+      operation: "count_posts"
+      post_type: "page"
+      post_status: "publish"
+    rollback:
+      enabled: false
+    outputs:
+      - page_count
+
+  # Symbol 4: Generate a simple report
+  - name: "generate_report"
+    type: "reporting"
+    description: "Generate a simple site summary report"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "read_site_info"
+      - "count_posts"
+      - "count_pages"
+    parameters:
+      operation: "generate_report"
+      report_type: "site_summary"
+      output_format: "json"
+      include_data:
+        site_info: "${read_site_info.site_info}"
+        post_count: "${count_posts.post_count}"
+        page_count: "${count_pages.page_count}"
+    rollback:
+      enabled: false
+    outputs:
+      - report_path
+
+# Notifications
+notifications:
+  on_success:
+    - type: "log"
+      message: "First workflow completed successfully!"
+      level: "info"
+
+  on_failure:
+    - type: "log"
+      message: "First workflow failed - check logs for details"
+      level: "error"
+
+# Output configuration
+outputs:
+  format: "json"
+  destination: "./outputs/my-first-workflow-${timestamp}.json"
+  include_metadata: true
+  include_timings: true
+  pretty_print: true

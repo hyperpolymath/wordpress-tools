@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# WordPress with php-aegis security stack
+FROM docker.io/library/wordpress:latest
+
+# Install php-aegis as MU-plugin
+COPY --chown=www-data:www-data php-aegis/ /var/www/html/wp-content/mu-plugins/php-aegis/
+
+# Create rate limit storage directory
+RUN mkdir -p /tmp/rate-limit && chown www-data:www-data /tmp/rate-limit
+
+# Install php-aegis loader (auto-loads the security stack)
+COPY --chown=www-data:www-data mu-loader.php /var/www/html/wp-content/mu-plugins/
+
+# Label for provenance tracking
+LABEL org.cerro-torre.provenance="verified"
+LABEL org.cerro-torre.security-stack="php-aegis-1.0.0"

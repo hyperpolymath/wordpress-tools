@@ -1,0 +1,199 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Changelog
+
+All notable changes to the Sinople WordPress Theme will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+== [Unreleased]
+
+=== Added
+- RSR (Rhodium Standard Repository) compliance documentation
+- Tri-Perimeter Contribution Framework (TPCF)
+- Dual licensing: MIT + Palimpsest v0.8
+- SECURITY.md with vulnerability disclosure policy
+- CONTRIBUTING.md with TPCF guidelines
+- CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+- MAINTAINERS.md with governance model
+
+=== Changed
+- Project structure reorganization for RSR compliance
+- Build system documentation updates
+
+=== Security
+- Enhanced security documentation and disclosure process
+
+== [1.0.0] - 2025-11-22
+
+=== Added
+
+==== Core Architecture
+- Rust WASM semantic processor (390+ lines)
+  - Sophia RDF 0.8 integration
+  - FastGraph in-memory RDF storage
+  - Turtle format parser
+  - Construct/Entanglement/Character queries
+  - Network graph generation for visualization
+- ReScript type-safe bindings (450+ lines)
+  - WASM integration layer
+  - Domain models (Construct, Entanglement, Character, Gloss)
+  - Error handling with Result types
+  - Example usage patterns
+- Deno + Fresh framework integration
+  - Server-side rendering setup
+  - API route structure
+  - Island architecture
+
+==== WordPress Theme
+- Complete template hierarchy (11 templates)
+  - index.php, header.php, footer.php, sidebar.php
+  - single.php, page.php, archive.php, search.php, 404.php, comments.php
+  - template-parts/content.php, template-parts/content-construct.php
+- Custom Post Types
+  - Constructs: Abstract concepts with glosses
+  - Entanglements: Relationships between constructs
+  - Full meta box UI for metadata entry
+- WordPress functions and hooks
+  - Theme setup and feature support
+  - Asset enqueuing (WASM, CSS, JS)
+  - Widget areas and navigation menus
+  - Dublin Core and Open Graph metadata
+- REST API endpoints
+  - `/wp-json/sinople/v1/semantic-graph` - Full graph data
+  - `/wp-json/sinople/v1/constructs/{id}/rdf` - Turtle export
+  - `/wp-json/sinople/v1/ontology` - Complete ontology
+
+==== Semantic Web Features
+- RDF Ontologies (4 Turtle files)
+  - sinople.ttl: Core ontology with OWL classes
+  - constructs.ttl: Example philosophical/scientific concepts
+  - entanglements.ttl: Relationship examples
+  - characters.ttl: Historical figures and archetypes
+- SPARQL-like query capabilities
+- VoID dataset description support
+
+==== IndieWeb Integration
+- Webmention endpoint (Level 4 compliance)
+- Micropub endpoint with h-entry support
+- Microformats2 markup throughout (h-entry, h-card)
+- IndieAuth discovery links
+
+==== Accessibility (WCAG 2.3 AAA)
+- 7:1 contrast ratios for all text
+- Full keyboard navigation support
+  - Alt+1: Skip to main content
+  - Alt+2: Skip to navigation
+  - Arrow keys: Menu navigation
+  - Escape: Close menus
+- Screen reader optimization
+  - ARIA labels and landmarks
+  - ARIA live regions for dynamic content
+  - Semantic HTML5 structure
+- Focus management
+  - Visible focus indicators (3px outlines)
+  - Focus trap for modals
+  - Keyboard-accessible all interactive elements
+- Prefers-reduced-motion support
+- High contrast mode
+- Print stylesheet optimization
+
+==== CSS Architecture
+- layout.css: Responsive grid/flexbox system
+- components.css: UI component library
+- accessibility.css: WCAG AAA overrides
+- print.css: Print optimization
+- CSS custom properties for theming
+- Mobile-first responsive design
+
+==== JavaScript Features
+- navigation.js (300+ lines)
+  - Mobile menu toggle with ARIA
+  - Advanced keyboard navigation
+  - Screen reader announcements
+  - Focus trap for modals
+- graph-viewer.js (200+ lines)
+  - SVG semantic graph visualization
+  - Circular layout algorithm
+  - Interactive nodes (click/keyboard)
+  - Search and filter functionality
+  - Integration with WordPress REST API
+
+==== Build System
+- Master build.sh script
+- WASM-specific build.sh for Rust compilation
+- ReScript compilation configuration
+- Deno task definitions
+- .gitignore for build artifacts
+
+==== Documentation
+- README.md: Project overview and quick start
+- USAGE.md: Developer usage guide
+- ROADMAP.md: Version planning and features
+- STACK.md: Technical stack details
+- CLAUDE.md: Comprehensive AI assistant guidelines (26KB)
+- PROJECT_SUMMARY.md: Development completion report
+
+=== Security
+- Memory-safe Rust implementation (zero `unsafe` blocks)
+- All WordPress output properly escaped
+- All WordPress input properly sanitized
+- CSRF protection via nonces
+- Capability checks before privileged operations
+- SQL injection prevention via prepared statements
+- XSS prevention via output escaping
+- No eval() or dynamic code execution
+
+=== Performance
+- WASM for near-native RDF processing speed
+- Lazy loading of WASM module
+- Code splitting for JavaScript
+- Optimized asset delivery
+- Minimal dependencies
+
+== Release Types
+
+=== Major Version (x.0.0)
+- Breaking API changes
+- Major architectural shifts
+- Incompatible with previous versions
+
+=== Minor Version (1.x.0)
+- New features (backwards-compatible)
+- New API endpoints
+- Significant improvements
+
+=== Patch Version (1.0.x)
+- Bug fixes
+- Security patches
+- Documentation updates
+- Performance improvements
+
+== Deprecation Policy
+
+- Features are deprecated for **one major version** before removal
+- Deprecation warnings added to code and docs
+- Migration guides provided for breaking changes
+- Security fixes backported to **last major version** only
+
+== Support Policy
+
+- **Current version** (1.0.x): Full support
+- **Previous major version**: Security fixes only
+- **Older versions**: No support (upgrade recommended)
+
+---
+
+**Legend:**
+- `Added`: New features
+- `Changed`: Changes to existing functionality
+- `Deprecated`: Soon-to-be removed features
+- `Removed`: Removed features
+- `Fixed`: Bug fixes
+- `Security`: Security vulnerability fixes
+
+---
+
+**Links:**
+- [Unreleased]: https://github.com/Hyperpolymath/wp-sinople-theme/compare/v1.0.0...HEAD
+- [1.0.0]: https://github.com/Hyperpolymath/wp-sinople-theme/releases/tag/v1.0.0

@@ -1,0 +1,603 @@
+# WP Praxis GraphQL API - Example Queries
+# This file contains example queries, mutations, and subscriptions
+
+# ============================================================================
+# Symbol Queries
+# ============================================================================
+
+# Get a single symbol by ID
+query GetSymbolById {
+  symbol(id: "1") {
+    id
+    name
+    type
+    context
+    status
+    dispatchTarget
+    parameters
+    description
+    priority
+    timeout
+    retryCount
+    createdAt
+    updatedAt
+  }
+}
+
+# Get a symbol by name
+query GetSymbolByName {
+  symbol(name: "wordpress_install") {
+    id
+    name
+    type
+    context
+  }
+}
+
+# Get all symbols with filters
+query GetSymbols {
+  symbols(
+    type: ACTION
+    context: WORDPRESS
+    status: ACTIVE
+    limit: 20
+    offset: 0
+  ) {
+    id
+    name
+    type
+    context
+    status
+  }
+}
+
+# Get symbols with pagination (Relay-style)
+query GetSymbolsConnection {
+  symbolsConnection(first: 10, after: null) {
+    edges {
+      node {
+        id
+        name
+        type
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+      total
+    }
+  }
+}
+
+# ============================================================================
+# Workflow Queries
+# ============================================================================
+
+# Get workflow with full details
+query GetWorkflow {
+  workflow(id: "1") {
+    id
+    name
+    description
+    status
+    manifestPath
+    metadata
+    startedAt
+    completedAt
+    duration
+    symbols {
+      id
+      name
+      type
+    }
+    executions {
+      id
+      status
+      startedAt
+      completedAt
+      result {
+        success
+        output
+        error
+        duration
+      }
+    }
+  }
+}
+
+# Get all active workflows
+query GetActiveWorkflows {
+  workflows(status: RUNNING, limit: 10) {
+    id
+    name
+    status
+    startedAt
+    executions {
+      id
+      status
+    }
+  }
+}
+
+# ============================================================================
+# Execution Queries
+# ============================================================================
+
+# Get execution details
+query GetExecution {
+  execution(id: "1") {
+    id
+    status
+    attempts
+    startedAt
+    completedAt
+    duration
+    workflow {
+      id
+      name
+    }
+    symbol {
+      id
+      name
+      type
+    }
+    node {
+      id
+      name
+      status
+    }
+    result {
+      success
+      output
+      error
+      stackTrace
+      duration
+    }
+  }
+}
+
+# Get executions for a workflow
+query GetWorkflowExecutions {
+  executions(workflowId: "1", limit: 50) {
+    id
+    status
+    symbol {
+      name
+    }
+    startedAt
+    duration
+  }
+}
+
+# ============================================================================
+# Baseline and Audit Queries
+# ============================================================================
+
+# Get active baseline
+query GetActiveBaseline {
+  baselines(active: true) {
+    id
+    name
+    version
+    isActive
+    symbolicState
+    createdAt
+  }
+}
+
+# Get baseline with audits
+query GetBaselineWithAudits {
+  baseline(id: "1") {
+    id
+    name
+    version
+    isActive
+    audits(limit: 10) {
+      id
+      status
+      severity
+      deviationCount
+      passedChecks
+      failedChecks
+      createdAt
+    }
+  }
+}
+
+# Get recent audits
+query GetRecentAudits {
+  audits(limit: 20) {
+    id
+    baseline {
+      name
+      version
+    }
+    workflow {
+      name
+    }
+    status
+    severity
+    deviationCount
+    passedChecks
+    failedChecks
+    deviations {
+      path
+      expected
+      actual
+      severity
+      message
+    }
+    recommendations {
+      title
+      description
+      actionable
+      priority
+    }
+    startedAt
+    completedAt
+    duration
+  }
+}
+
+# Get critical audits
+query GetCriticalAudits {
+  audits(severity: CRITICAL, limit: 10) {
+    id
+    baseline {
+      name
+    }
+    severity
+    deviations {
+      path
+      message
+    }
+  }
+}
+
+# ============================================================================
+# Swarm Node Queries
+# ============================================================================
+
+# Get all nodes
+query GetNodes {
+  nodes {
+    id
+    name
+    status
+    capabilities {
+      rust
+      php
+      powershell
+      maxConcurrentTasks
+    }
+    health {
+      cpuUsage
+      memoryUsage
+      activeTasks
+      completedTasks
+      failedTasks
+      uptime
+    }
+    lastHeartbeat
+    connectedAt
+  }
+}
+
+# Get node with tasks
+query GetNodeWithTasks {
+  node(id: "node-1") {
+    id
+    name
+    status
+    tasks(limit: 20) {
+      id
+      status
+      priority
+      symbol {
+        name
+        type
+      }
+      execution {
+        id
+        workflow {
+          name
+        }
+      }
+    }
+  }
+}
+
+# ============================================================================
+# Statistics Queries
+# ============================================================================
+
+# Get complete system statistics
+query GetSystemStats {
+  stats {
+    uptime
+    version
+    symbols {
+      total
+      byType {
+        type
+        count
+      }
+      byContext {
+        context
+        count
+      }
+      byStatus {
+        status
+        count
+      }
+    }
+    workflows {
+      total
+      pending
+      running
+      completed
+      failed
+      averageDuration
+      successRate
+    }
+    executions {
+      total
+      pending
+      running
+      completed
+      failed
+      averageDuration
+      successRate
+    }
+    nodes {
+      total
+      online
+      offline
+      totalCapacity
+      utilizationRate
+    }
+  }
+}
+
+# ============================================================================
+# Mutations
+# ============================================================================
+
+# Create a new symbol
+mutation CreateSymbol {
+  createSymbol(
+    input: {
+      name: "my_custom_symbol"
+      type: ACTION
+      context: WORDPRESS
+      dispatchTarget: RUST_INJECTOR
+      parameters: { action: "install", target: "plugin" }
+      description: "Custom WordPress plugin installation"
+      priority: 5
+      timeout: 300
+    }
+  ) {
+    id
+    name
+    status
+  }
+}
+
+# Update a symbol
+mutation UpdateSymbol {
+  updateSymbol(
+    id: "1"
+    input: { status: INACTIVE, description: "Updated description" }
+  ) {
+    id
+    name
+    status
+    description
+  }
+}
+
+# Create a workflow
+mutation CreateWorkflow {
+  createWorkflow(
+    input: {
+      name: "my_workflow"
+      description: "Custom workflow"
+      manifestPath: "/path/to/manifest.yml"
+      metadata: { env: "production" }
+    }
+  ) {
+    id
+    name
+    status
+  }
+}
+
+# Execute a workflow
+mutation ExecuteWorkflow {
+  executeWorkflow(input: { workflowId: "1", parameters: {}, priority: 5 }) {
+    id
+    status
+    startedAt
+  }
+}
+
+# Cancel a workflow
+mutation CancelWorkflow {
+  cancelWorkflow(id: "1") {
+    id
+    status
+    completedAt
+  }
+}
+
+# Retry failed execution
+mutation RetryExecution {
+  retryExecution(id: "1") {
+    id
+    status
+    attempts
+  }
+}
+
+# Rollback execution
+mutation RollbackExecution {
+  rollbackExecution(id: "1") {
+    id
+    status
+  }
+}
+
+# Create baseline
+mutation CreateBaseline {
+  createBaseline(
+    input: {
+      name: "production_baseline_v2"
+      description: "Production baseline version 2"
+      symbolicState: { wordpress: { version: "6.4", plugins: [] } }
+      version: "2.0.0"
+      baselineType: SYSTEM
+      scope: GLOBAL
+    }
+  ) {
+    id
+    name
+    version
+    isActive
+  }
+}
+
+# Activate baseline
+mutation ActivateBaseline {
+  activateBaseline(id: "2") {
+    id
+    name
+    isActive
+  }
+}
+
+# Run audit
+mutation RunAudit {
+  runAudit(
+    input: { baselineId: "1", workflowId: "1", auditType: MANUAL }
+  ) {
+    id
+    status
+    baseline {
+      name
+    }
+  }
+}
+
+# ============================================================================
+# Subscriptions
+# ============================================================================
+
+# Subscribe to all workflow updates
+subscription AllWorkflowUpdates {
+  workflowUpdated {
+    id
+    name
+    status
+    startedAt
+    completedAt
+  }
+}
+
+# Subscribe to specific workflow
+subscription SpecificWorkflowUpdates {
+  workflowUpdated(id: "1") {
+    id
+    status
+    executions {
+      id
+      status
+    }
+  }
+}
+
+# Subscribe to execution updates
+subscription ExecutionUpdates {
+  executionUpdated(workflowId: "1") {
+    id
+    status
+    symbol {
+      name
+    }
+    startedAt
+    completedAt
+  }
+}
+
+# Subscribe to audit completions
+subscription AuditCompletions {
+  auditCompleted {
+    id
+    baseline {
+      name
+    }
+    status
+    severity
+    deviationCount
+  }
+}
+
+# Subscribe to critical deviations
+subscription CriticalDeviations {
+  auditDeviationDetected(severity: CRITICAL) {
+    id
+    baseline {
+      name
+    }
+    deviations {
+      path
+      message
+      severity
+    }
+  }
+}
+
+# Subscribe to node status changes
+subscription NodeStatusUpdates {
+  nodeStatusChanged {
+    id
+    name
+    status
+    health {
+      activeTasks
+      cpuUsage
+      memoryUsage
+    }
+  }
+}
+
+# Subscribe to task assignments
+subscription TaskAssignments {
+  taskAssigned(nodeId: "node-1") {
+    id
+    symbol {
+      name
+    }
+    priority
+    node {
+      name
+    }
+  }
+}
+
+# Subscribe to stats updates
+subscription StatsUpdates {
+  statsUpdated {
+    workflows {
+      running
+      completed
+      failed
+    }
+    nodes {
+      online
+      utilizationRate
+    }
+  }
+}

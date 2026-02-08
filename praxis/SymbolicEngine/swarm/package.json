@@ -1,0 +1,47 @@
+{
+  "name": "@wp-praxis/swarm",
+  "version": "0.1.0",
+  "description": "Distributed symbolic execution swarm coordinator for WP Praxis",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "swarm": "./bin/swarm-cli.ts"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "dev": "bun run --watch src/index.ts",
+    "test": "bun test",
+    "lint": "tsc --noEmit",
+    "start:dispatcher": "bun run src/dispatch.ts",
+    "start:worker": "bun run src/worker.ts",
+    "start:websocket": "bun run src/websocket-server.ts",
+    "cli": "bun run bin/swarm-cli.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4",
+    "toml": "^3.0.0",
+    "ws": "^8.16.0",
+    "better-sqlite3": "^9.2.2",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10",
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/uuid": "^9.0.7",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "wp-praxis",
+    "symbolic-execution",
+    "distributed-systems",
+    "swarm",
+    "wordpress"
+  ],
+  "author": "WP Praxis Project",
+  "license": "AGPL-3.0"
+}

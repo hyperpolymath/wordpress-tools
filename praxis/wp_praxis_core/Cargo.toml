@@ -1,0 +1,46 @@
+[package]
+name = "wp_praxis_core"
+version = "0.1.0"
+edition = "2021"
+authors = ["WP Praxis Contributors"]
+description = "Offline-capable core library for WP Praxis symbolic workflows"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/hyperpolymath/wp-praxis"
+keywords = ["wordpress", "symbolic", "workflow", "offline"]
+categories = ["development-tools", "config"]
+
+[features]
+default = ["offline"]
+offline = []
+network = ["dep:reqwest", "dep:tokio"]
+full-stack = ["network", "dep:sqlx"]
+
+[dependencies]
+# Zero dependencies for default offline mode
+# Conditional dependencies only enabled with features
+reqwest = { version = "0.11", optional = true, default-features = false }
+tokio = { version = "1.35", optional = true, features = ["rt-multi-thread"] }
+sqlx = { version = "0.8", optional = true, features = ["runtime-tokio-native-tls", "mysql", "sqlite"] }
+
+[dev-dependencies]
+# Test-only dependencies don't count toward RSR compliance
+proptest = "1.4"
+quickcheck = "1.0"
+quickcheck_macros = "1.0"
+
+[lib]
+name = "wp_praxis_core"
+path = "src/lib.rs"
+
+[[example]]
+name = "validate_offline"
+path = "examples/validate_offline.rs"
+
+[[example]]
+name = "parse_manifest"
+path = "examples/parse_manifest.rs"
+
+# Kani verification configuration
+[package.metadata.kani]
+# Flags for Kani verification
+flags = ["--enable-unstable", "--cbmc-args", "--unwind", "10"]

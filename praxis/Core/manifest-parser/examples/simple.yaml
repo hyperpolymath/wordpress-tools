@@ -1,0 +1,103 @@
+# Simple WP Praxis Manifest Example (YAML)
+# This demonstrates basic symbol and workflow definitions
+
+version: "1.0"
+format: yaml
+
+metadata:
+  name: "Simple Example Manifest"
+  description: "Demonstrates basic WP Praxis symbolic operations"
+  author: "WP Praxis Project"
+  version: "0.1.0"
+  license: "AGPL-3.0"
+  tags:
+    - example
+    - basic
+    - wordpress
+
+# Symbol Definitions
+symbols:
+  - name: backup-database
+    type: action
+    context: wordpress
+    dispatch: rust_injector
+    parameters:
+      output_dir: "/var/backups/wp"
+      format: "sql"
+      compress: true
+    dependencies: []
+    metadata:
+      description: "Backup WordPress database"
+      author: "System"
+    enabled: true
+
+  - name: update-plugins
+    type: action
+    context: wordpress
+    dispatch: php_engine
+    parameters:
+      plugins: "all"
+      update_type: "minor"
+    dependencies:
+      - backup-database
+    metadata:
+      description: "Update WordPress plugins"
+    enabled: true
+
+  - name: clear-cache
+    type: action
+    context: wordpress
+    dispatch: php_engine
+    parameters:
+      cache_types:
+        - object
+        - transient
+        - page
+    dependencies: []
+    metadata:
+      description: "Clear WordPress caches"
+    enabled: true
+
+# Workflow Definitions
+workflows:
+  - name: maintenance-workflow
+    description: "Standard maintenance workflow"
+    steps:
+      - symbol: backup-database
+        parameters:
+          timestamp: true
+      - symbol: update-plugins
+        parameters: {}
+      - symbol: clear-cache
+        parameters: {}
+    triggers:
+      - cron: "0 2 * * 0"  # Weekly at 2 AM
+    conditions:
+      - maintenance_mode: enabled
+    error-handling: stop
+    parallel: false
+    metadata:
+      priority: high
+
+# Context Definitions
+contexts:
+  - name: production
+    type: runtime
+    configuration:
+      environment: production
+      debug: false
+    variables:
+      wp_path: "/var/www/html"
+      php_version: "8.1"
+    inherits: []
+
+# Dispatch Rules
+dispatches:
+  - pattern:
+      type: action
+      context: wordpress
+    executor: rust_injector
+    priority: 10
+    conditions:
+      - performance: high
+    metadata: {}

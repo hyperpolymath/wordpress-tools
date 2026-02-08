@@ -1,0 +1,17 @@
+= wordpress-tools
+// SPDX-License-Identifier: PMPL-1.0-or-later
+:author: Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+
+WordPress security, plugin management, and theming tools.
+
+== Components
+
+* `secured/` - WordPress security hardening
+* `plugin-conflict-mapper/` - Plugin conflict detection and mapping
+* `praxis/` - WordPress best practices framework
+* `resurrect/` - WordPress recovery and restoration
+* `sinople-theme/` - Custom WordPress theme
+
+== License
+
+PMPL-1.0-or-later

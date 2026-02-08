@@ -1,0 +1,542 @@
+= Contributing to WP Plugin Conflict Mapper
+:toc: left
+:toclevels: 3
+:sectanchors:
+:sectlinks:
+:icons: font
+:source-highlighter: rouge
+:experimental:
+:description: Contribution guidelines for WP Plugin Conflict Mapper
+:keywords: contributing, development, WordPress, plugin, TPCF
+
+[abstract]
+--
+Thank you for your interest in contributing to WP Plugin Conflict Mapper! This document provides guidelines and instructions for contributing to the project, including our Tri-Perimeter Contribution Framework (TPCF) governance model.
+--
+
+== Table of Contents
+
+* <<code-of-conduct>>
+* <<tri-perimeter-contribution-framework>>
+* <<getting-started>>
+* <<development-process>>
+* <<coding-standards>>
+* <<testing-requirements>>
+* <<security-considerations>>
+* <<submission-guidelines>>
+* <<community>>
+
+== Code of Conduct
+
+This project adheres to a Code of Conduct that all contributors are expected to follow. Please read link:CODE_OF_CONDUCT.adoc[CODE_OF_CONDUCT.adoc] before contributing.
+
+== Tri-Perimeter Contribution Framework
+
+This project follows the **Tri-Perimeter Contribution Framework (TPCF)**, a governance model with three perimeters of access:
+
+=== Perimeter 1: Core (Maintainers)
+
+*Access Level*:: Full repository access, merge rights, release authority
+*Responsibilities*:: Architecture decisions, security reviews, release management
+*Requirements*:: Demonstrated long-term commitment, deep technical expertise
+
+*Core Maintainers*:
+
+* Jonathan (Hyperpolymath) - Project Lead
+* _Additional maintainers as project grows_
+
+=== Perimeter 2: Contributor (Trusted Contributors)
+
+*Access Level*:: Direct push to feature branches, review authority
+*Responsibilities*:: Code review, mentoring, feature development
+*Requirements*:: Multiple accepted contributions, proven reliability
+
+*Pathway to Perimeter 2*:
+
+. Make 5+ quality contributions
+. Demonstrate understanding of codebase
+. Show commitment to project values
+. Request nomination by core maintainer
+
+=== Perimeter 3: Community (Open Sandbox)
+
+*Access Level*:: Fork, clone, issue creation, merge request submission
+*Responsibilities*:: Bug reports, feature suggestions, code contributions via MR
+*Requirements*:: Follow Code of Conduct
+
+*All contributors start here!*
+
+This is an open sandbox where:
+
+* Anyone can contribute
+* Experimentation is encouraged
+* Learning is supported
+* Reversibility is guaranteed
+
+See link:MAINTAINERS.md[MAINTAINERS.md] for detailed TPCF governance structure.
+
+== Getting Started
+
+=== Prerequisites
+
+[cols="1,2"]
+|===
+|Tool |Version
+
+|PHP
+|7.4 or higher
+
+|WordPress
+|5.8 or higher
+
+|Git
+|Latest stable
+
+|Composer
+|Latest stable (optional)
+
+|WP-CLI
+|Latest stable (optional)
+|===
+
+=== Setting Up Development Environment
+
+. *Clone the repository*
++
+[source,bash]
+----
+git clone https://gitlab.com/Hyperpolymath/wp-plugin-conflict-mapper.git
+cd wp-plugin-conflict-mapper
+----
+
+. *Install WordPress locally*
++
+Use Local by Flywheel, XAMPP, Docker, or similar
+
+. *Symlink plugin to WordPress*
++
+[source,bash]
+----
+ln -s $(pwd) /path/to/wordpress/wp-content/plugins/wp-plugin-conflict-mapper
+----
+
+. *Activate plugin*
++
+[source,bash]
+----
+wp plugin activate wp-plugin-conflict-mapper
+----
+
+. *Install development dependencies*
++
+[source,bash]
+----
+composer install --dev
+----
+
+. *Verify setup*
++
+[source,bash]
+----
+just check  # Run all validation checks
+----
+
+== Development Process
+
+=== Branching Strategy
+
+We use a simplified Git Flow:
+
+`main`:: Production-ready code
+`develop`:: Integration branch for features
+`feature/*`:: New features
+`bugfix/*`:: Bug fixes
+`hotfix/*`:: Critical production fixes
+
+=== Workflow
+
+. *Create an issue* describing your contribution
+. *Fork the repository* (or branch if Perimeter 2)
+. *Create a feature branch* from `develop`:
++
+[source,bash]
+----
+git checkout develop
+git pull origin develop
+git checkout -b feature/your-feature-name
+----
+
+. *Make your changes* following coding standards
+. *Test thoroughly* (see <<testing-requirements>>)
+. *Commit your changes* with clear messages
+. *Push to your fork*
+. *Create a Merge Request* to `develop` branch
+
+=== Commit Message Format
+
+Use https://www.conventionalcommits.org/[Conventional Commits^]:
+
+----
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+----
+
+.*Types*
+[cols="1,3"]
+|===
+|Type |Usage
+
+|`feat`
+|New feature
+
+|`fix`
+|Bug fix
+
+|`docs`
+|Documentation changes
+
+|`style`
+|Code style changes (formatting)
+
+|`refactor`
+|Code refactoring
+
+|`test`
+|Adding or updating tests
+
+|`chore`
+|Build process or auxiliary tool changes
+
+|`security`
+|Security improvements
+|===
+
+.Example
+----
+feat(scanner): Add support for multisite networks
+
+- Detect network-activated plugins
+- Handle site-specific plugin configurations
+- Add network admin menu
+
+Fixes #42
+----
+
+== Coding Standards
+
+=== WordPress Coding Standards
+
+Follow https://developer.wordpress.org/coding-standards/[WordPress PHP Coding Standards^]:
+
+[source,bash]
+----
+# Check your code
+just lint
+
+# Or manually:
+phpcs --standard=WordPress path/to/your/file.php
+
+# Auto-fix issues
+phpcbf --standard=WordPress path/to/your/file.php
+----
+
+=== Key Standards
+
+*Naming*:: Use `snake_case` for functions and variables (WordPress style)
+*Indentation*:: Use tabs, not spaces
+*Line Length*:: Max 100 characters
+*Documentation*:: PHPDoc for all functions and classes
+*Security*:: Sanitize input, escape output, use nonces
+*Internationalization*:: Use `__()` and `esc_html_e()` for all strings
+
+=== SPDX Headers
+
+All source files must include SPDX headers:
+
+[source,php]
+----
+<?php
+/**
+ * Short file description
+ *
+ * @package WP_Plugin_Conflict_Mapper
+ * @since   1.0.0
+ * @license AGPL-3.0-or-later OR Palimpsest-0.8
+ * SPDX-License-Identifier: PMPL-1.0-or-later
+ */
+----
+
+=== Code Example
+
+[source,php]
+----
+<?php
+/**
+ * Get plugin conflicts
+ *
+ * Retrieves all conflicts for a specific plugin.
+ *
+ * @since 1.0.0
+ *
+ * @param string $plugin_file Plugin file path.
+ * @return array Array of conflicts.
+ */
+function wpcm_get_plugin_conflicts( $plugin_file ) {
+    global $wpdb;
+
+    $conflicts = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}wpcm_conflicts WHERE affected_plugins LIKE %s",
+            '%' . $wpdb->esc_like( $plugin_file ) . '%'
+        )
+    );
+
+    return $conflicts;
+}
+----
+
+== Testing Requirements
+
+All contributions must include appropriate tests.
+
+=== Automated Testing
+
+[source,bash]
+----
+# Run all tests
+just test
+
+# Run with coverage
+just test-coverage
+
+# Run specific test file
+vendor/bin/phpunit tests/unit/test-scanner.php
+----
+
+=== Manual Testing Checklist
+
+Before submitting, test:
+
+[checklist]
+* [ ] Basic functionality works as expected
+* [ ] Edge cases handled (empty data, large datasets, errors)
+* [ ] WordPress 5.8, 6.0, latest versions
+* [ ] PHP 7.4, 8.0, 8.1+ versions
+* [ ] Browser compatibility (Chrome, Firefox, Safari, Edge)
+* [ ] Accessibility (keyboard navigation, screen readers)
+
+=== Functional Testing Checklist
+
+[checklist]
+* [ ] Plugin activates without errors
+* [ ] All admin pages load correctly
+* [ ] Scan completes without errors
+* [ ] Export functions work (JSON, CSV)
+* [ ] Settings save correctly
+* [ ] AJAX operations work
+* [ ] WP-CLI commands execute properly
+* [ ] REST API endpoints respond correctly
+* [ ] No PHP notices or warnings
+* [ ] No JavaScript console errors
+
+=== Test Data Scenarios
+
+Test with diverse scenarios:
+
+* *Small sites*: 0-5 plugins
+* *Medium sites*: 10-25 plugins
+* *Large sites*: 50+ plugins
+* *Conflict scenarios*: Intentionally conflicting plugins
+* *Clean installs*: Fresh WordPress installation
+
+== Security Considerations
+
+[IMPORTANT]
+====
+Security is paramount. All contributions must follow OWASP Top 10 best practices.
+====
+
+=== Required Security Practices
+
+. *Input Validation*
++
+[source,php]
+----
+$user_input = sanitize_text_field( $_POST['field'] );
+$email = sanitize_email( $_POST['email'] );
+$number = absint( $_POST['number'] );
+----
+
+. *Output Escaping*
++
+[source,php]
+----
+echo esc_html( $text );
+echo esc_attr( $attribute );
+echo esc_url( $url );
+----
+
+. *Nonce Verification*
++
+[source,php]
+----
+check_ajax_referer( 'wpcm_ajax_nonce', 'nonce' );
+wp_nonce_field( 'wpcm_settings_nonce' );
+----
+
+. *Capability Checks*
++
+[source,php]
+----
+if ( ! current_user_can( 'manage_options' ) ) {
+    wp_die( 'Unauthorized' );
+}
+----
+
+. *Database Security*
++
+[source,php]
+----
+$wpdb->prepare(
+    "SELECT * FROM {$wpdb->prefix}table WHERE id = %d",
+    $id
+);
+----
+
+=== Security Checklist
+
+[checklist]
+* [ ] All user inputs sanitized
+* [ ] All outputs escaped
+* [ ] All AJAX requests use nonces
+* [ ] All admin functions check capabilities
+* [ ] All database queries use prepared statements
+* [ ] No `eval()` or dynamic code execution
+* [ ] No direct file system access from user input
+* [ ] No external URL fetching without validation
+
+== Submission Guidelines
+
+=== Merge Request Process
+
+. *Update documentation* if needed
+. *Add changelog entry* to CHANGELOG.md
+. *Ensure all tests pass* (`just check`)
+. *Update version numbers* if applicable
+. *Request review* from maintainers
+. *Address feedback* promptly
+. *Squash commits* if requested
+
+=== Merge Request Template
+
+[source,markdown]
+----
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
+- [ ] Breaking change (fix or feature that breaks existing functionality)
+- [ ] Documentation update
+
+## Testing
+- [ ] Manual testing completed
+- [ ] WordPress 5.8+ tested
+- [ ] PHP 7.4+ tested
+- [ ] No console errors
+- [ ] No PHP warnings
+
+## Security
+- [ ] Input sanitization verified
+- [ ] Output escaping verified
+- [ ] Capability checks verified
+- [ ] No new vulnerabilities introduced
+
+## Checklist
+- [ ] Code follows WordPress coding standards
+- [ ] SPDX headers added
+- [ ] Documentation updated
+- [ ] CHANGELOG.md updated
+- [ ] No breaking changes (or documented)
+- [ ] Tests pass (`just check`)
+----
+
+=== Review Process
+
+. *Automated checks*: GitLab CI/CD pipeline runs
+. *Code review*: Maintainer reviews code quality
+. *Security review*: Security checklist verified
+. *Testing*: Maintainer tests functionality
+. *Approval*: Minimum 1 maintainer approval required
+. *Merge*: Squash and merge to develop
+
+== What to Contribute
+
+=== High Priority
+
+* Bug fixes
+* Security improvements
+* Performance optimizations
+* Documentation improvements
+* Accessibility enhancements
+
+=== Welcome Contributions
+
+* New conflict detection algorithms
+* Additional plugin categories
+* Internationalization/translations
+* UI/UX improvements
+* Test coverage
+* Code refactoring
+
+=== Need Help?
+
+Check issues tagged with:
+
+* `good first issue` - Good for newcomers
+* `help wanted` - Maintainers need assistance
+* `documentation` - Documentation improvements
+* `Perimeter 3` - Community contributions welcome
+
+== Community
+
+=== Communication Channels
+
+* *GitLab Issues*: Bug reports and feature requests
+* *GitLab Discussions*: General questions and ideas
+* *Merge Requests*: Code contributions
+
+=== Getting Help
+
+* Check link:README.adoc[README.adoc] for usage documentation
+* Check link:DEVELOPER.md[DEVELOPER.md] for technical documentation
+* Search existing issues before creating new ones
+* Provide reproduction steps for bugs
+
+== Recognition
+
+Contributors are recognized in:
+
+* CHANGELOG.md (for significant contributions)
+* GitLab contributors page
+* Release notes
+* .well-known/humans.txt
+
+== License
+
+By contributing, you agree that your contributions will be licensed under the project's dual license (AGPL-3.0-or-later OR Palimpsest-0.8).
+
+See link:LICENSE.txt[LICENSE.txt] for full license details.
+
+---
+
+[.text-center]
+*Thank you for contributing to WP Plugin Conflict Mapper!* +
+_Questions? Open an issue or contact the maintainers._
+
+[.text-center]
+_Tri-Perimeter Contribution Framework (TPCF) • RSR Compliant_

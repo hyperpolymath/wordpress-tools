@@ -1,0 +1,635 @@
+# WP Praxis GraphQL Schema
+# Comprehensive API for symbolic workflow execution and introspection
+
+# ============================================================================
+# Scalar Types
+# ============================================================================
+
+scalar DateTime
+scalar JSON
+scalar JSONObject
+
+# ============================================================================
+# Symbol Types
+# ============================================================================
+
+enum SymbolType {
+  ACTION
+  FILTER
+  STATE
+  QUERY
+  TRANSFORM
+}
+
+enum SymbolContext {
+  WORDPRESS
+  FILESYSTEM
+  DATABASE
+  NETWORK
+  GENERIC
+}
+
+enum SymbolDispatchTarget {
+  RUST_INJECTOR
+  PHP_ENGINE
+  POWERSHELL_ENGINE
+  INTERNAL
+}
+
+enum SymbolStatus {
+  ACTIVE
+  INACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+type Symbol {
+  id: ID!
+  name: String!
+  type: SymbolType!
+  context: SymbolContext!
+  status: SymbolStatus!
+  dispatchTarget: SymbolDispatchTarget!
+  parameters: JSONObject!
+  description: String
+  priority: Int!
+  timeout: Int!
+  retryCount: Int!
+  dependencies: [String!]
+  rollbackSymbol: Symbol
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateSymbolInput {
+  name: String!
+  type: SymbolType!
+  context: SymbolContext!
+  dispatchTarget: SymbolDispatchTarget!
+  parameters: JSONObject!
+  description: String
+  priority: Int
+  timeout: Int
+  retryCount: Int
+  dependencies: [String!]
+}
+
+input UpdateSymbolInput {
+  name: String
+  type: SymbolType
+  context: SymbolContext
+  status: SymbolStatus
+  dispatchTarget: SymbolDispatchTarget
+  parameters: JSONObject
+  description: String
+  priority: Int
+  timeout: Int
+  retryCount: Int
+  dependencies: [String!]
+}
+
+# ============================================================================
+# Workflow Types
+# ============================================================================
+
+enum WorkflowStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  PAUSED
+}
+
+type Workflow {
+  id: ID!
+  name: String!
+  description: String
+  manifestPath: String!
+  status: WorkflowStatus!
+  executionLog: [JSON!]!
+  metadata: JSONObject!
+  symbols: [Symbol!]!
+  executions(status: ExecutionStatus, limit: Int, offset: Int): [Execution!]!
+  startedAt: DateTime
+  completedAt: DateTime
+  duration: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateWorkflowInput {
+  name: String!
+  description: String
+  manifestPath: String!
+  metadata: JSONObject
+}
+
+input ExecuteWorkflowInput {
+  workflowId: ID!
+  parameters: JSONObject
+  priority: Int
+}
+
+# ============================================================================
+# Execution Types
+# ============================================================================
+
+enum ExecutionStatus {
+  PENDING
+  QUEUED
+  ASSIGNED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  ROLLED_BACK
+  RETRYING
+}
+
+type ExecutionResult {
+  success: Boolean!
+  output: JSON
+  error: String
+  stackTrace: String
+  duration: Int!
+  timestamp: DateTime!
+  metadata: JSONObject
+}
+
+type Execution {
+  id: ID!
+  workflow: Workflow!
+  symbol: Symbol!
+  status: ExecutionStatus!
+  node: Node
+  result: ExecutionResult
+  attempts: Int!
+  exitCode: Int
+  rollbackState: JSONObject
+  startedAt: DateTime
+  completedAt: DateTime
+  duration: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ============================================================================
+# Baseline Types
+# ============================================================================
+
+enum BaselineType {
+  SYSTEM
+  CUSTOM
+  SNAPSHOT
+  TEMPLATE
+}
+
+enum BaselineScope {
+  GLOBAL
+  PROJECT
+  SITE
+  USER
+}
+
+type Baseline {
+  id: ID!
+  name: String!
+  description: String
+  symbolicState: JSONObject!
+  version: String!
+  isActive: Boolean!
+  baselineType: BaselineType!
+  scope: BaselineScope!
+  createdBy: String
+  metadata: JSONObject
+  audits(limit: Int, offset: Int): [Audit!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateBaselineInput {
+  name: String!
+  description: String
+  symbolicState: JSONObject!
+  version: String
+  baselineType: BaselineType
+  scope: BaselineScope
+  createdBy: String
+  metadata: JSONObject
+}
+
+# ============================================================================
+# Audit Types
+# ============================================================================
+
+enum AuditType {
+  MANUAL
+  SCHEDULED
+  TRIGGERED
+  CONTINUOUS
+}
+
+enum AuditStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AuditSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+type Deviation {
+  path: String!
+  expected: JSON
+  actual: JSON
+  severity: AuditSeverity!
+  message: String!
+}
+
+type Recommendation {
+  title: String!
+  description: String!
+  actionable: Boolean!
+  priority: Int!
+}
+
+type Audit {
+  id: ID!
+  baseline: Baseline!
+  workflow: Workflow
+  auditType: AuditType!
+  status: AuditStatus!
+  deviations: [Deviation!]!
+  severity: AuditSeverity!
+  deviationCount: Int!
+  passedChecks: Int!
+  failedChecks: Int!
+  recommendations: [Recommendation!]!
+  startedAt: DateTime
+  completedAt: DateTime
+  duration: Int
+  metadata: JSONObject
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input RunAuditInput {
+  baselineId: ID!
+  workflowId: ID
+  auditType: AuditType
+  metadata: JSONObject
+}
+
+# ============================================================================
+# Swarm Node Types
+# ============================================================================
+
+enum NodeStatus {
+  INITIALIZING
+  IDLE
+  BUSY
+  OFFLINE
+  FAILED
+}
+
+type NodeCapabilities {
+  rust: Boolean!
+  php: Boolean!
+  powershell: Boolean!
+  maxConcurrentTasks: Int!
+}
+
+type NodeHealth {
+  cpuUsage: Float!
+  memoryUsage: Float!
+  activeTasks: Int!
+  completedTasks: Int!
+  failedTasks: Int!
+  uptime: Int!
+}
+
+type Node {
+  id: ID!
+  name: String!
+  status: NodeStatus!
+  capabilities: NodeCapabilities!
+  health: NodeHealth!
+  tasks(status: ExecutionStatus, limit: Int): [Task!]!
+  lastHeartbeat: DateTime!
+  connectedAt: DateTime!
+  metadata: JSONObject
+}
+
+# ============================================================================
+# Task Types
+# ============================================================================
+
+type Task {
+  id: ID!
+  execution: Execution!
+  symbol: Symbol!
+  node: Node
+  status: ExecutionStatus!
+  priority: Int!
+  dependencies: [Task!]!
+  createdAt: DateTime!
+  assignedAt: DateTime
+}
+
+# ============================================================================
+# Statistics Types
+# ============================================================================
+
+type SymbolStats {
+  total: Int!
+  byType: [TypeCount!]!
+  byContext: [ContextCount!]!
+  byStatus: [StatusCount!]!
+}
+
+type TypeCount {
+  type: SymbolType!
+  count: Int!
+}
+
+type ContextCount {
+  context: SymbolContext!
+  count: Int!
+}
+
+type StatusCount {
+  status: String!
+  count: Int!
+}
+
+type WorkflowStats {
+  total: Int!
+  pending: Int!
+  running: Int!
+  completed: Int!
+  failed: Int!
+  averageDuration: Float
+  successRate: Float
+}
+
+type ExecutionStats {
+  total: Int!
+  pending: Int!
+  running: Int!
+  completed: Int!
+  failed: Int!
+  averageDuration: Float
+  successRate: Float
+}
+
+type NodeStats {
+  total: Int!
+  online: Int!
+  offline: Int!
+  totalCapacity: Int!
+  utilizationRate: Float!
+}
+
+type SystemStats {
+  symbols: SymbolStats!
+  workflows: WorkflowStats!
+  executions: ExecutionStats!
+  nodes: NodeStats!
+  uptime: Int!
+  version: String!
+}
+
+# ============================================================================
+# Pagination Types
+# ============================================================================
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  total: Int!
+}
+
+type SymbolConnection {
+  edges: [SymbolEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SymbolEdge {
+  node: Symbol!
+  cursor: String!
+}
+
+type WorkflowConnection {
+  edges: [WorkflowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WorkflowEdge {
+  node: Workflow!
+  cursor: String!
+}
+
+type ExecutionConnection {
+  edges: [ExecutionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ExecutionEdge {
+  node: Execution!
+  cursor: String!
+}
+
+type AuditConnection {
+  edges: [AuditEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AuditEdge {
+  node: Audit!
+  cursor: String!
+}
+
+# ============================================================================
+# Query Root
+# ============================================================================
+
+type Query {
+  # Symbol queries
+  symbol(id: ID, name: String): Symbol
+  symbols(
+    type: SymbolType
+    context: SymbolContext
+    status: SymbolStatus
+    limit: Int
+    offset: Int
+  ): [Symbol!]!
+  symbolsConnection(
+    type: SymbolType
+    context: SymbolContext
+    status: SymbolStatus
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): SymbolConnection!
+
+  # Workflow queries
+  workflow(id: ID!): Workflow
+  workflows(
+    status: WorkflowStatus
+    limit: Int
+    offset: Int
+  ): [Workflow!]!
+  workflowsConnection(
+    status: WorkflowStatus
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): WorkflowConnection!
+
+  # Execution queries
+  execution(id: ID!): Execution
+  executions(
+    workflowId: ID
+    symbolId: ID
+    status: ExecutionStatus
+    limit: Int
+    offset: Int
+  ): [Execution!]!
+  executionsConnection(
+    workflowId: ID
+    symbolId: ID
+    status: ExecutionStatus
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): ExecutionConnection!
+
+  # Baseline queries
+  baseline(id: ID!): Baseline
+  baselines(
+    active: Boolean
+    baselineType: BaselineType
+    scope: BaselineScope
+    limit: Int
+    offset: Int
+  ): [Baseline!]!
+
+  # Audit queries
+  audit(id: ID!): Audit
+  audits(
+    baselineId: ID
+    severity: AuditSeverity
+    status: AuditStatus
+    limit: Int
+    offset: Int
+  ): [Audit!]!
+  auditsConnection(
+    baselineId: ID
+    severity: AuditSeverity
+    status: AuditStatus
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): AuditConnection!
+
+  # Node queries
+  node(id: ID!): Node
+  nodes(
+    status: NodeStatus
+    limit: Int
+    offset: Int
+  ): [Node!]!
+
+  # Task queries
+  task(id: ID!): Task
+  tasks(
+    nodeId: ID
+    status: ExecutionStatus
+    limit: Int
+    offset: Int
+  ): [Task!]!
+
+  # Statistics
+  stats: SystemStats!
+}
+
+# ============================================================================
+# Mutation Root
+# ============================================================================
+
+type Mutation {
+  # Symbol mutations
+  createSymbol(input: CreateSymbolInput!): Symbol!
+  updateSymbol(id: ID!, input: UpdateSymbolInput!): Symbol!
+  deleteSymbol(id: ID!): Boolean!
+  activateSymbol(id: ID!): Symbol!
+  deactivateSymbol(id: ID!): Symbol!
+
+  # Workflow mutations
+  createWorkflow(input: CreateWorkflowInput!): Workflow!
+  executeWorkflow(input: ExecuteWorkflowInput!): Workflow!
+  cancelWorkflow(id: ID!): Workflow!
+  pauseWorkflow(id: ID!): Workflow!
+  resumeWorkflow(id: ID!): Workflow!
+  deleteWorkflow(id: ID!): Boolean!
+
+  # Execution mutations
+  retryExecution(id: ID!): Execution!
+  cancelExecution(id: ID!): Execution!
+  rollbackExecution(id: ID!): Execution!
+
+  # Baseline mutations
+  createBaseline(input: CreateBaselineInput!): Baseline!
+  activateBaseline(id: ID!): Baseline!
+  deactivateBaseline(id: ID!): Baseline!
+  deleteBaseline(id: ID!): Boolean!
+
+  # Audit mutations
+  runAudit(input: RunAuditInput!): Audit!
+  cancelAudit(id: ID!): Audit!
+
+  # Node mutations (admin only)
+  removeNode(id: ID!): Boolean!
+}
+
+# ============================================================================
+# Subscription Root
+# ============================================================================
+
+type Subscription {
+  # Workflow subscriptions
+  workflowUpdated(id: ID): Workflow!
+  workflowStatusChanged(id: ID): Workflow!
+
+  # Execution subscriptions
+  executionUpdated(workflowId: ID): Execution!
+  executionStatusChanged(workflowId: ID, status: ExecutionStatus): Execution!
+
+  # Audit subscriptions
+  auditCompleted(baselineId: ID): Audit!
+  auditDeviationDetected(severity: AuditSeverity): Audit!
+
+  # Node subscriptions
+  nodeStatusChanged(id: ID): Node!
+  nodeHealthUpdated(id: ID): Node!
+
+  # Task subscriptions
+  taskAssigned(nodeId: ID): Task!
+  taskUpdated(nodeId: ID): Task!
+
+  # System subscriptions
+  statsUpdated: SystemStats!
+}

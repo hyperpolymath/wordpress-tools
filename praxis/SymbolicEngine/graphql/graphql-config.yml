@@ -1,0 +1,16 @@
+schema: schema.graphql
+documents:
+  - client/**/*.graphql
+  - src/**/*.graphql
+extensions:
+  endpoints:
+    default:
+      url: http://localhost:4000/graphql
+      headers:
+        Authorization: Bearer ${GRAPHQL_API_TOKEN}
+  codegen:
+    generates:
+      src/generated/types.ts:
+        plugins:
+          - typescript
+          - typescript-resolvers

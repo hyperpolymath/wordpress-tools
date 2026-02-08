@@ -1,0 +1,122 @@
+/**
+ * Layout Styles for Sinople Theme
+ * Grid and flexbox layouts with responsive design
+ */
+
+/* Site Container */
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Layout */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-md);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.site-branding {
+  flex: 0 0 auto;
+}
+
+.main-navigation {
+  flex: 1 1 auto;
+}
+
+/* Main Content Layout */
+.site-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-md);
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .has-sidebar .site-content {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .site-main {
+    grid-column: 1;
+  }
+
+  .widget-area {
+    grid-column: 2;
+  }
+}
+
+/* Content Width */
+.site-main,
+.widget-area {
+  max-width: var(--max-width);
+}
+
+/* Article Layout */
+article {
+  margin-bottom: var(--space-xxl);
+}
+
+.entry-header {
+  margin-bottom: var(--space-lg);
+}
+
+.entry-content {
+  max-width: var(--measure);
+}
+
+.entry-content > * + * {
+  margin-top: var(--space-md);
+}
+
+/* Footer Layout */
+.site-footer {
+  margin-top: auto;
+  padding: var(--space-xl) var(--space-md);
+  border-top: 2px solid var(--color-border);
+  text-align: center;
+}
+
+/* Responsive Grid */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Flexbox Utilities */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+/* Spacing Utilities */
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-sm); }
+.mb-2 { margin-bottom: var(--space-md); }
+.mb-3 { margin-bottom: var(--space-lg); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-sm); }
+.mt-2 { margin-top: var(--space-md); }
+.mt-3 { margin-top: var(--space-lg); }

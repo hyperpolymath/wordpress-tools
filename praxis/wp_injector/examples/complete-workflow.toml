@@ -1,0 +1,147 @@
+# Complete WP Praxis Workflow Example
+# Demonstrates multiple symbol types, dependencies, and validation
+
+[metadata]
+name = "Complete WordPress Workflow"
+version = "2.0.0"
+description = "Full-featured workflow with CPTs, taxonomies, and options"
+author = "WP Praxis Team"
+
+# Global configuration (optional)
+[config]
+environment = "production"
+backup_enabled = true
+
+# ============================================================================
+# Custom Post Types
+# ============================================================================
+
+[[symbols]]
+name = "event_post_type"
+type = "post_type"
+context = "wordpress"
+dispatch = "rust_injector"
+rollback = "snapshot"
+
+[symbols.parameters]
+post_type = "event"
+label = "Events"
+description = "Event management system"
+public = true
+show_in_rest = true
+menu_icon = "dashicons-calendar"
+supports = ["title", "editor", "thumbnail", "custom-fields"]
+has_archive = true
+
+[symbols.validation]
+wordpress_version = ">=5.5"
+
+[[symbols]]
+name = "testimonial_post_type"
+type = "post_type"
+context = "wordpress"
+rollback = "snapshot"
+
+[symbols.parameters]
+post_type = "testimonial"
+label = "Testimonials"
+public = true
+show_in_rest = true
+supports = ["title", "editor", "thumbnail"]
+
+# ============================================================================
+# Taxonomies
+# ============================================================================
+
+[[symbols]]
+name = "event_category"
+type = "taxonomy"
+context = "wordpress"
+depends_on = ["event_post_type"]
+rollback = "snapshot"
+
+[symbols.parameters]
+taxonomy = "event_category"
+label = "Event Categories"
+hierarchical = true
+public = true
+show_in_rest = true
+
+[[symbols]]
+name = "event_location"
+type = "taxonomy"
+context = "wordpress"
+depends_on = ["event_post_type"]
+rollback = "snapshot"
+
+[symbols.parameters]
+taxonomy = "event_location"
+label = "Event Locations"
+hierarchical = false
+public = true
+
+# ============================================================================
+# WordPress Options
+# ============================================================================
+
+[[symbols]]
+name = "site_branding"
+type = "option"
+context = "wordpress"
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "blogdescription"
+option_value = "Powered by WP Praxis Symbolic Engine"
+
+[[symbols]]
+name = "posts_per_page"
+type = "option"
+context = "wordpress"
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "posts_per_page"
+option_value = "12"
+
+[[symbols]]
+name = "timezone_setting"
+type = "option"
+context = "wordpress"
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "timezone_string"
+option_value = "America/New_York"
+
+# ============================================================================
+# Custom Options (WP Praxis specific)
+# ============================================================================
+
+[[symbols]]
+name = "praxis_config"
+type = "option"
+context = "wordpress"
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "wp_praxis_config"
+option_value = """
+{
+  "symbolic_engine": "enabled",
+  "auto_inject": false,
+  "debug_mode": false,
+  "version": "0.1.0"
+}
+"""
+
+[[symbols]]
+name = "enable_praxis_features"
+type = "option"
+context = "wordpress"
+depends_on = ["praxis_config"]
+rollback = "snapshot"
+
+[symbols.parameters]
+option_name = "wp_praxis_features"
+option_value = "post_types,taxonomies,symbolic_dispatch"

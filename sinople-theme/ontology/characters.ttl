@@ -1,0 +1,172 @@
+# Sinople Characters Vocabulary
+# Agents and entities within the semantic universe
+#
+# This file defines example characters and their relationships to constructs
+
+@prefix sn: <http://sinople.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+# ============================================================================
+# HISTORICAL PHILOSOPHERS
+# ============================================================================
+
+sn:Plato a sn:Character ;
+    rdfs:label "Plato"@en ;
+    foaf:name "Plato" ;
+    rdfs:comment "Ancient Greek philosopher, student of Socrates, teacher of Aristotle"@en ;
+    sn:hasConstruct sn:IdentityConstruct ;
+    sn:hasConstruct sn:JusticeConstruct ;
+    foaf:homepage <https://plato.stanford.edu/entries/plato/> .
+
+sn:Aristotle a sn:Character ;
+    rdfs:label "Aristotle"@en ;
+    foaf:name "Aristotle" ;
+    rdfs:comment "Ancient Greek philosopher and polymath, student of Plato"@en ;
+    sn:hasConstruct sn:MeaningConstruct ;
+    foaf:homepage <https://plato.stanford.edu/entries/aristotle/> .
+
+sn:Descartes a sn:Character ;
+    rdfs:label "René Descartes"@en ;
+    foaf:name "René Descartes" ;
+    rdfs:comment "French philosopher, mathematician, and scientist"@en ;
+    sn:hasConstruct sn:ConsciousnessConstruct ;
+    sn:hasConstruct sn:IdentityConstruct ;
+    sn:createdEntanglement sn:IdentityConsciousness .
+
+# ============================================================================
+# SCIENTISTS
+# ============================================================================
+
+sn:Newton a sn:Character ;
+    rdfs:label "Isaac Newton"@en ;
+    foaf:name "Isaac Newton" ;
+    rdfs:comment "English mathematician, physicist, and astronomer"@en ;
+    sn:hasConstruct sn:GravityConstruct ;
+    sn:hasConstruct sn:TimeConstruct ;
+    sn:hasConstruct sn:SpaceConstruct .
+
+sn:Einstein a sn:Character ;
+    rdfs:label "Albert Einstein"@en ;
+    foaf:name "Albert Einstein" ;
+    rdfs:comment "German-born theoretical physicist"@en ;
+    sn:hasConstruct sn:TimeConstruct ;
+    sn:hasConstruct sn:SpaceConstruct ;
+    sn:createdEntanglement sn:TimeSpaceEntanglement ;
+    sn:createdEntanglement sn:GravitySpaceTime .
+
+sn:Darwin a sn:Character ;
+    rdfs:label "Charles Darwin"@en ;
+    foaf:name "Charles Darwin" ;
+    rdfs:comment "English naturalist, geologist and biologist"@en ;
+    sn:hasConstruct sn:EvolutionConstruct ;
+    sn:createdEntanglement sn:EvolutionTime .
+
+# ============================================================================
+# MATHEMATICIANS
+# ============================================================================
+
+sn:Pythagoras a sn:Character ;
+    rdfs:label "Pythagoras"@en ;
+    foaf:name "Pythagoras" ;
+    rdfs:comment "Ancient Greek mathematician and philosopher"@en ;
+    sn:hasConstruct sn:ZeroConstruct ;
+    sn:hasConstruct sn:InfinityConstruct .
+
+sn:Cantor a sn:Character ;
+    rdfs:label "Georg Cantor"@en ;
+    foaf:name "Georg Cantor" ;
+    rdfs:comment "German mathematician, creator of set theory"@en ;
+    sn:hasConstruct sn:InfinityConstruct ;
+    sn:createdEntanglement sn:InfinityZero .
+
+# ============================================================================
+# LINGUISTS & COGNITIVE SCIENTISTS
+# ============================================================================
+
+sn:Saussure a sn:Character ;
+    rdfs:label "Ferdinand de Saussure"@en ;
+    foaf:name "Ferdinand de Saussure" ;
+    rdfs:comment "Swiss linguist and semiotician"@en ;
+    sn:hasConstruct sn:MeaningConstruct ;
+    sn:hasConstruct sn:MetaphorConstruct .
+
+sn:Lakoff a sn:Character ;
+    rdfs:label "George Lakoff"@en ;
+    foaf:name "George Lakoff" ;
+    rdfs:comment "American cognitive linguist"@en ;
+    sn:hasConstruct sn:MetaphorConstruct ;
+    sn:createdEntanglement sn:MetaphorMeaning .
+
+# ============================================================================
+# MODERN THINKERS
+# ============================================================================
+
+sn:Dennett a sn:Character ;
+    rdfs:label "Daniel Dennett"@en ;
+    foaf:name "Daniel Dennett" ;
+    rdfs:comment "American philosopher and cognitive scientist"@en ;
+    sn:hasConstruct sn:ConsciousnessConstruct ;
+    sn:hasConstruct sn:FreeWillConstruct ;
+    sn:createdEntanglement sn:ConsciousnessFreeWill .
+
+# ============================================================================
+# FICTIONAL/ARCHETYPAL CHARACTERS
+# ============================================================================
+
+sn:ThePhilosopher a sn:Character ;
+    rdfs:label "The Philosopher"@en ;
+    foaf:name "The Philosopher" ;
+    rdfs:comment "Archetypal seeker of wisdom and truth"@en ;
+    sn:hasConstruct sn:IdentityConstruct ;
+    sn:hasConstruct sn:MeaningConstruct ;
+    sn:hasConstruct sn:ConsciousnessConstruct .
+
+sn:TheScientist a sn:Character ;
+    rdfs:label "The Scientist"@en ;
+    foaf:name "The Scientist" ;
+    rdfs:comment "Archetypal empirical investigator of reality"@en ;
+    sn:hasConstruct sn:EvolutionConstruct ;
+    sn:hasConstruct sn:GravityConstruct ;
+    sn:hasConstruct sn:EntropyConstruct .
+
+sn:TheMathematician a sn:Character ;
+    rdfs:label "The Mathematician"@en ;
+    foaf:name "The Mathematician" ;
+    rdfs:comment "Archetypal explorer of abstract patterns"@en ;
+    sn:hasConstruct sn:InfinityConstruct ;
+    sn:hasConstruct sn:ZeroConstruct .
+
+# ============================================================================
+# CHARACTER TYPES
+# ============================================================================
+
+sn:HistoricalFigure a owl:Class ;
+    rdfs:label "Historical Figure"@en ;
+    rdfs:comment "A character based on a real historical person"@en ;
+    rdfs:subClassOf sn:Character .
+
+sn:ArchetypalCharacter a owl:Class ;
+    rdfs:label "Archetypal Character"@en ;
+    rdfs:comment "A character representing an archetype or ideal"@en ;
+    rdfs:subClassOf sn:Character .
+
+# Tag historical figures
+sn:Plato a sn:HistoricalFigure .
+sn:Aristotle a sn:HistoricalFigure .
+sn:Descartes a sn:HistoricalFigure .
+sn:Newton a sn:HistoricalFigure .
+sn:Einstein a sn:HistoricalFigure .
+sn:Darwin a sn:HistoricalFigure .
+sn:Pythagoras a sn:HistoricalFigure .
+sn:Cantor a sn:HistoricalFigure .
+sn:Saussure a sn:HistoricalFigure .
+sn:Lakoff a sn:HistoricalFigure .
+sn:Dennett a sn:HistoricalFigure .
+
+# Tag archetypal characters
+sn:ThePhilosopher a sn:ArchetypalCharacter .
+sn:TheScientist a sn:ArchetypalCharacter .
+sn:TheMathematician a sn:ArchetypalCharacter .

@@ -1,0 +1,57 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# OpenZiti Edge Router Configuration
+# Deployed on each site to tunnel traffic through the zero-trust network
+
+v: 3
+
+identity:
+  cert: /etc/ziti/router/client.cert
+  server_cert: /etc/ziti/router/server.chain.cert
+  key: /etc/ziti/router/server.key
+  ca: /etc/ziti/router/cas.cert
+
+# Connection to controller
+ctrl:
+  endpoint: tls:socp-controller.internal:6262
+
+# Edge router listener (for SDK connections)
+listeners:
+  # IPv6-only listener for control plane access
+  - binding: edge
+    address: tls:[::]:8442
+    options:
+      advertise: "[2001:db8::1]:8442"
+
+  # Internal tunnel for services
+  - binding: tunnel
+    options:
+      mode: host
+      resolver: udp://127.0.0.1:53
+      dnsSvcIpRange: 100.64.0.1/10
+
+# Link dialers (for mesh connections)
+link:
+  dialers:
+    - binding: transport
+
+# CSR configuration for certificate requests
+csr:
+  country: US
+  province: ""
+  locality: ""
+  organization: SOCP
+  organizationalUnit: ""
+  sans:
+    dns:
+      - localhost
+    ip:
+      - "::1"
+      - "127.0.0.1"
+
+# Forwarder configuration
+forwarder:
+  latencyProbeInterval: 10s
+  xgressDialQueueLength: 1000
+  xgressDialWorkerCount: 128
+  linkDialQueueLength: 1000
+  linkDialWorkerCount: 32

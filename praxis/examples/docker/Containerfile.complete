@@ -1,0 +1,83 @@
+# All-in-one WP Praxis container
+# Includes all languages and components
+FROM cgr.dev/chainguard/wolfi-base:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apk add --no-cache -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    postgresql-client \
+    mysql-client \
+    # PowerShell dependencies
+    powershell \
+    # PHP
+    php8.1 \
+    php8.1-cli \
+    php8.1-mysql \
+    php8.1-xml \
+    php8.1-mbstring \
+    php8.1-curl \
+    # Node.js (for Bun)
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apk add --no-cache -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Install Elixir
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
+    && dpkg -i erlang-solutions_2.0_all.deb \
+    && apt-get update \
+    && apk add --no-cache -y elixir \
+    && rm erlang-solutions_2.0_all.deb \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:${PATH}"
+
+# Install Racket (for introspection)
+RUN wget https://download.racket-lang.org/installers/8.11/racket-8.11-x86_64-linux-cs.sh \
+    && chmod +x racket-8.11-x86_64-linux-cs.sh \
+    && ./racket-8.11-x86_64-linux-cs.sh --unix-style --dest /usr/local \
+    && rm racket-8.11-x86_64-linux-cs.sh
+
+# Create app directory
+WORKDIR /app
+
+# Copy WP Praxis source
+COPY . /app/
+
+# Build Rust injector
+WORKDIR /app/wp_injector
+RUN cargo build --release
+
+# Build Elixir CLI
+WORKDIR /app/Core/cli-wrapper
+RUN mix local.hex --force \
+    && mix local.rebar --force \
+    && mix deps.get \
+    && mix compile
+
+# Install TypeScript dependencies
+WORKDIR /app/SymbolicEngine/swarm
+RUN bun install
+
+WORKDIR /app/SymbolicEngine/dashboard
+RUN bun install
+
+# Set up entrypoint
+WORKDIR /app
+COPY examples/docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["dispatcher"]

@@ -1,0 +1,172 @@
+# WP Praxis Swarm - Sample Workflow
+#
+# This is a sample workflow demonstrating the symbolic execution system
+# with various symbol types, dependencies, and backend dispatchers.
+
+name: "sample-workflow"
+version: "1.0.0"
+description: "Sample symbolic workflow demonstrating WP Praxis Swarm capabilities"
+
+metadata:
+  author: "WP Praxis"
+  created: "2025-11-22"
+  purpose: "demonstration"
+
+symbols:
+  # Initialize workflow
+  - name: "initialize"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    priority: 100
+    parameters:
+      message: "Starting sample workflow"
+
+  # Delay for 2 seconds (internal operation)
+  - name: "wait"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "initialize"
+    parameters:
+      ms: 2000
+
+  # Simulate WordPress initialization (PHP engine)
+  - name: "wp_init"
+    type: "action"
+    context: "wordpress"
+    dispatch: "php_engine"
+    dependencies:
+      - "wait"
+    priority: 50
+    timeout: 15000
+    retries: 2
+    parameters:
+      operation: "initialize"
+      config:
+        load_plugins: true
+        load_theme: false
+
+  # Process database records (Rust injector)
+  - name: "process_posts"
+    type: "transform"
+    context: "database"
+    dispatch: "rust_injector"
+    dependencies:
+      - "wp_init"
+    priority: 40
+    timeout: 30000
+    retries: 3
+    parameters:
+      table: "wp_posts"
+      action: "process"
+      filter:
+        post_status: "publish"
+        post_type: "post"
+      limit: 100
+
+  # Query processed data
+  - name: "query_results"
+    type: "query"
+    context: "database"
+    dispatch: "rust_injector"
+    dependencies:
+      - "process_posts"
+    parameters:
+      table: "wp_posts"
+      select:
+        - "ID"
+        - "post_title"
+        - "post_date"
+      where:
+        processed: true
+
+  # Apply symbolic filter (PowerShell engine)
+  - name: "apply_symbolic_filter"
+    type: "filter"
+    context: "wordpress"
+    dispatch: "powershell_engine"
+    dependencies:
+      - "query_results"
+    priority: 30
+    timeout: 20000
+    parameters:
+      filter_name: "content_processor"
+      rules:
+        - type: "normalize"
+          target: "post_content"
+        - type: "sanitize"
+          target: "post_title"
+
+  # Update state (PHP engine)
+  - name: "update_state"
+    type: "state"
+    context: "wordpress"
+    dispatch: "php_engine"
+    dependencies:
+      - "apply_symbolic_filter"
+    parameters:
+      state_key: "workflow_status"
+      state_value:
+        status: "processing"
+        timestamp: "{{now}}"
+        items_processed: "{{count}}"
+
+  # Parallel tasks (no dependencies between them)
+  - name: "cache_clear"
+    type: "action"
+    context: "wordpress"
+    dispatch: "php_engine"
+    dependencies:
+      - "update_state"
+    priority: 20
+    parameters:
+      operation: "cache_flush"
+      cache_types:
+        - "object"
+        - "transient"
+
+  - name: "log_activity"
+    type: "action"
+    context: "filesystem"
+    dispatch: "powershell_engine"
+    dependencies:
+      - "update_state"
+    priority: 20
+    parameters:
+      log_file: "/var/log/wp-praxis/activity.log"
+      message: "Workflow executed successfully"
+      level: "info"
+
+  # Finalize workflow
+  - name: "finalize"
+    type: "action"
+    context: "wordpress"
+    dispatch: "php_engine"
+    dependencies:
+      - "cache_clear"
+      - "log_activity"
+    priority: 10
+    timeout: 10000
+    parameters:
+      operation: "finalize"
+      cleanup: true
+    rollback:
+      name: "rollback_finalize"
+      type: "action"
+      context: "wordpress"
+      dispatch: "php_engine"
+      parameters:
+        operation: "restore_state"
+        restore_point: "pre_finalize"
+
+  # Final status update
+  - name: "complete"
+    type: "state"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "finalize"
+    parameters:
+      message: "Workflow completed successfully"

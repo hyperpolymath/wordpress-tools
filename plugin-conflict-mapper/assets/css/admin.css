@@ -1,0 +1,965 @@
+/**
+ * Admin Styles for WP Plugin Conflict Mapper
+ *
+ * @package WP_Plugin_Conflict_Mapper
+ * @since 1.0.0
+ */
+
+/* General */
+.wpcm-dashboard,
+.wpcm-reports,
+.wpcm-rankings,
+.wpcm-settings {
+    max-width: 1400px;
+}
+
+/* Stats Grid */
+.wpcm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.wpcm-stat-box {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-left: 4px solid #2271b1;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wpcm-stat-box.wpcm-stat-warning {
+    border-left-color: #d63638;
+}
+
+.wpcm-stat-icon {
+    font-size: 40px;
+    color: #2271b1;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpcm-stat-warning .wpcm-stat-icon {
+    color: #d63638;
+}
+
+.wpcm-stat-content h3 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.wpcm-stat-content p {
+    margin: 5px 0 0;
+    color: #646970;
+    font-size: 14px;
+}
+
+/* Actions */
+.wpcm-actions {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.wpcm-actions .button-hero {
+    padding: 15px 30px;
+    height: auto;
+    font-size: 16px;
+}
+
+.wpcm-actions .dashicons {
+    font-size: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Scan Results */
+.wpcm-scan-results {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.wpcm-scan-results h2 {
+    margin-top: 0;
+}
+
+#wpcm-results-content {
+    margin-top: 20px;
+}
+
+.wpcm-conflict-item {
+    background: #f0f0f1;
+    padding: 15px;
+    margin: 10px 0;
+    border-left: 4px solid #d63638;
+}
+
+.wpcm-conflict-item.wpcm-conflict-medium {
+    border-left-color: #dba617;
+}
+
+.wpcm-conflict-item.wpcm-conflict-low {
+    border-left-color: #72aee6;
+}
+
+.wpcm-overlap-item {
+    background: #f0f0f1;
+    padding: 15px;
+    margin: 10px 0;
+    border-left: 4px solid #dba617;
+}
+
+/* Badges */
+.wpcm-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.wpcm-badge-success {
+    background: #00a32a;
+    color: #fff;
+}
+
+.wpcm-badge-warning {
+    background: #dba617;
+    color: #fff;
+}
+
+.wpcm-badge-error {
+    background: #d63638;
+    color: #fff;
+}
+
+.wpcm-badge-inactive {
+    background: #787c82;
+    color: #fff;
+}
+
+/* Score Badges */
+.wpcm-score-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    min-width: 40px;
+    text-align: center;
+}
+
+.wpcm-score-excellent {
+    background: #00a32a;
+}
+
+.wpcm-score-good {
+    background: #72aee6;
+}
+
+.wpcm-score-fair {
+    background: #dba617;
+}
+
+.wpcm-score-poor {
+    background: #d63638;
+}
+
+/* Tables */
+.wpcm-reports-table,
+.wpcm-rankings-table {
+    margin-top: 20px;
+}
+
+.wpcm-reports-table th,
+.wpcm-rankings-table th {
+    font-weight: 600;
+}
+
+/* Rankings */
+.wpcm-rankings-filters {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.wpcm-rankings-filters label {
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.wpcm-rankings-filters select {
+    min-width: 200px;
+}
+
+.wpcm-issues-list {
+    background: #f0f0f1;
+    padding: 10px;
+    margin-top: 10px;
+    border-left: 3px solid #dba617;
+}
+
+.wpcm-issues-list ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.wpcm-issues-list li {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.wpcm-ranking-legend {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.wpcm-ranking-legend h3 {
+    margin-top: 0;
+}
+
+.wpcm-ranking-legend ul {
+    list-style: none;
+    padding: 0;
+}
+
+.wpcm-ranking-legend li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.wpcm-ranking-legend li:last-child {
+    border-bottom: none;
+}
+
+.wpcm-ranking-legend .wpcm-score-badge {
+    margin-right: 10px;
+}
+
+/* Recent Activity */
+.wpcm-recent-activity,
+.wpcm-quick-tips {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.wpcm-recent-activity h2,
+.wpcm-quick-tips h2 {
+    margin-top: 0;
+}
+
+.wpcm-quick-tips ul {
+    list-style: none;
+    padding: 0;
+}
+
+.wpcm-quick-tips li {
+    padding: 8px 0 8px 30px;
+    position: relative;
+}
+
+.wpcm-quick-tips li:before {
+    content: "\f534";
+    font-family: dashicons;
+    position: absolute;
+    left: 0;
+    color: #2271b1;
+    font-size: 20px;
+}
+
+/* Modal */
+.wpcm-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.wpcm-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 900px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.wpcm-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.wpcm-modal-close:hover,
+.wpcm-modal-close:focus {
+    color: #000;
+}
+
+/* Settings */
+.wpcm-settings-info {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.wpcm-settings-info h2 {
+    margin-top: 0;
+}
+
+/* Loading State */
+.wpcm-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.wpcm-loading:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #2271b1;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: wpcm-spin 0.6s linear infinite;
+}
+
+@keyframes wpcm-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .wpcm-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpcm-modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+}
+
+/* ==========================================================================
+   Known Conflicts Visualization Styles
+   ========================================================================== */
+
+/* Subtitle */
+.wpcm-known-conflicts .wpcm-subtitle {
+    font-size: 14px;
+    color: #646970;
+    margin: -10px 0 20px;
+}
+
+/* Summary Cards */
+.wpcm-conflict-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.wpcm-summary-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wpcm-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.wpcm-summary-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    background: #f0f6fc;
+}
+
+.wpcm-summary-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: #2271b1;
+}
+
+.wpcm-summary-total .wpcm-summary-icon { background: #f0f6fc; }
+.wpcm-summary-total .wpcm-summary-icon .dashicons { color: #2271b1; }
+
+.wpcm-summary-found .wpcm-summary-icon { background: #edfaef; }
+.wpcm-summary-found .wpcm-summary-icon .dashicons { color: #00a32a; }
+.wpcm-summary-found.has-conflicts .wpcm-summary-icon { background: #fcf0f1; }
+.wpcm-summary-found.has-conflicts .wpcm-summary-icon .dashicons { color: #d63638; }
+
+.wpcm-summary-critical .wpcm-summary-icon { background: #f0f0f1; }
+.wpcm-summary-critical .wpcm-summary-icon .dashicons { color: #646970; }
+.wpcm-summary-critical.has-issues .wpcm-summary-icon { background: #fcf0f1; }
+.wpcm-summary-critical.has-issues .wpcm-summary-icon .dashicons { color: #d63638; }
+
+.wpcm-summary-high .wpcm-summary-icon { background: #f0f0f1; }
+.wpcm-summary-high .wpcm-summary-icon .dashicons { color: #646970; }
+.wpcm-summary-high.has-issues .wpcm-summary-icon { background: #fff3e0; }
+.wpcm-summary-high.has-issues .wpcm-summary-icon .dashicons { color: #e65100; }
+
+.wpcm-summary-medium .wpcm-summary-icon { background: #fef8e7; }
+.wpcm-summary-medium .wpcm-summary-icon .dashicons { color: #dba617; }
+
+.wpcm-summary-low .wpcm-summary-icon { background: #f0f6fc; }
+.wpcm-summary-low .wpcm-summary-icon .dashicons { color: #72aee6; }
+
+.wpcm-summary-number {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    color: #1d2327;
+}
+
+.wpcm-summary-label {
+    font-size: 12px;
+    color: #646970;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Charts Row */
+.wpcm-charts-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.wpcm-chart-container {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.wpcm-chart-container h2 {
+    margin: 0 0 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Bar Chart */
+.wpcm-bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.wpcm-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wpcm-bar-label {
+    width: 70px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d2327;
+}
+
+.wpcm-bar-track {
+    flex: 1;
+    height: 28px;
+    background: #f0f0f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.wpcm-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    min-width: 35px;
+    transition: width 0.5s ease;
+}
+
+.wpcm-bar-value {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* No Conflicts State */
+.wpcm-no-conflicts {
+    text-align: center;
+    padding: 40px 20px;
+    color: #00a32a;
+}
+
+.wpcm-no-conflicts .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+}
+
+.wpcm-no-conflicts p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Type Grid */
+.wpcm-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.wpcm-type-item {
+    background: #f6f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.wpcm-type-item.has-issues {
+    background: #fcf0f1;
+}
+
+.wpcm-type-item .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    margin-bottom: 8px;
+}
+
+.wpcm-type-count {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1d2327;
+}
+
+.wpcm-type-label {
+    font-size: 12px;
+    color: #646970;
+    text-transform: uppercase;
+}
+
+/* Conflicts List */
+.wpcm-conflicts-list {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+.wpcm-conflicts-list h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpcm-conflicts-list h2 .dashicons {
+    color: #2271b1;
+}
+
+/* Filter Bar */
+.wpcm-filter-bar {
+    background: #f6f7f7;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wpcm-filter-bar label {
+    font-weight: 500;
+    color: #1d2327;
+}
+
+.wpcm-filter-select {
+    min-width: 150px;
+}
+
+/* Conflicts Grid */
+.wpcm-conflicts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+/* Conflict Card */
+.wpcm-conflict-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.wpcm-conflict-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.wpcm-conflict-card.hidden {
+    display: none;
+}
+
+.wpcm-conflict-header {
+    background: #f6f7f7;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #d63638;
+}
+
+.wpcm-severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.wpcm-severity-badge .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.wpcm-severity-critical { background: #d63638; }
+.wpcm-severity-high { background: #e65100; }
+.wpcm-severity-medium { background: #dba617; }
+.wpcm-severity-low { background: #72aee6; }
+
+.wpcm-conflict-type {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    color: #1d2327;
+}
+
+.wpcm-type-overlap { background: #f3e5f5; color: #7b1fa2; }
+.wpcm-type-conflict { background: #ffebee; color: #c62828; }
+.wpcm-type-incompatible { background: #eceff1; color: #37474f; }
+.wpcm-type-performance { background: #fff8e1; color: #f57f17; }
+
+/* Plugin Pair */
+.wpcm-conflict-plugins {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.wpcm-plugin-pair {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.wpcm-plugin-name {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #1d2327;
+    font-size: 13px;
+}
+
+.wpcm-plugin-name .dashicons {
+    color: #2271b1;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.wpcm-conflict-icon {
+    color: #d63638;
+}
+
+.wpcm-conflict-icon .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Conflict Description & Resolution */
+.wpcm-conflict-description,
+.wpcm-conflict-resolution {
+    padding: 12px 15px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.wpcm-conflict-description {
+    border-bottom: 1px solid #f0f0f1;
+    color: #1d2327;
+}
+
+.wpcm-conflict-description p,
+.wpcm-conflict-resolution p {
+    margin: 0;
+}
+
+.wpcm-conflict-resolution {
+    background: #f0f6fc;
+}
+
+.wpcm-conflict-resolution strong {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #2271b1;
+    margin-bottom: 5px;
+}
+
+.wpcm-conflict-resolution strong .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.wpcm-conflict-resolution p {
+    color: #1d2327;
+}
+
+/* Verified Badge */
+.wpcm-verified-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background: #edfaef;
+    color: #00a32a;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.wpcm-verified-badge .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Database Stats */
+.wpcm-db-stats {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+.wpcm-db-stats h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpcm-db-stats h2 .dashicons {
+    color: #2271b1;
+}
+
+.wpcm-db-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.wpcm-db-stat {
+    text-align: center;
+    padding: 20px;
+    background: #f6f7f7;
+    border-radius: 8px;
+}
+
+.wpcm-db-stat-value {
+    display: block;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2271b1;
+    line-height: 1;
+}
+
+.wpcm-db-stat-label {
+    display: block;
+    font-size: 12px;
+    color: #646970;
+    margin-top: 8px;
+    text-transform: uppercase;
+}
+
+/* Breakdown */
+.wpcm-db-breakdown h3 {
+    margin: 0 0 15px;
+    font-size: 14px;
+    color: #1d2327;
+}
+
+.wpcm-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.wpcm-breakdown-section h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: #646970;
+    text-transform: uppercase;
+}
+
+.wpcm-breakdown-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.wpcm-breakdown-section li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #1d2327;
+}
+
+.wpcm-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Export Section */
+.wpcm-export-section {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+.wpcm-export-section h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpcm-export-section h2 .dashicons {
+    color: #2271b1;
+}
+
+.wpcm-export-section p {
+    color: #646970;
+    margin: 0 0 15px;
+}
+
+.wpcm-export-section .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.wpcm-export-section .button .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Known Conflicts Responsive */
+@media screen and (max-width: 782px) {
+    .wpcm-conflict-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wpcm-charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .wpcm-conflicts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpcm-db-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpcm-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpcm-plugin-pair {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .wpcm-conflict-icon {
+        transform: rotate(90deg);
+    }
+}

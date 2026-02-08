@@ -1,0 +1,428 @@
+# Multi-Language Workflow
+# Demonstrates cross-layer execution with Rust, PHP, PowerShell, Elixir
+# This workflow showcases the full polyglot integration of WP Praxis
+
+version: "1.0"
+metadata:
+  name: "multi-language-workflow"
+  description: "Cross-layer workflow demonstrating polyglot execution and state management"
+  author: "WP Praxis"
+  tags: ["advanced", "polyglot", "integration", "state-management"]
+
+config:
+  wordpress:
+    path: "/var/www/html"
+    url: "https://example.com"
+  database:
+    connection: "postgresql://localhost/wp_praxis"
+    pool_size: 10
+  execution:
+    mode: "mixed" # sequential, parallel, or mixed
+    timeout: 180
+    retry_on_failure: true
+    max_retries: 3
+  state_management:
+    enabled: true
+    persistence: "database"
+    sync_interval: 5
+
+symbols:
+  # Step 1: Initialize workflow state in Elixir (database via Ecto)
+  - name: "initialize_workflow_state"
+    type: "state"
+    description: "Initialize workflow execution state in PostgreSQL via Elixir/Ecto"
+    dispatch: "elixir"
+    context: "database"
+    parameters:
+      operation: "create_workflow_execution"
+      workflow_name: "multi-language-workflow"
+      metadata:
+        initiated_by: "cli"
+        environment: "development"
+        timestamp: "${system.timestamp}"
+    rollback:
+      enabled: true
+      strategy: "delete_workflow_execution"
+    outputs:
+      - workflow_execution_id
+      - execution_token
+
+  # Step 2: Audit current WordPress state (PowerShell)
+  - name: "audit_wordpress_state"
+    type: "audit"
+    description: "Run comprehensive WordPress audit using PowerShell symbolic engine"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "initialize_workflow_state"
+    parameters:
+      audit_type: "comprehensive"
+      include_options: true
+      include_posts: true
+      include_users: true
+      include_plugins: true
+      include_themes: true
+      output_format: "json"
+    rollback:
+      enabled: false
+    outputs:
+      - audit_id
+      - audit_report_path
+      - total_options
+      - total_posts
+      - total_users
+
+  # Step 3: Store audit results in database (Elixir)
+  - name: "persist_audit_results"
+    type: "state"
+    description: "Persist audit results to PostgreSQL via Elixir/Ecto"
+    dispatch: "elixir"
+    context: "database"
+    depends_on:
+      - "audit_wordpress_state"
+    parameters:
+      operation: "create_audit_record"
+      workflow_execution_id: "${initialize_workflow_state.workflow_execution_id}"
+      audit_id: "${audit_wordpress_state.audit_id}"
+      audit_data_path: "${audit_wordpress_state.audit_report_path}"
+      metadata:
+        total_options: "${audit_wordpress_state.total_options}"
+        total_posts: "${audit_wordpress_state.total_posts}"
+        total_users: "${audit_wordpress_state.total_users}"
+    rollback:
+      enabled: true
+      strategy: "delete_audit_record"
+    outputs:
+      - audit_record_id
+      - persisted_at
+
+  # Step 4: Analyze data patterns (Rust - high performance)
+  - name: "analyze_data_patterns"
+    type: "analysis"
+    description: "Perform high-performance data pattern analysis using Rust"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    depends_on:
+      - "audit_wordpress_state"
+    parameters:
+      operation: "analyze_patterns"
+      data_source: "${audit_wordpress_state.audit_report_path}"
+      analysis_types:
+        - "option_usage_frequency"
+        - "post_type_distribution"
+        - "user_role_distribution"
+        - "orphaned_metadata"
+        - "performance_bottlenecks"
+      optimization_level: "O3"
+      parallel_threads: 4
+    rollback:
+      enabled: false
+    outputs:
+      - analysis_report_path
+      - patterns_found
+      - recommendations
+
+  # Step 5: Generate optimization recommendations (PowerShell)
+  - name: "generate_optimization_plan"
+    type: "planning"
+    description: "Generate optimization plan based on analysis using PowerShell"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "analyze_data_patterns"
+    parameters:
+      operation: "generate_plan"
+      analysis_input: "${analyze_data_patterns.analysis_report_path}"
+      optimization_goals:
+        - "reduce_autoload_size"
+        - "cleanup_orphaned_data"
+        - "optimize_indexes"
+      risk_tolerance: "conservative"
+      backup_required: true
+    rollback:
+      enabled: false
+    outputs:
+      - optimization_plan_path
+      - estimated_impact
+      - risk_level
+
+  # Step 6: Execute WordPress optimizations (PHP)
+  - name: "execute_wp_optimizations"
+    type: "action"
+    description: "Execute WordPress-specific optimizations using PHP"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "generate_optimization_plan"
+    parameters:
+      operation: "execute_optimization_plan"
+      plan_path: "${generate_optimization_plan.optimization_plan_path}"
+      actions:
+        - type: "update_autoload_options"
+          target_options:
+            - "large_transients"
+            - "unused_settings"
+          new_autoload: false
+        - type: "cleanup_post_meta"
+          target: "orphaned_meta"
+        - type: "optimize_database_tables"
+          tables: ["wp_options", "wp_postmeta", "wp_usermeta"]
+    rollback:
+      enabled: true
+      strategy: "restore_from_backup"
+    outputs:
+      - optimizations_applied
+      - before_size
+      - after_size
+      - improvement_percentage
+
+  # Step 7: Perform database cleanup (Rust - performance critical)
+  - name: "database_cleanup"
+    type: "action"
+    description: "High-performance database cleanup using Rust"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    depends_on:
+      - "execute_wp_optimizations"
+    parameters:
+      operation: "database_cleanup"
+      tasks:
+        - "remove_expired_transients"
+        - "optimize_tables"
+        - "update_statistics"
+      safe_mode: true
+      max_execution_time: 60
+    rollback:
+      enabled: true
+      strategy: "restore_from_backup"
+    outputs:
+      - cleanup_completed
+      - space_recovered
+      - tables_optimized
+
+  # Step 8: Update workflow state (Elixir)
+  - name: "update_workflow_progress"
+    type: "state"
+    description: "Update workflow execution progress in database"
+    dispatch: "elixir"
+    context: "database"
+    depends_on:
+      - "database_cleanup"
+    parameters:
+      operation: "update_workflow_execution"
+      workflow_execution_id: "${initialize_workflow_state.workflow_execution_id}"
+      status: "optimizations_complete"
+      progress_percentage: 70
+      metadata:
+        optimizations_applied: "${execute_wp_optimizations.optimizations_applied}"
+        space_recovered: "${database_cleanup.space_recovered}"
+    rollback:
+      enabled: false
+    outputs:
+      - update_timestamp
+
+  # Step 9: Run post-optimization audit (PowerShell)
+  - name: "post_optimization_audit"
+    type: "audit"
+    description: "Run audit after optimizations to measure impact"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "database_cleanup"
+    parameters:
+      audit_type: "comprehensive"
+      include_options: true
+      include_posts: true
+      include_users: true
+      include_plugins: true
+      include_themes: true
+      output_format: "json"
+      baseline_comparison: "${audit_wordpress_state.audit_id}"
+    rollback:
+      enabled: false
+    outputs:
+      - audit_id
+      - audit_report_path
+      - improvement_metrics
+
+  # Step 10: Generate visual diff report (PowerShell)
+  - name: "generate_visual_diff"
+    type: "reporting"
+    description: "Generate visual diff between before/after states"
+    dispatch: "powershell"
+    context: "wordpress"
+    depends_on:
+      - "post_optimization_audit"
+    parameters:
+      operation: "visualize_diff"
+      baseline_before: "${audit_wordpress_state.audit_id}"
+      baseline_after: "${post_optimization_audit.audit_id}"
+      output_formats: ["html", "json", "pdf"]
+      include_charts: true
+      include_recommendations: true
+    rollback:
+      enabled: false
+    outputs:
+      - diff_report_html
+      - diff_report_json
+      - diff_report_pdf
+
+  # Step 11: Persist final results (Elixir)
+  - name: "persist_final_results"
+    type: "state"
+    description: "Persist final workflow results to database"
+    dispatch: "elixir"
+    context: "database"
+    depends_on:
+      - "post_optimization_audit"
+      - "generate_visual_diff"
+    parameters:
+      operation: "finalize_workflow_execution"
+      workflow_execution_id: "${initialize_workflow_state.workflow_execution_id}"
+      status: "completed"
+      progress_percentage: 100
+      results:
+        initial_audit_id: "${audit_wordpress_state.audit_id}"
+        final_audit_id: "${post_optimization_audit.audit_id}"
+        optimizations_applied: "${execute_wp_optimizations.optimizations_applied}"
+        space_recovered: "${database_cleanup.space_recovered}"
+        improvement_percentage: "${execute_wp_optimizations.improvement_percentage}"
+        diff_reports:
+          html: "${generate_visual_diff.diff_report_html}"
+          json: "${generate_visual_diff.diff_report_json}"
+          pdf: "${generate_visual_diff.diff_report_pdf}"
+    rollback:
+      enabled: false
+    outputs:
+      - finalized_at
+      - execution_duration
+
+  # Step 12: Send notifications (PHP - WordPress integration)
+  - name: "send_completion_notifications"
+    type: "notification"
+    description: "Send completion notifications via WordPress"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "persist_final_results"
+    parameters:
+      operation: "send_notifications"
+      notification_types:
+        - type: "email"
+          recipients: ["admin@example.com"]
+          subject: "WP Praxis: Multi-Language Workflow Completed"
+          template: "workflow_completion"
+          data:
+            workflow_name: "multi-language-workflow"
+            execution_id: "${initialize_workflow_state.workflow_execution_id}"
+            duration: "${persist_final_results.execution_duration}"
+            improvement: "${execute_wp_optimizations.improvement_percentage}"
+        - type: "webhook"
+          url: "https://example.com/webhooks/workflow-complete"
+          method: "POST"
+          headers:
+            Authorization: "Bearer ${env.WEBHOOK_TOKEN}"
+          payload:
+            event: "workflow.completed"
+            workflow: "multi-language-workflow"
+            execution_id: "${initialize_workflow_state.workflow_execution_id}"
+            results: "${persist_final_results.results}"
+    rollback:
+      enabled: false
+    outputs:
+      - notifications_sent
+
+  # Step 13: Update dashboard metrics (Elixir + GraphQL)
+  - name: "update_dashboard_metrics"
+    type: "state"
+    description: "Update real-time dashboard metrics via GraphQL subscription"
+    dispatch: "elixir"
+    context: "graphql"
+    depends_on:
+      - "persist_final_results"
+    parameters:
+      operation: "publish_metrics"
+      subscription_topic: "workflow_metrics"
+      metrics:
+        workflow_id: "${initialize_workflow_state.workflow_execution_id}"
+        workflow_name: "multi-language-workflow"
+        status: "completed"
+        duration: "${persist_final_results.execution_duration}"
+        symbols_executed: 13
+        optimizations_applied: "${execute_wp_optimizations.optimizations_applied}"
+        space_recovered_mb: "${database_cleanup.space_recovered}"
+        performance_improvement: "${execute_wp_optimizations.improvement_percentage}"
+    rollback:
+      enabled: false
+    outputs:
+      - metrics_published
+
+# Rollback configuration
+rollback:
+  on_error: "automatic"
+  preserve_state: true
+  preserve_audits: true
+  cleanup_temp_files: true
+  notification:
+    enabled: true
+    channels: ["log", "email", "webhook"]
+
+# Notifications
+notifications:
+  on_success:
+    - type: "log"
+      message: "Multi-language workflow completed successfully"
+      level: "info"
+      details:
+        execution_id: "${initialize_workflow_state.workflow_execution_id}"
+        duration: "${persist_final_results.execution_duration}"
+        improvement: "${execute_wp_optimizations.improvement_percentage}"
+
+  on_failure:
+    - type: "log"
+      message: "Multi-language workflow failed"
+      level: "error"
+      details:
+        execution_id: "${initialize_workflow_state.workflow_execution_id}"
+        failed_symbol: "${workflow.failed_symbol}"
+        error_message: "${workflow.error_message}"
+
+    - type: "email"
+      to: "admin@example.com"
+      subject: "WP Praxis: Workflow Failed - Rollback Initiated"
+      body: "The multi-language workflow has failed and automatic rollback has been initiated."
+
+  on_complete:
+    - type: "log"
+      message: "Workflow execution completed"
+      level: "info"
+      details:
+        status: "${workflow.status}"
+        duration: "${workflow.duration}"
+
+# State management configuration
+state_management:
+  checkpoints:
+    enabled: true
+    frequency: "per_symbol"
+    storage: "database"
+
+  recovery:
+    enabled: true
+    strategy: "resume_from_checkpoint"
+    max_recovery_attempts: 3
+
+  cleanup:
+    enabled: true
+    retention_days: 30
+    archive_completed: true
+
+# Output configuration
+outputs:
+  format: "json"
+  destination: "./outputs/multi-language-workflow-${timestamp}.json"
+  include_metadata: true
+  include_timings: true
+  include_state: true
+  include_all_outputs: true
+  pretty_print: true

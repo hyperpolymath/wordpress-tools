@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WP Praxis GraphQL Playground</title>
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    #playground {
+      height: 100vh;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 24px;
+      color: #666;
+    }
+  </style>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+  ></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/@graphiql/react/dist/style.css"
+  />
+  <script
+    crossorigin
+    src="https://unpkg.com/@graphiql/react/dist/graphiql.umd.js"
+  ></script>
+</head>
+<body>
+  <div id="playground">
+    <div class="loading">Loading GraphQL Playground...</div>
+  </div>
+  <script>
+    const { GraphiQL } = window.GraphiQL;
+    const { createGraphiQLFetcher } = window.GraphiQL;
+
+    const API_URL = window.location.origin + '/graphql';
+
+    const fetcher = createGraphiQLFetcher({
+      url: API_URL,
+    });
+
+    const defaultQuery = `# Welcome to WP Praxis GraphQL API
+# Press Cmd/Ctrl + Enter to execute a query
+
+# Example: Get all symbols
+query GetSymbols {
+  symbols(limit: 10) {
+    id
+    name
+    type
+    context
+    status
+    dispatchTarget
+    priority
+  }
+}
+
+# Example: Get workflows with executions
+query GetWorkflows {
+  workflows(limit: 5) {
+    id
+    name
+    status
+    startedAt
+    executions {
+      id
+      status
+      symbol {
+        name
+        type
+      }
+    }
+  }
+}
+
+# Example: Get system statistics
+query GetStats {
+  stats {
+    uptime
+    version
+    symbols {
+      total
+      byType {
+        type
+        count
+      }
+    }
+    workflows {
+      total
+      running
+      completed
+      failed
+      successRate
+    }
+    nodes {
+      total
+      online
+      utilizationRate
+    }
+  }
+}
+
+# Example: Create a new symbol
+mutation CreateSymbol {
+  createSymbol(input: {
+    name: "example_symbol"
+    type: ACTION
+    context: WORDPRESS
+    dispatchTarget: RUST_INJECTOR
+    parameters: {
+      action: "process"
+    }
+    description: "Example symbolic action"
+  }) {
+    id
+    name
+    status
+  }
+}
+
+# Example: Execute a workflow
+mutation ExecuteWorkflow {
+  executeWorkflow(input: {
+    workflowId: "1"
+    parameters: {}
+  }) {
+    id
+    status
+    startedAt
+  }
+}
+
+# Example: Subscribe to workflow updates
+subscription WorkflowUpdates {
+  workflowUpdated {
+    id
+    name
+    status
+    startedAt
+    completedAt
+  }
+}
+`;
+
+    ReactDOM.render(
+      React.createElement(GraphiQL, {
+        fetcher: fetcher,
+        defaultQuery: defaultQuery,
+        headerEditorEnabled: true,
+        shouldPersistHeaders: true,
+      }),
+      document.getElementById('playground')
+    );
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+# Sinople Constructs Vocabulary
+# Extended vocabulary for construct types and properties
+#
+# This file contains additional construct examples and taxonomies
+
+@prefix sn: <http://sinople.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================================
+# CONSTRUCT TAXONOMIES
+# ============================================================================
+
+sn:PhilosophicalConstruct a owl:Class ;
+    rdfs:label "Philosophical Construct"@en ;
+    rdfs:comment "Abstract philosophical concepts and ideas"@en ;
+    rdfs:subClassOf sn:Construct .
+
+sn:ScientificConstruct a owl:Class ;
+    rdfs:label "Scientific Construct"@en ;
+    rdfs:comment "Scientific theories, models, and concepts"@en ;
+    rdfs:subClassOf sn:Construct .
+
+sn:MathematicalConstruct a owl:Class ;
+    rdfs:label "Mathematical Construct"@en ;
+    rdfs:comment "Mathematical objects, structures, and abstractions"@en ;
+    rdfs:subClassOf sn:Construct .
+
+sn:LinguisticConstruct a owl:Class ;
+    rdfs:label "Linguistic Construct"@en ;
+    rdfs:comment "Language concepts, grammatical structures, and semantic units"@en ;
+    rdfs:subClassOf sn:Construct .
+
+sn:SocialConstruct a owl:Class ;
+    rdfs:label "Social Construct"@en ;
+    rdfs:comment "Socially constructed concepts and institutions"@en ;
+    rdfs:subClassOf sn:Construct .
+
+# ============================================================================
+# EXAMPLE CONSTRUCTS
+# ============================================================================
+
+# Philosophical Constructs
+
+sn:ConsciousnessConstruct a sn:PhilosophicalConstruct ;
+    rdfs:label "Consciousness"@en ;
+    rdfs:comment "The state or quality of awareness, or, of being aware of an external object or something within oneself"@en ;
+    sn:hasGloss "Awareness of one's own existence, sensations, thoughts, surroundings, etc."@en ;
+    sn:constructType "philosophical" ;
+    sn:complexity 10 .
+
+sn:FreeWillConstruct a sn:PhilosophicalConstruct ;
+    rdfs:label "Free Will"@en ;
+    rdfs:comment "The power of acting without the constraint of necessity or fate; the ability to act at one's own discretion"@en ;
+    sn:hasGloss "The capacity to choose between different possible courses of action unimpeded"@en ;
+    sn:constructType "philosophical" ;
+    sn:complexity 9 .
+
+sn:IdentityConstruct a sn:PhilosophicalConstruct ;
+    rdfs:label "Identity"@en ;
+    rdfs:comment "The fact of being who or what a person or thing is"@en ;
+    sn:hasGloss "The characteristics determining who or what a person or thing is"@en ;
+    sn:constructType "philosophical" ;
+    sn:complexity 8 .
+
+# Scientific Constructs
+
+sn:EvolutionConstruct a sn:ScientificConstruct ;
+    rdfs:label "Evolution"@en ;
+    rdfs:comment "The process by which different kinds of living organisms developed and diversified from earlier forms"@en ;
+    sn:hasGloss "Change in the heritable characteristics of biological populations over successive generations"@en ;
+    sn:constructType "scientific" ;
+    sn:complexity 7 .
+
+sn:EntropyConstruct a sn:ScientificConstruct ;
+    rdfs:label "Entropy"@en ;
+    rdfs:comment "A thermodynamic quantity representing the unavailability of thermal energy for conversion into mechanical work"@en ;
+    sn:hasGloss "A measure of disorder or randomness in a closed system"@en ;
+    sn:constructType "scientific" ;
+    sn:complexity 8 .
+
+sn:GravityConstruct a sn:ScientificConstruct ;
+    rdfs:label "Gravity"@en ;
+    rdfs:comment "The force that attracts a body toward the center of the earth, or toward any other physical body having mass"@en ;
+    sn:hasGloss "The universal force of attraction acting between all matter"@en ;
+    sn:constructType "scientific" ;
+    sn:complexity 6 .
+
+# Mathematical Constructs
+
+sn:InfinityConstruct a sn:MathematicalConstruct ;
+    rdfs:label "Infinity"@en ;
+    rdfs:comment "A quantity without bound or end; limitless"@en ;
+    sn:hasGloss "An unbounded quantity greater than every real number"@en ;
+    sn:constructType "mathematical" ;
+    sn:complexity 9 .
+
+sn:ZeroConstruct a sn:MathematicalConstruct ;
+    rdfs:label "Zero"@en ;
+    rdfs:comment "The integer denoted 0 that, when used as a counting number, indicates no quantity"@en ;
+    sn:hasGloss "The additive identity; the number that, added to any number, yields the same number"@en ;
+    sn:constructType "mathematical" ;
+    sn:complexity 5 .
+
+# Linguistic Constructs
+
+sn:MetaphorConstruct a sn:LinguisticConstruct ;
+    rdfs:label "Metaphor"@en ;
+    rdfs:comment "A figure of speech in which a word or phrase is applied to an object or action to which it is not literally applicable"@en ;
+    sn:hasGloss "Understanding one conceptual domain in terms of another"@en ;
+    sn:constructType "linguistic" ;
+    sn:complexity 6 .
+
+sn:MeaningConstruct a sn:LinguisticConstruct ;
+    rdfs:label "Meaning"@en ;
+    rdfs:comment "What is meant by a word, text, concept, or action"@en ;
+    sn:hasGloss "The content carried or implied by something"@en ;
+    sn:constructType "linguistic" ;
+    sn:complexity 8 .
+
+# Social Constructs
+
+sn:JusticeConstruct a sn:SocialConstruct ;
+    rdfs:label "Justice"@en ;
+    rdfs:comment "The quality of being just; righteousness, equitableness, or moral rightness"@en ;
+    sn:hasGloss "The principle of moral rightness; fairness"@en ;
+    sn:constructType "social" ;
+    sn:complexity 8 .
+
+sn:MoneyConstruct a sn:SocialConstruct ;
+    rdfs:label "Money"@en ;
+    rdfs:comment "A current medium of exchange in the form of coins and banknotes"@en ;
+    sn:hasGloss "A store of value and unit of account facilitating economic exchange"@en ;
+    sn:constructType "social" ;
+    sn:complexity 6 .
+
+# ============================================================================
+# CONSTRUCT COLLECTIONS
+# ============================================================================
+
+sn:FundamentalConcepts a owl:Class ;
+    rdfs:label "Fundamental Concepts"@en ;
+    rdfs:comment "Collection of the most fundamental constructs"@en ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:unionOf (sn:TimeConstruct sn:SpaceConstruct sn:ConsciousnessConstruct)
+    ] .

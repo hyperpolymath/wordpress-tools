@@ -1,0 +1,73 @@
+# Custom Post Type Registration Example
+# This manifest creates a custom post type with associated taxonomy
+
+metadata:
+  name: "Portfolio Post Type"
+  version: "1.0.0"
+  description: "Register portfolio custom post type and category taxonomy"
+  author: "WP Praxis"
+
+symbols:
+  # Define the custom post type first
+  - name: portfolio_post_type
+    type: post_type
+    context: wordpress
+    dispatch: rust_injector
+    rollback: snapshot
+    parameters:
+      post_type: portfolio
+      label: Portfolio
+      description: Portfolio items showcase
+      public: true
+      publicly_queryable: true
+      show_ui: true
+      show_in_menu: true
+      show_in_rest: true  # Enable Gutenberg editor
+      menu_icon: dashicons-portfolio
+      supports:
+        - title
+        - editor
+        - thumbnail
+        - excerpt
+      has_archive: true
+      rewrite:
+        slug: portfolio
+        with_front: false
+    validation:
+      wordpress_version: ">=5.0"
+
+  # Define taxonomy that depends on the post type
+  - name: portfolio_category
+    type: taxonomy
+    context: wordpress
+    dispatch: rust_injector
+    depends_on:
+      - portfolio_post_type
+    rollback: snapshot
+    parameters:
+      taxonomy: portfolio_category
+      label: Portfolio Categories
+      description: Categories for portfolio items
+      hierarchical: true
+      public: true
+      show_ui: true
+      show_in_rest: true
+      show_admin_column: true
+      rewrite:
+        slug: portfolio-category
+
+  # Add another taxonomy for tags
+  - name: portfolio_tag
+    type: taxonomy
+    context: wordpress
+    depends_on:
+      - portfolio_post_type
+    rollback: snapshot
+    parameters:
+      taxonomy: portfolio_tag
+      label: Portfolio Tags
+      description: Tags for portfolio items
+      hierarchical: false
+      public: true
+      show_ui: true
+      show_in_rest: true

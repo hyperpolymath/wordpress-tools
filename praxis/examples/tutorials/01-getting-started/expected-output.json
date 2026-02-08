@@ -1,0 +1,87 @@
+{
+  "workflow": {
+    "name": "my-first-workflow",
+    "description": "A simple workflow to get started with WP Praxis",
+    "version": "1.0",
+    "executed_at": "2025-11-22T10:30:45Z",
+    "duration_seconds": 0.35,
+    "status": "completed",
+    "symbols_total": 4,
+    "symbols_completed": 4,
+    "symbols_failed": 0
+  },
+  "symbols": {
+    "read_site_info": {
+      "status": "completed",
+      "dispatch": "rust_injector",
+      "context": "wordpress",
+      "started_at": "2025-11-22T10:30:45.100Z",
+      "completed_at": "2025-11-22T10:30:45.250Z",
+      "duration_seconds": 0.15,
+      "outputs": {
+        "site_info": {
+          "blogname": "My WordPress Site",
+          "blogdescription": "Just another WordPress site",
+          "siteurl": "http://localhost",
+          "home": "http://localhost",
+          "admin_email": "admin@example.com",
+          "posts_per_page": "10",
+          "timezone_string": "America/New_York"
+        }
+      }
+    },
+    "count_posts": {
+      "status": "completed",
+      "dispatch": "php",
+      "context": "wordpress",
+      "started_at": "2025-11-22T10:30:45.250Z",
+      "completed_at": "2025-11-22T10:30:45.330Z",
+      "duration_seconds": 0.08,
+      "outputs": {
+        "post_count": 42
+      }
+    },
+    "count_pages": {
+      "status": "completed",
+      "dispatch": "php",
+      "context": "wordpress",
+      "started_at": "2025-11-22T10:30:45.330Z",
+      "completed_at": "2025-11-22T10:30:45.390Z",
+      "duration_seconds": 0.06,
+      "outputs": {
+        "page_count": 7
+      }
+    },
+    "generate_report": {
+      "status": "completed",
+      "dispatch": "powershell",
+      "context": "wordpress",
+      "started_at": "2025-11-22T10:30:45.390Z",
+      "completed_at": "2025-11-22T10:30:45.510Z",
+      "duration_seconds": 0.12,
+      "outputs": {
+        "report_path": "./reports/site-summary-2025-11-22.json"
+      }
+    }
+  },
+  "metadata": {
+    "hostname": "localhost",
+    "user": "wp-praxis",
+    "wp_version": "6.4.0",
+    "php_version": "8.2.0",
+    "mysql_version": "8.0.34",
+    "os": "Linux",
+    "wp_praxis_version": "0.1.0"
+  },
+  "environment": {
+    "config_file": "~/.wp-praxis/config.yaml",
+    "wordpress_path": "/var/www/html",
+    "wordpress_url": "http://localhost"
+  },
+  "performance": {
+    "total_duration_ms": 350,
+    "symbols_duration_ms": 410,
+    "overhead_ms": 60,
+    "overhead_percentage": 17.1
+  }
+}

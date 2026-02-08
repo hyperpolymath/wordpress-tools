@@ -1,0 +1,428 @@
+# Custom Post Type Setup Workflow
+# Demonstrates dependency chains and WordPress context execution
+
+version = "1.0"
+
+[metadata]
+name = "custom-post-type-setup"
+description = "Create a complete custom post type with taxonomies and meta boxes"
+author = "WP Praxis"
+tags = ["wordpress", "cpt", "taxonomy", "advanced"]
+
+[config.wordpress]
+path = "/var/www/html"
+url = "https://example.com"
+
+[config.execution]
+mode = "sequential"
+timeout = 120
+retry_on_failure = true
+max_retries = 2
+
+# Symbol 1: Register Custom Post Type
+[[symbols]]
+name = "register_product_cpt"
+type = "action"
+description = "Register 'Product' custom post type"
+dispatch = "php"
+context = "wordpress"
+
+[symbols.parameters]
+operation = "register_post_type"
+post_type = "product"
+
+[symbols.parameters.args]
+label = "Products"
+public = true
+hierarchical = false
+supports = ["title", "editor", "thumbnail", "excerpt", "custom-fields"]
+has_archive = true
+rewrite = { slug = "products", with_front = false }
+show_in_rest = true
+menu_icon = "dashicons-cart"
+
+[symbols.parameters.labels]
+name = "Products"
+singular_name = "Product"
+add_new = "Add New Product"
+add_new_item = "Add New Product"
+edit_item = "Edit Product"
+new_item = "New Product"
+view_item = "View Product"
+search_items = "Search Products"
+not_found = "No products found"
+not_found_in_trash = "No products found in trash"
+
+[symbols.rollback]
+enabled = true
+strategy = "unregister_post_type"
+
+[[symbols.outputs]]
+name = "post_type_registered"
+
+# Symbol 2: Register Product Category Taxonomy
+[[symbols]]
+name = "register_product_category"
+type = "action"
+description = "Register 'Product Category' taxonomy"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt"]
+
+[symbols.parameters]
+operation = "register_taxonomy"
+taxonomy = "product_category"
+object_types = ["product"]
+
+[symbols.parameters.args]
+label = "Product Categories"
+hierarchical = true
+public = true
+show_in_rest = true
+rewrite = { slug = "product-category", with_front = false, hierarchical = true }
+show_admin_column = true
+
+[symbols.parameters.labels]
+name = "Product Categories"
+singular_name = "Product Category"
+search_items = "Search Categories"
+all_items = "All Categories"
+parent_item = "Parent Category"
+parent_item_colon = "Parent Category:"
+edit_item = "Edit Category"
+update_item = "Update Category"
+add_new_item = "Add New Category"
+new_item_name = "New Category Name"
+
+[symbols.rollback]
+enabled = true
+strategy = "unregister_taxonomy"
+
+[[symbols.outputs]]
+name = "taxonomy_registered"
+
+# Symbol 3: Register Product Tag Taxonomy
+[[symbols]]
+name = "register_product_tag"
+type = "action"
+description = "Register 'Product Tag' taxonomy"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt"]
+
+[symbols.parameters]
+operation = "register_taxonomy"
+taxonomy = "product_tag"
+object_types = ["product"]
+
+[symbols.parameters.args]
+label = "Product Tags"
+hierarchical = false
+public = true
+show_in_rest = true
+rewrite = { slug = "product-tag" }
+show_admin_column = true
+
+[symbols.parameters.labels]
+name = "Product Tags"
+singular_name = "Product Tag"
+search_items = "Search Tags"
+all_items = "All Tags"
+edit_item = "Edit Tag"
+update_item = "Update Tag"
+add_new_item = "Add New Tag"
+new_item_name = "New Tag Name"
+
+[symbols.rollback]
+enabled = true
+strategy = "unregister_taxonomy"
+
+[[symbols.outputs]]
+name = "taxonomy_registered"
+
+# Symbol 4: Create Meta Box for Product Details
+[[symbols]]
+name = "create_product_details_metabox"
+type = "action"
+description = "Add meta box for product pricing and SKU"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt"]
+
+[symbols.parameters]
+operation = "add_meta_box"
+meta_box_id = "product_details"
+title = "Product Details"
+post_type = "product"
+context = "normal"
+priority = "high"
+
+[[symbols.parameters.fields]]
+id = "product_price"
+label = "Price"
+type = "number"
+description = "Product price in dollars"
+required = true
+step = "0.01"
+min = "0"
+
+[[symbols.parameters.fields]]
+id = "product_sku"
+label = "SKU"
+type = "text"
+description = "Product stock keeping unit"
+required = true
+pattern = "[A-Z0-9-]+"
+
+[[symbols.parameters.fields]]
+id = "product_stock"
+label = "Stock Quantity"
+type = "number"
+description = "Number of items in stock"
+required = false
+min = "0"
+step = "1"
+
+[[symbols.parameters.fields]]
+id = "product_featured"
+label = "Featured Product"
+type = "checkbox"
+description = "Mark as featured product"
+required = false
+
+[symbols.rollback]
+enabled = true
+strategy = "remove_meta_box"
+
+[[symbols.outputs]]
+name = "meta_box_registered"
+
+# Symbol 5: Create Meta Box for Product Attributes
+[[symbols]]
+name = "create_product_attributes_metabox"
+type = "action"
+description = "Add meta box for product attributes"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt"]
+
+[symbols.parameters]
+operation = "add_meta_box"
+meta_box_id = "product_attributes"
+title = "Product Attributes"
+post_type = "product"
+context = "side"
+priority = "default"
+
+[[symbols.parameters.fields]]
+id = "product_color"
+label = "Color"
+type = "select"
+description = "Primary product color"
+required = false
+options = ["Red", "Blue", "Green", "Yellow", "Black", "White"]
+
+[[symbols.parameters.fields]]
+id = "product_size"
+label = "Size"
+type = "select"
+description = "Product size"
+required = false
+options = ["Small", "Medium", "Large", "X-Large"]
+
+[[symbols.parameters.fields]]
+id = "product_weight"
+label = "Weight (lbs)"
+type = "number"
+description = "Product weight in pounds"
+required = false
+step = "0.1"
+min = "0"
+
+[symbols.rollback]
+enabled = true
+strategy = "remove_meta_box"
+
+[[symbols.outputs]]
+name = "meta_box_registered"
+
+# Symbol 6: Add Custom Columns to Admin List
+[[symbols]]
+name = "add_product_admin_columns"
+type = "action"
+description = "Add custom columns to product admin list view"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt", "create_product_details_metabox"]
+
+[symbols.parameters]
+operation = "add_admin_columns"
+post_type = "product"
+
+[[symbols.parameters.columns]]
+id = "product_price"
+label = "Price"
+sortable = true
+position = 2
+
+[[symbols.parameters.columns]]
+id = "product_sku"
+label = "SKU"
+sortable = true
+position = 3
+
+[[symbols.parameters.columns]]
+id = "product_stock"
+label = "Stock"
+sortable = true
+position = 4
+
+[[symbols.parameters.columns]]
+id = "product_featured"
+label = "Featured"
+sortable = true
+position = 5
+
+[symbols.rollback]
+enabled = true
+strategy = "remove_admin_columns"
+
+[[symbols.outputs]]
+name = "admin_columns_added"
+
+# Symbol 7: Create Sample Products (using Rust for performance)
+[[symbols]]
+name = "create_sample_products"
+type = "action"
+description = "Create 10 sample products for demonstration"
+dispatch = "rust_injector"
+context = "wordpress"
+depends_on = ["register_product_cpt", "register_product_category", "register_product_tag"]
+
+[symbols.parameters]
+operation = "bulk_create_posts"
+post_type = "product"
+count = 10
+
+[[symbols.parameters.templates]]
+title = "Premium Widget ${index}"
+content = "This is a high-quality widget with advanced features. Product ${index} in our catalog."
+status = "publish"
+
+[symbols.parameters.templates.meta]
+product_price = "${random:10-100}"
+product_sku = "WIDGET-${random:1000-9999}"
+product_stock = "${random:0-50}"
+product_featured = "${random:boolean}"
+
+[symbols.parameters.templates.taxonomies]
+product_category = ["Electronics", "Widgets"]
+product_tag = ["Premium", "New Arrival"]
+
+[symbols.rollback]
+enabled = true
+strategy = "delete_created_posts"
+
+[[symbols.outputs]]
+name = "products_created"
+[[symbols.outputs]]
+name = "product_ids"
+
+# Symbol 8: Flush Rewrite Rules
+[[symbols]]
+name = "flush_rewrite_rules"
+type = "action"
+description = "Flush WordPress rewrite rules to activate new permalinks"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt", "register_product_category", "register_product_tag"]
+
+[symbols.parameters]
+operation = "flush_rewrite_rules"
+hard = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "rules_flushed"
+
+# Symbol 9: Validate Setup
+[[symbols]]
+name = "validate_cpt_setup"
+type = "validation"
+description = "Validate that all components are properly registered"
+dispatch = "php"
+context = "wordpress"
+depends_on = ["register_product_cpt", "register_product_category", "register_product_tag", "flush_rewrite_rules"]
+
+[symbols.parameters]
+validation_type = "post_type_exists"
+post_type = "product"
+check_taxonomies = ["product_category", "product_tag"]
+check_rewrite_rules = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "validation_passed"
+[[symbols.outputs]]
+name = "validation_errors"
+
+# Symbol 10: Generate Documentation
+[[symbols]]
+name = "generate_cpt_documentation"
+type = "reporting"
+description = "Generate documentation for the new custom post type"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["validate_cpt_setup"]
+
+[symbols.parameters]
+report_type = "cpt_documentation"
+post_type = "product"
+output_format = "markdown"
+include_fields = true
+include_taxonomies = true
+include_examples = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "documentation_path"
+
+# Rollback configuration
+[rollback]
+on_error = "automatic"
+preserve_data = true
+
+[rollback.notification]
+enabled = true
+channels = ["log", "email"]
+
+# Notifications
+[[notifications.on_success]]
+type = "log"
+message = "Custom post type 'Product' setup completed successfully"
+level = "info"
+
+[[notifications.on_success]]
+type = "email"
+to = "admin@example.com"
+subject = "WP Praxis: Product CPT Setup Complete"
+body = "The Product custom post type has been successfully configured with all taxonomies and meta boxes."
+
+[[notifications.on_failure]]
+type = "log"
+message = "Custom post type setup failed, rollback initiated"
+level = "error"
+
+# Output configuration
+[outputs]
+format = "json"
+destination = "./outputs/cpt-setup-${timestamp}.json"
+include_metadata = true
+include_timings = true
+include_validation = true

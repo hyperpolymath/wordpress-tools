@@ -1,0 +1,525 @@
+# Swarm Distributed Execution Workflow
+# Demonstrates parallel task execution across distributed workers
+
+version: "1.0"
+metadata:
+  name: "swarm-distributed"
+  description: "Distributed parallel execution across swarm workers with load balancing"
+  author: "WP Praxis"
+  tags: ["swarm", "distributed", "parallel", "performance", "scalability"]
+
+config:
+  wordpress:
+    path: "/var/www/html"
+    url: "https://example.com"
+  swarm:
+    dispatcher:
+      host: "localhost"
+      port: 8080
+      protocol: "http"
+    workers:
+      min_count: 3
+      max_count: 10
+      auto_scale: true
+    load_balancing:
+      strategy: "least_busy"
+      health_check_interval: 5
+  execution:
+    mode: "parallel"
+    timeout: 600
+    retry_on_failure: true
+    max_retries: 2
+    parallel_limit: 5  # Max symbols executing in parallel
+
+symbols:
+  # Step 1: Initialize swarm dispatcher
+  - name: "initialize_swarm"
+    type: "swarm"
+    description: "Initialize swarm dispatcher and discover workers"
+    dispatch: "typescript"
+    context: "swarm"
+    parameters:
+      operation: "initialize_dispatcher"
+      discovery_method: "broadcast"
+      worker_requirements:
+        min_memory_mb: 512
+        min_cpu_cores: 1
+        required_capabilities: ["rust", "php", "powershell"]
+      timeout: 30
+    rollback:
+      enabled: true
+      strategy: "shutdown_dispatcher"
+    outputs:
+      - dispatcher_id
+      - workers_discovered
+      - swarm_ready
+
+  # Step 2: Register worker health monitors
+  - name: "register_health_monitors"
+    type: "swarm"
+    description: "Register health monitoring for all workers"
+    dispatch: "typescript"
+    context: "swarm"
+    depends_on:
+      - "initialize_swarm"
+    parameters:
+      operation: "register_monitors"
+      monitor_interval: 5
+      health_checks:
+        - "cpu_usage"
+        - "memory_usage"
+        - "response_time"
+        - "error_rate"
+      thresholds:
+        max_cpu_percent: 90
+        max_memory_percent: 85
+        max_response_ms: 1000
+        max_error_rate: 0.05
+    rollback:
+      enabled: false
+    outputs:
+      - monitors_active
+      - monitored_workers
+
+  # Step 3-12: Parallel tasks (will be distributed across workers)
+  # Task Group A: WordPress Option Updates (3 tasks in parallel)
+  - name: "update_general_settings"
+    type: "action"
+    description: "Update general WordPress settings"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "options_update"
+      swarm_enabled: true
+    depends_on:
+      - "initialize_swarm"
+    parameters:
+      operation: "batch_update_options"
+      updates:
+        - option_name: "blogname"
+          option_value: "Swarm-Powered WordPress"
+        - option_name: "blogdescription"
+          option_value: "Distributed execution demo"
+        - option_name: "admin_email"
+          option_value: "swarm@example.com"
+    rollback:
+      enabled: true
+      strategy: "restore_previous_values"
+    outputs:
+      - options_updated
+      - worker_id
+
+  - name: "update_reading_settings"
+    type: "action"
+    description: "Update reading settings"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "options_update"
+      swarm_enabled: true
+    depends_on:
+      - "initialize_swarm"
+    parameters:
+      operation: "batch_update_options"
+      updates:
+        - option_name: "posts_per_page"
+          option_value: 25
+        - option_name: "posts_per_rss"
+          option_value: 20
+    rollback:
+      enabled: true
+      strategy: "restore_previous_values"
+    outputs:
+      - options_updated
+      - worker_id
+
+  - name: "update_discussion_settings"
+    type: "action"
+    description: "Update discussion settings"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "options_update"
+      swarm_enabled: true
+    depends_on:
+      - "initialize_swarm"
+    parameters:
+      operation: "batch_update_options"
+      updates:
+        - option_name: "default_comment_status"
+          option_value: "closed"
+        - option_name: "default_ping_status"
+          option_value: "closed"
+    rollback:
+      enabled: true
+      strategy: "restore_previous_values"
+    outputs:
+      - options_updated
+      - worker_id
+
+  # Task Group B: Bulk Content Operations (3 tasks in parallel)
+  - name: "create_bulk_posts_1"
+    type: "action"
+    description: "Create posts batch 1 (IDs 1-100)"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "content_creation"
+      swarm_enabled: true
+    depends_on:
+      - "update_general_settings"
+      - "update_reading_settings"
+      - "update_discussion_settings"
+    parameters:
+      operation: "bulk_create_posts"
+      post_type: "post"
+      count: 100
+      start_index: 1
+      template:
+        title: "Swarm Post ${index}"
+        content: "This post was created by swarm worker in parallel execution. Post number ${index}."
+        status: "publish"
+        meta:
+          swarm_created: true
+          batch: 1
+    rollback:
+      enabled: true
+      strategy: "delete_created_posts"
+    outputs:
+      - posts_created
+      - post_ids
+      - worker_id
+      - execution_time
+
+  - name: "create_bulk_posts_2"
+    type: "action"
+    description: "Create posts batch 2 (IDs 101-200)"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "content_creation"
+      swarm_enabled: true
+    depends_on:
+      - "update_general_settings"
+      - "update_reading_settings"
+      - "update_discussion_settings"
+    parameters:
+      operation: "bulk_create_posts"
+      post_type: "post"
+      count: 100
+      start_index: 101
+      template:
+        title: "Swarm Post ${index}"
+        content: "This post was created by swarm worker in parallel execution. Post number ${index}."
+        status: "publish"
+        meta:
+          swarm_created: true
+          batch: 2
+    rollback:
+      enabled: true
+      strategy: "delete_created_posts"
+    outputs:
+      - posts_created
+      - post_ids
+      - worker_id
+      - execution_time
+
+  - name: "create_bulk_posts_3"
+    type: "action"
+    description: "Create posts batch 3 (IDs 201-300)"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "content_creation"
+      swarm_enabled: true
+    depends_on:
+      - "update_general_settings"
+      - "update_reading_settings"
+      - "update_discussion_settings"
+    parameters:
+      operation: "bulk_create_posts"
+      post_type: "post"
+      count: 100
+      start_index: 201
+      template:
+        title: "Swarm Post ${index}"
+        content: "This post was created by swarm worker in parallel execution. Post number ${index}."
+        status: "publish"
+        meta:
+          swarm_created: true
+          batch: 3
+    rollback:
+      enabled: true
+      strategy: "delete_created_posts"
+    outputs:
+      - posts_created
+      - post_ids
+      - worker_id
+      - execution_time
+
+  # Task Group C: Data Analysis (3 tasks in parallel)
+  - name: "analyze_post_patterns"
+    type: "analysis"
+    description: "Analyze post content patterns"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "analysis"
+      swarm_enabled: true
+    depends_on:
+      - "create_bulk_posts_1"
+      - "create_bulk_posts_2"
+      - "create_bulk_posts_3"
+    parameters:
+      operation: "analyze_patterns"
+      target: "posts"
+      analysis_types:
+        - "content_length_distribution"
+        - "category_distribution"
+        - "tag_frequency"
+    rollback:
+      enabled: false
+    outputs:
+      - analysis_results
+      - worker_id
+      - execution_time
+
+  - name: "analyze_option_patterns"
+    type: "analysis"
+    description: "Analyze options and autoload"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "analysis"
+      swarm_enabled: true
+    depends_on:
+      - "update_general_settings"
+      - "update_reading_settings"
+      - "update_discussion_settings"
+    parameters:
+      operation: "analyze_patterns"
+      target: "options"
+      analysis_types:
+        - "autoload_size"
+        - "option_types"
+        - "transient_count"
+    rollback:
+      enabled: false
+    outputs:
+      - analysis_results
+      - worker_id
+      - execution_time
+
+  - name: "analyze_database_performance"
+    type: "analysis"
+    description: "Analyze database performance metrics"
+    dispatch: "rust_injector"
+    context: "wordpress"
+    execution:
+      parallel_group: "analysis"
+      swarm_enabled: true
+    depends_on:
+      - "create_bulk_posts_1"
+      - "create_bulk_posts_2"
+      - "create_bulk_posts_3"
+    parameters:
+      operation: "analyze_database"
+      metrics:
+        - "table_sizes"
+        - "index_efficiency"
+        - "query_performance"
+    rollback:
+      enabled: false
+    outputs:
+      - analysis_results
+      - worker_id
+      - execution_time
+
+  # Step 13: Aggregate results from all workers
+  - name: "aggregate_worker_results"
+    type: "aggregation"
+    description: "Aggregate results from all parallel executions"
+    dispatch: "typescript"
+    context: "swarm"
+    depends_on:
+      - "create_bulk_posts_1"
+      - "create_bulk_posts_2"
+      - "create_bulk_posts_3"
+      - "analyze_post_patterns"
+      - "analyze_option_patterns"
+      - "analyze_database_performance"
+    parameters:
+      operation: "aggregate_results"
+      aggregation_functions:
+        - type: "sum"
+          field: "posts_created"
+        - type: "average"
+          field: "execution_time"
+        - type: "collect"
+          field: "worker_id"
+        - type: "merge"
+          field: "analysis_results"
+    rollback:
+      enabled: false
+    outputs:
+      - total_posts_created
+      - average_execution_time
+      - workers_used
+      - aggregated_analysis
+
+  # Step 14: Generate swarm performance report
+  - name: "generate_swarm_performance_report"
+    type: "reporting"
+    description: "Generate performance report for swarm execution"
+    dispatch: "typescript"
+    context: "swarm"
+    depends_on:
+      - "aggregate_worker_results"
+    parameters:
+      operation: "generate_report"
+      report_type: "swarm_performance"
+      include_metrics:
+        - "total_execution_time"
+        - "parallel_efficiency"
+        - "worker_utilization"
+        - "load_distribution"
+        - "throughput"
+      output_format: "json"
+      include_visualizations: true
+    rollback:
+      enabled: false
+    outputs:
+      - report_path
+      - performance_score
+      - efficiency_percentage
+
+  # Step 15: Verify data integrity across workers
+  - name: "verify_distributed_integrity"
+    type: "validation"
+    description: "Verify data integrity across distributed operations"
+    dispatch: "php"
+    context: "wordpress"
+    depends_on:
+      - "aggregate_worker_results"
+    parameters:
+      validation_type: "distributed_integrity"
+      checks:
+        - "verify_post_count"
+        - "verify_no_duplicates"
+        - "verify_metadata_consistency"
+        - "verify_option_values"
+      expected_values:
+        total_posts: 300
+        duplicate_posts: 0
+    rollback:
+      enabled: false
+    outputs:
+      - validation_passed
+      - validation_errors
+
+  # Step 16: Scale down swarm
+  - name: "scale_down_swarm"
+    type: "swarm"
+    description: "Gracefully scale down swarm workers"
+    dispatch: "typescript"
+    context: "swarm"
+    depends_on:
+      - "verify_distributed_integrity"
+      - "generate_swarm_performance_report"
+    parameters:
+      operation: "scale_workers"
+      target_count: 1
+      strategy: "graceful"
+      drain_timeout: 30
+    rollback:
+      enabled: false
+    outputs:
+      - workers_scaled_down
+      - final_worker_count
+
+  # Step 17: Cleanup swarm resources
+  - name: "cleanup_swarm"
+    type: "swarm"
+    description: "Cleanup swarm dispatcher and resources"
+    dispatch: "typescript"
+    context: "swarm"
+    depends_on:
+      - "scale_down_swarm"
+    parameters:
+      operation: "shutdown_dispatcher"
+      cleanup_logs: false
+      preserve_metrics: true
+    rollback:
+      enabled: false
+    outputs:
+      - cleanup_completed
+      - metrics_preserved
+
+# Swarm-specific configuration
+swarm:
+  auto_recovery:
+    enabled: true
+    max_worker_failures: 3
+    rebalance_on_failure: true
+
+  monitoring:
+    enabled: true
+    metrics:
+      - "worker_cpu_usage"
+      - "worker_memory_usage"
+      - "task_distribution"
+      - "execution_times"
+      - "error_rates"
+    export_interval: 10
+    export_destination: "./swarm-metrics/"
+
+  load_balancing:
+    algorithm: "least_busy"
+    rebalance_threshold: 0.3
+    sticky_sessions: false
+
+# Rollback configuration
+rollback:
+  on_error: "automatic"
+  strategy: "distributed_rollback"
+  coordinate_workers: true
+  notification:
+    enabled: true
+    channels: ["log", "webhook"]
+
+# Notifications
+notifications:
+  on_success:
+    - type: "log"
+      message: "Swarm distributed workflow completed successfully"
+      level: "info"
+      details:
+        total_posts_created: "${aggregate_worker_results.total_posts_created}"
+        workers_used: "${aggregate_worker_results.workers_used}"
+        efficiency: "${generate_swarm_performance_report.efficiency_percentage}"
+
+  on_failure:
+    - type: "log"
+      message: "Swarm workflow failed"
+      level: "error"
+      details:
+        failed_symbol: "${workflow.failed_symbol}"
+        worker_id: "${workflow.failed_worker_id}"
+
+  on_worker_failure:
+    - type: "log"
+      message: "Worker failure detected, rebalancing tasks"
+      level: "warning"
+      details:
+        worker_id: "${event.worker_id}"
+        failed_task: "${event.task_name}"
+
+# Output configuration
+outputs:
+  format: "json"
+  destination: "./outputs/swarm-distributed-${timestamp}.json"
+  include_metadata: true
+  include_timings: true
+  include_worker_metrics: true
+  include_performance_data: true
+  pretty_print: true

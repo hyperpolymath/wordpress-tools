@@ -1,0 +1,78 @@
+%% -*- erlang -*-
+%% OTP Application Specification for WP Praxis Manifest Parser
+%%
+%% This application provides symbolic manifest parsing, transformation,
+%% and validation for YAML/TOML/Dhall configuration files.
+
+{application, manifest_parser,
+ [
+  {description, "WP Praxis Symbolic Manifest Parser - LFE-based declarative configuration processor"},
+  {vsn, "0.1.0"},
+  {registered, [
+      manifest_parser_sup,
+      parser_server,
+      symbol_registry
+  ]},
+  {mod, {manifest_parser_app, []}},
+  {applications, [
+      kernel,
+      stdlib,
+      sasl,
+      crypto,
+      yamerl,   % YAML parsing
+      toml,     % TOML parsing
+      jsx       % JSON encoding/decoding
+  ]},
+  {env, [
+      %% Default configuration
+      {max_recursion_depth, 100},
+      {enable_macro_expansion, true},
+      {validate_on_parse, true},
+      {cache_parsed_manifests, true},
+      {cache_ttl_seconds, 300},
+      {symbol_registry_size, 1000},
+      {default_manifest_format, yaml},
+      {strict_validation, false},
+      {trace_symbolic_dispatch, false},
+
+      %% Parser options
+      {yaml_options, [
+          {detailed_constr, true},
+          {str_node_as_binary, true}
+      ]},
+      {toml_options, [
+          {return_maps, true}
+      ]},
+
+      %% Optimization options
+      {optimize_symbols, true},
+      {constant_folding, true},
+      {dead_symbol_elimination, true},
+
+      %% Integration options
+      {elixir_interop, true},
+      {json_export_format, pretty},
+
+      %% Logging
+      {log_level, info},
+      {log_parse_errors, true},
+      {log_transformations, false}
+  ]},
+  {modules, []}, % Will be filled by rebar3
+  {licenses, ["AGPL-3.0"]},
+  {links, [
+      {"GitHub", "https://github.com/wppraxis/wp-praxis"},
+      {"Documentation", "https://wppraxis.dev/docs"}
+  ]},
+  {maintainers, ["WP Praxis Project"]},
+  {files, [
+      "src",
+      "include",
+      "priv",
+      "config",
+      "README.md",
+      "LICENSE",
+      "rebar.config",
+      "rebar.lock"
+  ]}
+ ]}.

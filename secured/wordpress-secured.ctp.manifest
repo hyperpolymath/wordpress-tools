@@ -1,0 +1,140 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Cerro Torre manifest for WordPress with php-aegis security stack
+manifest-version = "0.1.0"
+
+[package]
+name = "wordpress-secured"
+version = "6.4.2-aegis.1"
+summary = "WordPress with php-aegis security stack (XSS prevention, rate limiting, IndieWeb security)"
+description = """
+Production-ready WordPress container with integrated php-aegis security enforcement:
+- Input validation and sanitization
+- XSS prevention across 8+ attack vectors
+- SSRF protection for Webmentions
+- Rate limiting (10 req/min per IP)
+- Security headers (CSP, HSTS, X-Frame-Options)
+- IndieWeb protocol security (Micropub, Webmention, IndieAuth)
+- XMLRPC disabled (DDoS mitigation)
+"""
+
+[provenance]
+packager = "Hyperpolymath"
+packager-email = "security@hyperpolymath.org"
+packaging-date = "2026-01-22"
+upstream-url = "https://wordpress.org/"
+repository = "https://github.com/hyperpolymath/php-aegis"
+
+[provenance.security-stack]
+php-aegis = { version = "1.0.0", url = "https://github.com/hyperpolymath/php-aegis" }
+wordpress = { version = "6.4.2", url = "https://wordpress.org/" }
+mariadb = { version = "latest", url = "https://mariadb.org/" }
+
+[provenance.security-features]
+xss-prevention = "enabled"
+ssrf-protection = "enabled"
+rate-limiting = "10-req-per-minute"
+security-headers = "csp-hsts-xframe"
+indieweb-security = "micropub-webmention-indieauth"
+xmlrpc = "disabled"
+
+[runtime]
+user = "www-data"
+working-directory = "/var/www/html"
+entrypoint = ["docker-entrypoint.sh"]
+command = ["apache2-foreground"]
+
+[runtime.environment]
+WORDPRESS_DB_HOST = "db:3306"
+WORDPRESS_DB_NAME = "wordpress"
+WORDPRESS_DB_USER = "wordpress"
+
+[runtime.ports]
+http = 80
+
+[runtime.volumes]
+data = "/var/www/html"
+
+[selinux]
+policy-type = "confined"
+allow-network = true
+allow-database = true
+allow-filesystem-write = ["/var/www/html/wp-content/uploads", "/tmp/rate-limit"]
+
+[selinux.network]
+allow-tcp-connect = ["3306"]  # MariaDB
+allow-tcp-bind = ["80"]       # HTTP
+
+[selinux.filesystem]
+read-paths = ["/var/www/html", "/usr/share", "/etc"]
+write-paths = ["/var/www/html/wp-content/uploads", "/tmp/rate-limit", "/tmp/sessions"]
+no-exec-paths = ["/var/www/html/wp-content/uploads"]
+
+[security.capabilities]
+drop-all = true
+add = ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID", "NET_BIND_SERVICE"]
+
+[security.seccomp]
+default-action = "SCMP_ACT_ERRNO"
+allowed-syscalls = [
+    "read", "write", "open", "close", "stat", "fstat", "lstat",
+    "poll", "lseek", "mmap", "mprotect", "munmap", "brk",
+    "rt_sigaction", "rt_sigprocmask", "rt_sigreturn", "ioctl",
+    "pread64", "pwrite64", "readv", "writev", "access", "pipe",
+    "select", "sched_yield", "mremap", "msync", "mincore", "madvise",
+    "shmget", "shmat", "shmctl", "dup", "dup2", "pause", "nanosleep",
+    "getitimer", "alarm", "setitimer", "getpid", "sendfile", "socket",
+    "connect", "accept", "sendto", "recvfrom", "sendmsg", "recvmsg",
+    "shutdown", "bind", "listen", "getsockname", "getpeername",
+    "socketpair", "setsockopt", "getsockopt", "clone", "fork", "vfork",
+    "execve", "exit", "wait4", "kill", "uname", "semget", "semop",
+    "semctl", "shmdt", "msgget", "msgsnd", "msgrcv", "msgctl", "fcntl",
+    "flock", "fsync", "fdatasync", "truncate", "ftruncate", "getdents",
+    "getcwd", "chdir", "fchdir", "rename", "mkdir", "rmdir", "creat",
+    "link", "unlink", "symlink", "readlink", "chmod", "fchmod", "chown",
+    "fchown", "lchown", "umask", "gettimeofday", "getrlimit", "getrusage",
+    "sysinfo", "times", "ptrace", "getuid", "syslog", "getgid", "setuid",
+    "setgid", "geteuid", "getegid", "setpgid", "getppid", "getpgrp",
+    "setsid", "setreuid", "setregid", "getgroups", "setgroups", "setresuid",
+    "getresuid", "setresgid", "getresgid", "getpgid", "setfsuid", "setfsgid",
+    "getsid", "capget", "capset", "rt_sigpending", "rt_sigtimedwait",
+    "rt_sigqueueinfo", "rt_sigsuspend", "sigaltstack", "utime", "mknod",
+    "uselib", "personality", "ustat", "statfs", "fstatfs", "sysfs",
+    "getpriority", "setpriority", "sched_setparam", "sched_getparam",
+    "sched_setscheduler", "sched_getscheduler", "sched_get_priority_max",
+    "sched_get_priority_min", "sched_rr_get_interval", "mlock", "munlock",
+    "mlockall", "munlockall", "vhangup", "modify_ldt", "pivot_root",
+    "_sysctl", "prctl", "arch_prctl", "adjtimex", "setrlimit", "chroot",
+    "sync", "acct", "settimeofday", "mount", "umount2", "swapon", "swapoff",
+    "reboot", "sethostname", "setdomainname", "iopl", "ioperm",
+    "create_module", "init_module", "delete_module", "get_kernel_syms",
+    "query_module", "quotactl", "nfsservctl", "getpmsg", "putpmsg", "afs_syscall",
+    "tuxcall", "security", "gettid", "readahead", "setxattr", "lsetxattr",
+    "fsetxattr", "getxattr", "lgetxattr", "fgetxattr", "listxattr",
+    "llistxattr", "flistxattr", "removexattr", "lremovexattr", "fremovexattr",
+    "tkill", "time", "futex", "sched_setaffinity", "sched_getaffinity",
+    "set_thread_area", "io_setup", "io_destroy", "io_getevents", "io_submit",
+    "io_cancel", "get_thread_area", "lookup_dcookie", "epoll_create",
+    "epoll_ctl_old", "epoll_wait_old", "remap_file_pages", "getdents64",
+    "set_tid_address", "restart_syscall", "semtimedop", "fadvise64",
+    "timer_create", "timer_settime", "timer_gettime", "timer_getoverrun",
+    "timer_delete", "clock_settime", "clock_gettime", "clock_getres",
+    "clock_nanosleep", "exit_group", "epoll_wait", "epoll_ctl", "tgkill",
+    "utimes", "vserver", "mbind", "set_mempolicy", "get_mempolicy", "mq_open",
+    "mq_unlink", "mq_timedsend", "mq_timedreceive", "mq_notify",
+    "mq_getsetattr", "kexec_load", "waitid", "add_key", "request_key",
+    "keyctl", "ioprio_set", "ioprio_get", "inotify_init", "inotify_add_watch",
+    "inotify_rm_watch", "migrate_pages", "openat", "mkdirat", "mknodat",
+    "fchownat", "futimesat", "newfstatat", "unlinkat", "renameat", "linkat",
+    "symlinkat", "readlinkat", "fchmodat", "faccessat", "pselect6", "ppoll",
+    "unshare", "set_robust_list", "get_robust_list", "splice", "tee",
+    "sync_file_range", "vmsplice", "move_pages", "utimensat", "epoll_pwait",
+    "signalfd", "timerfd_create", "eventfd", "fallocate", "timerfd_settime",
+    "timerfd_gettime", "accept4", "signalfd4", "eventfd2", "epoll_create1",
+    "dup3", "pipe2", "inotify_init1", "preadv", "pwritev", "rt_tgsigqueueinfo",
+    "perf_event_open", "recvmmsg", "fanotify_init", "fanotify_mark",
+    "prlimit64", "name_to_handle_at", "open_by_handle_at", "clock_adjtime",
+    "syncfs", "sendmmsg", "setns", "getcpu", "process_vm_readv",
+    "process_vm_writev", "kcmp", "finit_module", "sched_setattr",
+    "sched_getattr", "renameat2", "seccomp", "getrandom", "memfd_create",
+    "kexec_file_load", "bpf"
+]

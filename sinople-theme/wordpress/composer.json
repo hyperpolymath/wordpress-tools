@@ -1,0 +1,43 @@
+{
+    "name": "sinople/theme",
+    "description": "Sinople WordPress Theme - Semantic Web First",
+    "type": "wordpress-theme",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Jonathan D.A. Jewell",
+            "homepage": "https://github.com/hyperpolymath"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "hyperpolymath/php-aegis": "dev-main"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hyperpolymath/php-aegis"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sinople\\": "inc/"
+        },
+        "files": [
+            "inc/security.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "analyze": "phpstan analyse inc/",
+        "lint": "php-cs-fixer fix --dry-run --diff",
+        "fmt": "php-cs-fixer fix"
+    }
+}

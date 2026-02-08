@@ -1,0 +1,238 @@
+# Sinople Core Ontology
+# Main vocabulary for the Sinople semantic web framework
+#
+# Prefix: sn
+# Namespace: http://sinople.org/ontology#
+#
+# This ontology defines the core concepts of the Sinople universe:
+# - Constructs: Abstract entities and ideas
+# - Entanglements: Relationships between constructs
+# - Characters: Agents within the semantic space
+# - Glosses: Annotations and explanations
+
+@prefix sn: <http://sinople.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+
+<http://sinople.org/ontology> a owl:Ontology ;
+    rdfs:label "Sinople Core Ontology"@en ;
+    rdfs:comment "Core vocabulary for semantic relationships, constructs, and entanglements in the Sinople universe"@en ;
+    dc:title "Sinople Core Ontology" ;
+    dc:creator "Sinople Theme Contributors" ;
+    dcterms:created "2025-11-22"^^xsd:date ;
+    dcterms:modified "2025-11-22"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    rdfs:seeAlso <http://sinople.org/> .
+
+# ============================================================================
+# CORE CLASSES
+# ============================================================================
+
+sn:Construct a owl:Class ;
+    rdfs:label "Construct"@en ;
+    rdfs:comment "An abstract entity, concept, or idea within the Sinople semantic universe. Constructs represent fundamental building blocks of knowledge."@en ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:Entanglement a owl:Class ;
+    rdfs:label "Entanglement"@en ;
+    rdfs:comment "A relationship, connection, or interaction between two or more constructs. Entanglements represent the ways in which constructs relate to each other."@en ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:Character a owl:Class ;
+    rdfs:label "Character"@en ;
+    rdfs:comment "An agent, person, or entity that participates in the semantic universe. Characters interact with and create constructs and entanglements."@en ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> ;
+    rdfs:subClassOf foaf:Agent .
+
+sn:Gloss a owl:Class ;
+    rdfs:label "Gloss"@en ;
+    rdfs:comment "An annotation, explanation, or interpretive note attached to a construct. Glosses provide additional context and understanding."@en ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+# ============================================================================
+# CONSTRUCT PROPERTIES
+# ============================================================================
+
+sn:hasGloss a owl:DatatypeProperty ;
+    rdfs:label "has gloss"@en ;
+    rdfs:comment "Associates a gloss (annotation or explanation) with a construct"@en ;
+    rdfs:domain sn:Construct ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:hasDetailedGloss a owl:ObjectProperty ;
+    rdfs:label "has detailed gloss"@en ;
+    rdfs:comment "Associates a structured gloss object with a construct"@en ;
+    rdfs:domain sn:Construct ;
+    rdfs:range sn:Gloss ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:constructType a owl:DatatypeProperty ;
+    rdfs:label "construct type"@en ;
+    rdfs:comment "The type or category of the construct"@en ;
+    rdfs:domain sn:Construct ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:complexity a owl:DatatypeProperty ;
+    rdfs:label "complexity"@en ;
+    rdfs:comment "A measure of the construct's complexity (0-10 scale)"@en ;
+    rdfs:domain sn:Construct ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+# ============================================================================
+# ENTANGLEMENT PROPERTIES
+# ============================================================================
+
+sn:hasSource a owl:ObjectProperty ;
+    rdfs:label "has source"@en ;
+    rdfs:comment "The source construct of an entanglement"@en ;
+    rdfs:domain sn:Entanglement ;
+    rdfs:range sn:Construct ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:hasTarget a owl:ObjectProperty ;
+    rdfs:label "has target"@en ;
+    rdfs:comment "The target construct of an entanglement"@en ;
+    rdfs:domain sn:Entanglement ;
+    rdfs:range sn:Construct ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:relationshipType a owl:DatatypeProperty ;
+    rdfs:label "relationship type"@en ;
+    rdfs:comment "The type of relationship represented by the entanglement"@en ;
+    rdfs:domain sn:Entanglement ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:strength a owl:DatatypeProperty ;
+    rdfs:label "strength"@en ;
+    rdfs:comment "The strength of the entanglement (0.0-1.0 scale)"@en ;
+    rdfs:domain sn:Entanglement ;
+    rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:bidirectional a owl:DatatypeProperty ;
+    rdfs:label "bidirectional"@en ;
+    rdfs:comment "Whether the entanglement is bidirectional"@en ;
+    rdfs:domain sn:Entanglement ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+# ============================================================================
+# CHARACTER PROPERTIES
+# ============================================================================
+
+sn:hasConstruct a owl:ObjectProperty ;
+    rdfs:label "has construct"@en ;
+    rdfs:comment "Associates a character with a construct they created or are associated with"@en ;
+    rdfs:domain sn:Character ;
+    rdfs:range sn:Construct ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:createdEntanglement a owl:ObjectProperty ;
+    rdfs:label "created entanglement"@en ;
+    rdfs:comment "Associates a character with an entanglement they created"@en ;
+    rdfs:domain sn:Character ;
+    rdfs:range sn:Entanglement ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+# ============================================================================
+# GLOSS PROPERTIES
+# ============================================================================
+
+sn:glossText a owl:DatatypeProperty ;
+    rdfs:label "gloss text"@en ;
+    rdfs:comment "The textual content of the gloss"@en ;
+    rdfs:domain sn:Gloss ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:glossLanguage a owl:DatatypeProperty ;
+    rdfs:label "gloss language"@en ;
+    rdfs:comment "The language of the gloss (ISO 639-1 code)"@en ;
+    rdfs:domain sn:Gloss ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+sn:glossPosition a owl:DatatypeProperty ;
+    rdfs:label "gloss position"@en ;
+    rdfs:comment "The position of the gloss within the text (character offset)"@en ;
+    rdfs:domain sn:Gloss ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://sinople.org/ontology> .
+
+# ============================================================================
+# RELATIONSHIP TYPES (Individuals)
+# ============================================================================
+
+sn:RelatedTo a sn:RelationshipType ;
+    rdfs:label "related to"@en ;
+    rdfs:comment "A general relationship between constructs"@en .
+
+sn:DependsOn a sn:RelationshipType ;
+    rdfs:label "depends on"@en ;
+    rdfs:comment "One construct depends on another"@en .
+
+sn:ContradictsWith a sn:RelationshipType ;
+    rdfs:label "contradicts with"@en ;
+    rdfs:comment "Constructs that are in contradiction"@en .
+
+sn:ComplementsTo a sn:RelationshipType ;
+    rdfs:label "complements"@en ;
+    rdfs:comment "Constructs that complement each other"@en .
+
+sn:EvolvesFrom a sn:RelationshipType ;
+    rdfs:label "evolves from"@en ;
+    rdfs:comment "One construct evolved from another"@en .
+
+sn:SubsumedBy a sn:RelationshipType ;
+    rdfs:label "subsumed by"@en ;
+    rdfs:comment "One construct is subsumed by a more general one"@en .
+
+# ============================================================================
+# EXAMPLES (for testing and demonstration)
+# ============================================================================
+
+# Example Construct: Time
+sn:TimeConstruct a sn:Construct ;
+    rdfs:label "Time"@en ;
+    rdfs:comment "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"@en ;
+    sn:hasGloss "A dimension in which events occur in sequence"@en ;
+    sn:constructType "philosophical" ;
+    sn:complexity 8 .
+
+# Example Construct: Space
+sn:SpaceConstruct a sn:Construct ;
+    rdfs:label "Space"@en ;
+    rdfs:comment "The boundless three-dimensional extent in which objects and events have relative position and direction"@en ;
+    sn:hasGloss "A continuous area or expanse which is free, available, or unoccupied"@en ;
+    sn:constructType "philosophical" ;
+    sn:complexity 8 .
+
+# Example Entanglement: Time-Space
+sn:TimeSpaceEntanglement a sn:Entanglement ;
+    rdfs:label "Time-Space Continuum"@en ;
+    rdfs:comment "The fundamental relationship between temporal and spatial dimensions"@en ;
+    sn:hasSource sn:TimeConstruct ;
+    sn:hasTarget sn:SpaceConstruct ;
+    sn:relationshipType "interdependent" ;
+    sn:strength 0.95 ;
+    sn:bidirectional true .
+
+# Example Character
+sn:ExampleScholar a sn:Character ;
+    rdfs:label "Example Scholar"@en ;
+    foaf:name "Dr. Example" ;
+    sn:hasConstruct sn:TimeConstruct ;
+    sn:createdEntanglement sn:TimeSpaceEntanglement .

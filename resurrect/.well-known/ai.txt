@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# AI Policy for wp-resurrect
+# https://site.spawning.ai/spawning-ai-txt
+
+User-Agent: *
+# Training data consent
+Allow-Training: No
+Allow-Inference: Yes
+
+# Specific bots
+User-Agent: GPTBot
+Disallow: /
+
+User-Agent: CCBot
+Disallow: /
+
+User-Agent: anthropic-ai
+Allow: /docs/
+Disallow: /config/
+Disallow: /salt/
+Disallow: /sdp/
+
+# Contact for AI-related inquiries
+AI-Contact: mailto:ai-policy@example.com

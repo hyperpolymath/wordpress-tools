@@ -1,0 +1,65 @@
+# Sample WP Praxis Workflow Manifest
+# This demonstrates a simple WordPress workflow with symbolic operations
+
+[metadata]
+name = "Sample WordPress Workflow"
+version = "1.0.0"
+description = "Example workflow for testing introspection system"
+
+[[symbols]]
+name = "validate_user"
+type = "action"
+context = "wordpress"
+
+[symbols.metadata]
+dispatch = "rust_injector"
+priority = 10
+hook-name = "wp_authenticate_user"
+
+[symbols.metadata.parameters]
+strict_mode = true
+allowed_roles = ["admin", "editor"]
+
+[[symbols]]
+name = "process_payment"
+type = "action"
+context = "wordpress"
+depends-on = ["validate_user"]
+
+[symbols.metadata]
+dispatch = "rust_injector"
+priority = 20
+
+[symbols.metadata.parameters]
+gateway = "stripe"
+currency = "USD"
+amount = 100
+
+[[symbols]]
+name = "send_notification"
+type = "filter"
+context = "wordpress"
+depends-on = ["process_payment"]
+
+[symbols.metadata]
+dispatch = "powershell"
+priority = 30
+
+[symbols.metadata.parameters]
+notification_type = "email"
+template = "payment_confirmation"
+recipients = ["admin@example.com"]
+
+[[symbols]]
+name = "log_transaction"
+type = "action"
+context = "global"
+depends-on = ["process_payment"]
+
+[symbols.metadata]
+dispatch = "elixir"
+priority = 25
+
+[symbols.metadata.parameters]
+log_level = "info"
+database = "transactions"

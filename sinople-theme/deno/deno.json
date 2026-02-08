@@ -1,0 +1,33 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-env --watch main.ts",
+    "build": "deno run --allow-net --allow-read --allow-write --allow-env build.ts",
+    "dev": "deno run --allow-net --allow-read --allow-env --watch dev.ts"
+  },
+  "imports": {
+    "$fresh/": "https://deno.land/x/fresh@1.6.0/",
+    "preact": "https://esm.sh/preact@10.19.2",
+    "preact/": "https://esm.sh/preact@10.19.2/",
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string@6.3.1",
+    "@preact/signals": "https://esm.sh/@preact/signals@1.2.1",
+    "@preact/signals-core": "https://esm.sh/@preact/signals-core@1.5.0"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns", "deno.unstable"]
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": true,
+    "proseWrap": "preserve"
+  }
+}

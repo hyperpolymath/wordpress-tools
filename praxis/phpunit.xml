@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+         bootstrap="plugin/tests/bootstrap.php"
+         colors="true"
+         verbose="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         convertDeprecationsToExceptions="true"
+         cacheDirectory=".phpunit.cache">
+
+    <testsuites>
+        <testsuite name="WP Praxis Test Suite">
+            <directory>plugin/tests</directory>
+            <directory>engine/php/tests</directory>
+        </testsuite>
+
+        <testsuite name="Unit Tests">
+            <directory>plugin/tests</directory>
+            <exclude>plugin/tests/integration</exclude>
+        </testsuite>
+
+        <testsuite name="Integration Tests">
+            <directory>plugin/tests/integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">plugin</directory>
+            <directory suffix=".php">engine/php</directory>
+        </include>
+        <exclude>
+            <directory>plugin/tests</directory>
+            <directory>engine/php/tests</directory>
+            <directory>vendor</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="tests/coverage/php-html"/>
+            <clover outputFile="tests/coverage/php-clover.xml"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+
+    <php>
+        <env name="WP_PRAXIS_TEST_MODE" value="true"/>
+        <env name="WP_PRAXIS_DB_HOST" value="localhost"/>
+        <env name="WP_PRAXIS_DB_NAME" value="wp_praxis_test"/>
+    </php>
+
+    <logging>
+        <junit outputFile="tests/results/phpunit-results.xml"/>
+    </logging>
+</phpunit>

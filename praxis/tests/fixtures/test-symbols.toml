@@ -1,0 +1,242 @@
+# WP Praxis Test Symbols
+# Comprehensive test manifest in TOML format
+
+name = "test_symbols_manifest"
+version = "1.0.0"
+description = "Test symbols covering various scenarios"
+
+[metadata]
+author = "WP Praxis Test Suite"
+created = "2025-11-22"
+purpose = "Testing and validation"
+
+[configuration]
+mode = "test"
+cache_enabled = false
+max_concurrent = 3
+timeout_ms = 5000
+
+# Simple action symbol
+[[symbols]]
+name = "simple_action"
+type = "action"
+context = "test"
+dispatch = "powershell"
+description = "Simple action for basic testing"
+
+[symbols.parameters]
+message = "Hello from simple action"
+
+# Query symbol with caching
+[[symbols]]
+name = "cached_query"
+type = "query"
+context = "database"
+dispatch = "php_engine"
+description = "Query with caching enabled"
+cache_enabled = true
+cache_ttl = 1800
+
+[symbols.parameters]
+query = "SELECT * FROM test_table"
+limit = 100
+
+# Symbol with dependencies
+[[symbols]]
+name = "dependent_symbol"
+type = "action"
+context = "test"
+dispatch = "rust_injector"
+description = "Symbol with dependencies"
+depends_on = ["simple_action", "cached_query"]
+
+[symbols.parameters]
+dependency_mode = "all"
+
+# Transform symbol
+[[symbols]]
+name = "data_transformer"
+type = "transform"
+context = "data"
+dispatch = "rust_injector"
+description = "Transform data from one format to another"
+
+[symbols.parameters]
+input_format = "json"
+output_format = "yaml"
+preserve_types = true
+
+[symbols.transformations]
+normalize = true
+validate = true
+sanitize = true
+
+# Validator symbol
+[[symbols]]
+name = "input_validator"
+type = "validator"
+context = "validation"
+dispatch = "php_engine"
+description = "Validate input data"
+
+[symbols.parameters]
+strict_mode = true
+allow_null = false
+
+[symbols.validation_rules]
+required_fields = ["name", "type", "context"]
+type_checks = { name = "string", type = "string", context = "string" }
+
+# Symbol with WordPress integration
+[[symbols]]
+name = "wp_integration_symbol"
+type = "action"
+context = "wordpress"
+dispatch = "php_engine"
+description = "WordPress integration test symbol"
+
+[symbols.parameters]
+hook = "init"
+priority = 10
+
+[symbols.wp_integration]
+register_hooks = true
+use_transients = true
+capability_required = "manage_options"
+
+# Performance test symbol
+[[symbols]]
+name = "performance_test"
+type = "action"
+context = "test"
+dispatch = "rust_injector"
+description = "Symbol for performance testing"
+
+[symbols.parameters]
+iterations = 1000
+parallel = true
+
+[symbols.performance]
+expected_duration_ms = 100
+max_memory_mb = 128
+benchmark = true
+
+# Error handling test symbol
+[[symbols]]
+name = "error_test_symbol"
+type = "action"
+context = "test"
+dispatch = "powershell"
+description = "Symbol that intentionally fails for error handling tests"
+
+[symbols.parameters]
+should_fail = true
+error_message = "Intentional test failure"
+
+[symbols.error_handling]
+strategy = "rollback"
+retry_count = 3
+retry_delay_ms = 100
+
+# Complex symbol with nested parameters
+[[symbols]]
+name = "complex_symbol"
+type = "action"
+context = "test"
+dispatch = "rust_injector"
+description = "Complex symbol with nested parameters"
+
+[symbols.parameters]
+simple_param = "value"
+numeric_param = 42
+
+[symbols.parameters.nested_object]
+key1 = "value1"
+key2 = "value2"
+
+[symbols.parameters.nested_object.deep_nested]
+level = 3
+data = "deep value"
+
+[[symbols.parameters.array_param]]
+item = "first"
+
+[[symbols.parameters.array_param]]
+item = "second"
+
+[[symbols.parameters.array_param]]
+item = "third"
+
+# Edge case: Minimal valid symbol
+[[symbols]]
+name = "minimal_symbol"
+type = "action"
+context = "test"
+dispatch = "powershell"
+
+# Edge case: Symbol with all optional fields
+[[symbols]]
+name = "maximal_symbol"
+type = "action"
+context = "test"
+dispatch = "rust_injector"
+description = "Symbol with all possible fields"
+order = 100
+timeout_ms = 10000
+cache_enabled = true
+cache_ttl = 7200
+retry_on_failure = true
+retry_count = 5
+depends_on = ["minimal_symbol"]
+
+[symbols.parameters]
+comprehensive = true
+
+[symbols.metadata]
+version = "1.0.0"
+author = "Test Suite"
+documentation = "https://example.com/docs"
+
+[symbols.monitoring]
+enabled = true
+collect_metrics = true
+trace_execution = true
+
+# Test invalid scenarios (for negative testing)
+# These should be in a separate manifest for negative tests
+# [[symbols]]
+# name = ""  # Invalid: empty name
+# type = "action"
+# context = "test"
+# dispatch = "powershell"
+
+# [[symbols]]
+# name = "invalid_type_symbol"
+# type = "invalid_type"  # Invalid: unknown type
+# context = "test"
+# dispatch = "powershell"
+
+# Rollback configuration
+[rollback]
+enabled = true
+strategy = "reverse_order"
+
+[[rollback.symbols]]
+name = "rollback_complex"
+type = "action"
+context = "test"
+dispatch = "powershell"
+description = "Rollback for complex operations"
+
+# Monitoring configuration
+[monitoring]
+enabled = true
+collect_metrics = true
+export_format = "json"
+export_path = "tests/results/metrics.json"
+
+[monitoring.metrics]
+execution_time = true
+memory_usage = true
+symbol_count = true
+success_rate = true

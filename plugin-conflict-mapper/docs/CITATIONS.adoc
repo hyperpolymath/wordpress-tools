@@ -1,0 +1,36 @@
+= wp-plugin-conflict-mapper - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{wp-plugin-conflict-mapper_2025,
+  author = {Polymath, Hyper},
+  title = {wp-plugin-conflict-mapper},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/wp-plugin-conflict-mapper},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _wp-plugin-conflict-mapper_ [Computer software]. Available at: https://github.com/hyperpolymath/wp-plugin-conflict-mapper
+
+== OSCOLA
+
+Hyper Polymath, 'wp-plugin-conflict-mapper' (2025) <https://github.com/hyperpolymath/wp-plugin-conflict-mapper>
+
+== MLA
+
+Polymath, Hyper. "wp-plugin-conflict-mapper." 2025, github.com/hyperpolymath/wp-plugin-conflict-mapper.
+
+== APA 7
+
+Polymath, H. (2025). _wp-plugin-conflict-mapper_ [Computer software]. GitHub. https://github.com/hyperpolymath/wp-plugin-conflict-mapper
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

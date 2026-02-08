@@ -1,0 +1,91 @@
+# WP Praxis Swarm - Internal Operations Test
+#
+# This workflow uses only internal operations (no external backends required)
+# Perfect for testing the swarm system without dependencies
+
+name: "test-internal"
+version: "1.0.0"
+description: "Test workflow using internal operations only"
+
+symbols:
+  # Simple echo operation
+  - name: "echo_start"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    priority: 100
+    parameters:
+      message: "Test workflow started"
+
+  # Short delay
+  - name: "delay_1s"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "echo_start"
+    parameters:
+      ms: 1000
+
+  # Parallel echo operations
+  - name: "echo_parallel_1"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "delay_1s"
+    priority: 50
+    parameters:
+      message: "Parallel task 1"
+
+  - name: "echo_parallel_2"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "delay_1s"
+    priority: 50
+    parameters:
+      message: "Parallel task 2"
+
+  - name: "echo_parallel_3"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "delay_1s"
+    priority: 50
+    parameters:
+      message: "Parallel task 3"
+
+  # Wait for parallel tasks
+  - name: "delay_500ms"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "echo_parallel_1"
+      - "echo_parallel_2"
+      - "echo_parallel_3"
+    parameters:
+      ms: 500
+
+  # No-op operation
+  - name: "noop"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "delay_500ms"
+    parameters: {}
+
+  # Final echo
+  - name: "echo_complete"
+    type: "action"
+    context: "generic"
+    dispatch: "internal"
+    dependencies:
+      - "noop"
+    priority: 10
+    parameters:
+      message: "Test workflow completed successfully"

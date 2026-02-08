@@ -1,0 +1,89 @@
+[
+  {
+    "name": "update_site_option",
+    "type": "action",
+    "description": "Update a WordPress site option",
+    "dispatch": "rust_injector",
+    "context": "wordpress",
+    "parameters": {
+      "operation": "update_option",
+      "option_name": "blogname",
+      "option_value": "My WordPress Site"
+    },
+    "outputs": ["option_updated"]
+  },
+  {
+    "name": "create_post",
+    "type": "action",
+    "description": "Create a new WordPress post",
+    "dispatch": "php",
+    "context": "wordpress",
+    "parameters": {
+      "operation": "create_post",
+      "post_type": "post",
+      "post_title": "New Post",
+      "post_content": "Post content here",
+      "post_status": "publish"
+    },
+    "outputs": ["post_id"]
+  },
+  {
+    "name": "run_audit",
+    "type": "audit",
+    "description": "Run comprehensive audit",
+    "dispatch": "powershell",
+    "context": "wordpress",
+    "parameters": {
+      "audit_type": "comprehensive",
+      "include_options": true,
+      "include_posts": true
+    },
+    "outputs": ["audit_id", "audit_report"]
+  },
+  {
+    "name": "create_baseline",
+    "type": "audit",
+    "description": "Create baseline snapshot",
+    "dispatch": "powershell",
+    "context": "wordpress",
+    "parameters": {
+      "baseline_name": "snapshot_${timestamp}",
+      "include_options": true,
+      "include_posts": true,
+      "include_users": true
+    },
+    "outputs": ["baseline_id"]
+  },
+  {
+    "name": "register_post_type",
+    "type": "action",
+    "description": "Register custom post type",
+    "dispatch": "php",
+    "context": "wordpress",
+    "parameters": {
+      "operation": "register_post_type",
+      "post_type": "product",
+      "args": {
+        "label": "Products",
+        "public": true,
+        "has_archive": true
+      }
+    },
+    "outputs": ["post_type_registered"]
+  },
+  {
+    "name": "bulk_update_options",
+    "type": "action",
+    "description": "Update multiple options at once",
+    "dispatch": "rust_injector",
+    "context": "wordpress",
+    "parameters": {
+      "operation": "batch_update_options",
+      "updates": [
+        {"option_name": "posts_per_page", "option_value": 20},
+        {"option_name": "timezone_string", "option_value": "America/New_York"}
+      ]
+    },
+    "outputs": ["options_updated"]
+  }
+]

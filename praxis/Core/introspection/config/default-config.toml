@@ -1,0 +1,36 @@
+# WP Praxis Introspection System Configuration
+
+[analysis]
+depth = "full"
+enable_trace = true
+enable_semantic_analysis = true
+enable_feedback = true
+enable_meta_evaluation = false
+
+[performance]
+bottleneck_threshold_multiplier = 2.0
+max_dependency_depth = 10
+max_symbols = 1000
+
+[semantic]
+preservation_threshold = 0.7
+type_checking_enabled = true
+contract_verification_enabled = true
+
+[output]
+default_format = "text"
+verbose = false
+color = true
+
+[database]
+host = "localhost"
+port = 5432
+database = "wp_praxis"
+user = "postgres"
+password = ""
+enabled = false
+
+[paths]
+log_directory = "/var/log/wp-praxis"
+cache_directory = "/tmp/wp-praxis-cache"
+output_directory = "./output"

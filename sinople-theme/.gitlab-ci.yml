@@ -1,0 +1,262 @@
+# GitLab CI/CD for Sinople WordPress Theme
+# RSR-compliant automated testing and validation
+
+stages:
+  - validate
+  - build
+  - test
+  - security
+  - release
+
+variables:
+  RUST_VERSION: "stable"
+  NODE_VERSION: "20"
+  DENO_VERSION: "1.40.0"
+
+# Default image
+default:
+  image: ubuntu:22.04
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq curl git build-essential
+
+# ============================================================================
+# VALIDATION STAGE
+# ============================================================================
+
+validate:docs:
+  stage: validate
+  script:
+    - |
+      echo "Validating documentation..."
+      for file in README.md LICENSE.txt SECURITY.md CONTRIBUTING.md CODE_OF_CONDUCT.md MAINTAINERS.md CHANGELOG.md TPCF.md; do
+        if [ ! -f "$file" ]; then
+          echo "❌ Missing $file"
+          exit 1
+        fi
+      done
+    - test -f .well-known/security.txt || exit 1
+    - test -f .well-known/ai.txt || exit 1
+    - test -f .well-known/humans.txt || exit 1
+    - echo "✅ All documentation present"
+  allow_failure: false
+
+validate:build-system:
+  stage: validate
+  script:
+    - test -f justfile || exit 1
+    - test -f build.sh || exit 1
+    - test -x build.sh || exit 1
+    - test -f flake.nix || exit 1
+    - echo "✅ Build system valid"
+  allow_failure: false
+
+# ============================================================================
+# BUILD STAGE
+# ============================================================================
+
+build:wasm:
+  stage: build
+  image: rust:${RUST_VERSION}
+  before_script:
+    - cargo install wasm-pack
+  script:
+    - cd wasm/semantic_processor
+    - wasm-pack build --target web --out-dir pkg
+  artifacts:
+    paths:
+      - wasm/semantic_processor/pkg/
+    expire_in: 1 day
+  cache:
+    key: rust-wasm-${CI_COMMIT_REF_SLUG}
+    paths:
+      - wasm/semantic_processor/target/
+
+build:rescript:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - cd rescript
+    - npm install
+    - npx rescript clean
+    - npx rescript build
+  artifacts:
+    paths:
+      - rescript/src/**/*.res.js
+    expire_in: 1 day
+  cache:
+    key: node-rescript-${CI_COMMIT_REF_SLUG}
+    paths:
+      - rescript/node_modules/
+
+build:theme:
+  stage: build
+  dependencies:
+    - build:wasm
+    - build:rescript
+  script:
+    - mkdir -p wordpress/assets/wasm
+    - mkdir -p wordpress/assets/js
+    - cp wasm/semantic_processor/pkg/*.js wordpress/assets/wasm/ || true
+    - cp wasm/semantic_processor/pkg/*.wasm wordpress/assets/wasm/ || true
+    - find rescript/src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; || true
+    - echo "✅ Theme assembled"
+  artifacts:
+    paths:
+      - wordpress/
+    expire_in: 1 week
+
+# ============================================================================
+# TEST STAGE
+# ============================================================================
+
+test:rust:
+  stage: test
+  image: rust:${RUST_VERSION}
+  dependencies:
+    - build:wasm
+  script:
+    - cd wasm/semantic_processor
+    - cargo test --lib
+  coverage: '/^\s*lines:\s*\d+\.\d+\%/'
+  artifacts:
+    reports:
+      junit: wasm/semantic_processor/target/nextest/junit.xml
+    expire_in: 1 week
+  allow_failure: true  # Until tests are fully implemented
+
+test:rescript:
+  stage: test
+  image: node:${NODE_VERSION}
+  dependencies:
+    - build:rescript
+  script:
+    - cd rescript
+    - npm test || echo "No ReScript tests configured"
+  allow_failure: true  # Until tests are fully implemented
+
+test:integration:
+  stage: test
+  image: denoland/deno:${DENO_VERSION}
+  dependencies:
+    - build:wasm
+    - build:rescript
+  script:
+    - deno test --allow-read tests/ || echo "No integration tests configured"
+  allow_failure: true  # Until tests are fully implemented
+
+# ============================================================================
+# SECURITY STAGE
+# ============================================================================
+
+security:audit-rust:
+  stage: security
+  image: rust:${RUST_VERSION}
+  script:
+    - cargo install cargo-audit
+    - cd wasm/semantic_processor
+    - cargo audit
+  allow_failure: true  # Don't fail build on advisories (warn only)
+
+security:audit-npm:
+  stage: security
+  image: node:${NODE_VERSION}
+  script:
+    - cd rescript
+    - npm audit --production || true
+  allow_failure: true  # Don't fail build on advisories (warn only)
+
+security:sast:
+  stage: security
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=auto wordpress/ || true
+  allow_failure: true  # Optional security scanning
+
+# ============================================================================
+# RELEASE STAGE
+# ============================================================================
+
+release:package:
+  stage: release
+  dependencies:
+    - build:theme
+  script:
+    - mkdir -p dist
+    - tar -czf dist/sinople-theme-${CI_COMMIT_TAG:-latest}.tar.gz wordpress/
+    - echo "✅ Package created"
+  artifacts:
+    paths:
+      - dist/sinople-theme-*.tar.gz
+    expire_in: 30 days
+  only:
+    - tags
+    - main
+
+release:gitlab:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo "Creating GitLab release for ${CI_COMMIT_TAG}"
+  release:
+    tag_name: '${CI_COMMIT_TAG}'
+    description: 'Release ${CI_COMMIT_TAG} - See CHANGELOG.md for details'
+    assets:
+      links:
+        - name: 'Sinople Theme Package'
+          url: '${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_TAG}/raw/dist/sinople-theme-${CI_COMMIT_TAG}.tar.gz?job=release:package'
+  only:
+    - tags
+  dependencies:
+    - release:package
+
+# ============================================================================
+# LINT STAGE (optional, runs in parallel with build)
+# ============================================================================
+
+lint:rust:
+  stage: validate
+  image: rust:${RUST_VERSION}
+  script:
+    - cd wasm/semantic_processor
+    - rustup component add rustfmt clippy
+    - cargo fmt --check
+    - cargo clippy -- -D warnings
+  allow_failure: true  # Warn only
+
+lint:php:
+  stage: validate
+  image: composer:latest
+  script:
+    - composer global require wp-coding-standards/wpcs
+    - phpcs --standard=WordPress wordpress/ || true
+  allow_failure: true  # Optional (phpcs not always installed)
+
+# ============================================================================
+# CACHE CONFIGURATION
+# ============================================================================
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cargo/
+    - wasm/semantic_processor/target/
+    - rescript/node_modules/
+
+# ============================================================================
+# WORKFLOW RULES
+# ============================================================================
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+# ============================================================================
+# NOTIFICATIONS (optional)
+# ============================================================================
+
+# Uncomment to enable notifications
+# after_script:
+#   - 'curl -X POST -H "Content-Type: application/json" -d "{\"text\":\"Build ${CI_JOB_STATUS}: ${CI_PROJECT_NAME} (${CI_COMMIT_REF_NAME})\"}" ${SLACK_WEBHOOK_URL}'

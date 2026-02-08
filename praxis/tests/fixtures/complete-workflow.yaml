@@ -1,0 +1,215 @@
+name: complete_test_workflow
+version: 1.0.0
+description: Comprehensive test workflow covering all symbol types and features
+
+metadata:
+  author: WP Praxis Test Suite
+  created: 2025-11-22
+  tags:
+    - test
+    - comprehensive
+    - integration
+
+configuration:
+  mode: test
+  cache_enabled: true
+  max_concurrent: 5
+  timeout_ms: 30000
+  rollback_on_failure: true
+
+symbols:
+  # Initialization phase
+  - name: initialize_environment
+    type: action
+    context: system
+    dispatch: powershell
+    order: 1
+    description: Initialize test environment
+    parameters:
+      setup_database: true
+      create_temp_files: true
+      log_level: debug
+    outputs:
+      - environment_ready
+      - database_id
+
+  - name: validate_prerequisites
+    type: validator
+    context: system
+    dispatch: rust_injector
+    order: 2
+    depends_on:
+      - initialize_environment
+    description: Validate all prerequisites are met
+    parameters:
+      check_database: true
+      check_permissions: true
+      check_dependencies: true
+    validation_rules:
+      - database_accessible
+      - write_permissions
+      - all_dependencies_present
+
+  # Data preparation phase
+  - name: load_test_data
+    type: query
+    context: database
+    dispatch: php_engine
+    order: 3
+    depends_on:
+      - validate_prerequisites
+    description: Load test data from fixtures
+    parameters:
+      source: fixtures/test-data.json
+      table: wp_test_symbols
+      batch_size: 100
+    cache_enabled: true
+    cache_ttl: 3600
+
+  - name: transform_test_data
+    type: transform
+    context: data
+    dispatch: rust_injector
+    order: 4
+    depends_on:
+      - load_test_data
+    description: Transform test data into required format
+    parameters:
+      input_format: json
+      output_format: normalized
+      apply_filters: true
+    transformations:
+      - normalize_keys
+      - validate_types
+      - remove_duplicates
+
+  # Processing phase
+  - name: process_symbols
+    type: action
+    context: wordpress
+    dispatch: php_engine
+    order: 5
+    depends_on:
+      - transform_test_data
+    description: Process symbols in WordPress context
+    parameters:
+      hook: init
+      priority: 10
+      batch_process: true
+    wp_integration:
+      register_hooks: true
+      use_transients: true
+      capability_required: manage_options
+
+  - name: execute_rust_injection
+    type: action
+    context: wordpress
+    dispatch: rust_injector
+    order: 6
+    depends_on:
+      - process_symbols
+    description: Execute high-performance symbolic injection
+    parameters:
+      injection_type: deep
+      target_scope: global
+      optimize: true
+    performance:
+      expected_duration_ms: 500
+      max_memory_mb: 256
+
+  - name: verify_injection_results
+    type: validator
+    context: wordpress
+    dispatch: php_engine
+    order: 7
+    depends_on:
+      - execute_rust_injection
+    description: Verify injection was successful
+    validation_rules:
+      - symbols_registered
+      - hooks_active
+      - no_conflicts
+    assertions:
+      - count_gt: 0
+      - all_valid: true
+      - no_errors: true
+
+  # Finalization phase
+  - name: generate_report
+    type: action
+    context: reporting
+    dispatch: powershell
+    order: 8
+    depends_on:
+      - verify_injection_results
+    description: Generate comprehensive test report
+    parameters:
+      format: html
+      include_metrics: true
+      include_logs: true
+      output_path: tests/results/report.html
+
+  - name: cleanup_environment
+    type: action
+    context: system
+    dispatch: powershell
+    order: 9
+    depends_on:
+      - generate_report
+    description: Clean up test environment
+    parameters:
+      remove_temp_files: true
+      reset_database: true
+      clear_cache: true
+    rollback: false
+    always_execute: true
+
+# Error handling configuration
+error_handling:
+  strategy: rollback
+  rollback_order: reverse
+  capture_errors: true
+  error_output: tests/results/errors.json
+
+# Rollback symbols (executed in reverse order on failure)
+rollback_symbols:
+  - name: rollback_injection
+    type: action
+    context: wordpress
+    dispatch: php_engine
+    description: Rollback symbolic injection
+    parameters:
+      clear_symbols: true
+      unregister_hooks: true
+
+  - name: rollback_database
+    type: action
+    context: database
+    dispatch: php_engine
+    description: Rollback database changes
+    parameters:
+      restore_backup: true
+      clear_test_data: true
+
+  - name: rollback_environment
+    type: action
+    context: system
+    dispatch: powershell
+    description: Rollback environment changes
+    parameters:
+      remove_temp_files: true
+      reset_configuration: true
+
+# Monitoring and observability
+monitoring:
+  enabled: true
+  collect_metrics: true
+  trace_execution: true
+  export_format: json
+
+metrics:
+  - execution_time
+  - memory_usage
+  - symbol_count
+  - success_rate
+  - error_count

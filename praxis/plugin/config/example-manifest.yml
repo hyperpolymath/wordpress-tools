@@ -1,0 +1,144 @@
+# WP Praxis Example Manifest
+# This is a sample manifest demonstrating symbolic workflow configuration
+
+# Global configuration
+config:
+  version: "0.1.0"
+  description: "Example symbolic workflow for WordPress"
+  author: "WP Praxis"
+
+# Symbolic definitions
+symbols:
+  # Example 1: WordPress action hook
+  - name: example_init_action
+    type: action
+    context: wordpress
+    dispatch: php
+    priority: 10
+    accepted_args: 1
+    parameters:
+      hook: init
+      callback: !php/const '\WPPraxis\Examples\example_callback'
+    metadata:
+      description: "Example initialization action"
+
+  # Example 2: WordPress filter hook
+  - name: example_content_filter
+    type: filter
+    context: wordpress
+    dispatch: php
+    priority: 10
+    accepted_args: 2
+    parameters:
+      hook: the_content
+      callback: !php/const '\WPPraxis\Examples\filter_content'
+    metadata:
+      description: "Example content filter"
+
+  # Example 3: Custom symbolic operation using Rust injector
+  - name: process_symbolic_data
+    type: custom
+    context: cli
+    dispatch: rust_injector
+    parameters:
+      injector_path: /home/user/wp-praxis/wp_injector/target/release/wp_injector
+      operation: process
+      data_source: database
+    metadata:
+      description: "Process symbolic data using Rust injector"
+      performance_critical: true
+
+  # Example 4: PowerShell symbolic operation
+  - name: run_symbolic_audit
+    type: custom
+    context: cli
+    dispatch: powershell
+    parameters:
+      script: /home/user/wp-praxis/SymbolicEngine/core/Run-SymbolicAudit.ps1
+      mode: full
+    metadata:
+      description: "Run symbolic audit via PowerShell"
+
+  # Example 5: State symbol (no WordPress hook)
+  - name: workflow_state
+    type: state
+    context: wordpress
+    dispatch: php
+    parameters:
+      initial_state: idle
+      transitions:
+        - from: idle
+          to: processing
+          trigger: start
+        - from: processing
+          to: completed
+          trigger: finish
+        - from: processing
+          to: failed
+          trigger: error
+    metadata:
+      description: "Workflow state machine"
+      persistent: true
+
+  # Example 6: REST API endpoint
+  - name: api_process_request
+    type: custom
+    context: rest
+    dispatch: php
+    parameters:
+      endpoint: /wp-praxis/v1/process
+      method: POST
+      callback: !php/const '\WPPraxis\Examples\api_handler'
+    metadata:
+      description: "REST API processing endpoint"
+
+  # Example 7: AJAX handler
+  - name: ajax_symbolic_operation
+    type: custom
+    context: ajax
+    dispatch: php
+    parameters:
+      action: wp_praxis_symbolic_op
+      callback: !php/const '\WPPraxis\Examples\ajax_handler'
+      require_auth: true
+    metadata:
+      description: "AJAX symbolic operation handler"
+
+  # Example 8: Cron job
+  - name: scheduled_cleanup
+    type: custom
+    context: cron
+    dispatch: php
+    parameters:
+      hook: wp_praxis_cleanup
+      schedule: daily
+      callback: !php/const '\WPPraxis\Examples\cleanup_handler'
+    metadata:
+      description: "Scheduled cleanup operation"
+
+# Workflow definitions (optional)
+workflows:
+  - name: content_processing
+    description: "Process content through symbolic pipeline"
+    steps:
+      - symbol: example_content_filter
+        condition: has_content
+      - symbol: process_symbolic_data
+        condition: data_valid
+      - symbol: workflow_state
+        action: transition
+        params:
+          trigger: finish
+
+  - name: audit_workflow
+    description: "Run full system audit"
+    steps:
+      - symbol: workflow_state
+        action: transition
+        params:
+          trigger: start
+      - symbol: run_symbolic_audit
+      - symbol: workflow_state
+        action: transition
+        params:
+          trigger: finish

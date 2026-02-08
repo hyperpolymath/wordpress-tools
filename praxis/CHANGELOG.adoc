@@ -1,0 +1,217 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Changelog
+
+All notable changes to WP Praxis will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+== [Unreleased]
+
+=== Planned
+- Improved offline-first capabilities
+- Additional RSR compliance enhancements
+- Performance optimizations for swarm coordination
+- Enhanced security features (rate limiting, MFA)
+- Desktop application enhancements
+
+== [0.1.0] - 2025-11-22
+
+=== Added
+
+==== Core Components
+- **PowerShell Symbolic Engine** (4,015 lines)
+  - `symbolic.ps1` - Main orchestrator with interactive mode
+  - `Run-SymbolicAudit.ps1` - Comprehensive audit system with compliance checking
+  - `Set-NormativeBaseline.ps1` - Baseline management and versioning
+  - `Trigger-SymbolicActions.ps1` - Multi-executor dispatch (Rust/PHP/Elixir/PowerShell/External)
+  - `Validate-SymbolicRoles.ps1` - RBAC validation with hierarchy analysis
+  - `Visualize-SymbolicDiff.ps1` - State comparison and visualization (Text/HTML/JSON)
+
+- **Rust Injector** (1,296 lines)
+  - Complete WordPress database integration via SQLx
+  - YAML/TOML manifest parsing with validation
+  - Symbol injection with transaction-like behavior
+  - Rollback strategies (snapshot, inverse, none)
+  - Full CLI: `inject`, `validate`, `rollback`, `status`, `diff`
+  - wp-config.php parsing for database credentials
+  - 24 unit tests passing
+
+- **PHP Symbolic Engine & WordPress Plugin** (2,227 lines)
+  - `Symbol.php` - Recursive dispatch with WordPress hook integration
+  - `symbolic-engine.php` - Manifest loading, validation, execution
+  - WordPress plugin with complete admin UI (4 pages)
+  - AJAX handlers and REST API endpoints (`/wp-praxis/v1/*`)
+  - Settings management via WordPress Settings API
+  - Security: nonces, capability checks, input sanitization
+  - Composer dependencies configured
+  - 30+ PHPUnit tests
+
+- **Ecto Database Schema** (1,207 lines)
+  - 5 complete schemas (Symbol, Workflow, Execution, Baseline, Audit)
+  - 5 database migrations with 51+ indexes
+  - 56 pre-built query functions across 3 modules
+  - Full OTP application structure with supervision
+
+- **TypeScript Swarm System** (4,116 lines)
+  - Distributed symbolic execution coordinator
+  - Worker nodes with load balancing and health monitoring
+  - WebSocket real-time communication (ws protocol)
+  - Multi-backend execution (Rust, PHP, PowerShell, Internal)
+  - SQLite state management with transactions
+  - Complete CLI with dispatcher and worker commands
+  - 40+ test cases
+
+- **GraphQL API** (3,500+ lines)
+  - Complete schema for all WP Praxis entities
+  - 20+ queries, 15+ mutations, 10+ subscriptions
+  - Apollo Server 4 with WebSocket support
+  - DataLoader for N+1 query prevention
+  - JWT authentication and permission system
+  - GraphiQL playground with 50+ example queries
+  - PostgreSQL, SQLite, and PowerShell integration
+
+- **Dashboard** (3,000+ lines)
+  - REST API backend with Elysia framework
+  - Real-time WebSocket updates via custom event system
+  - Modern responsive UI with dark mode support
+  - Chart.js visualizations (timeline, doughnut charts)
+  - PostgreSQL state aggregation from multiple sources
+  - Workflow DAG visualization with Canvas API
+  - Symbol inspection interface with modal dialogs
+  - Manifest upload with drag-and-drop validation
+
+- **Racket Introspection System** (5,000+ lines)
+  - Symbolic state inspection and pattern analysis
+  - Recursive execution tracing across all layers
+  - Semantic integrity verification with contract system
+  - Feedback generation with actionable recommendations
+  - Meta-circular evaluation and self-inspection
+  - CLI tool, interactive REPL, HTTP API server
+  - PowerShell bridge and Elixir port protocol
+  - GraphViz visualization and HTML/JSON reporting
+
+- **LFE Manifest Parser** (3,500+ lines)
+  - YAML 1.2 and TOML 1.0 parsing with yamerl integration
+  - Lisp macro system for symbolic DSL
+  - Manifest validation and optimization (4 passes)
+  - OTP application with supervision tree
+  - ETS caching for performance
+  - Elixir/Erlang interop via native calls
+  - JSON export for other languages
+  - CLI interface and gen-server architecture
+
+==== Testing & Quality
+- **Comprehensive Test Suite** (245+ tests, ~78% coverage)
+  - PowerShell: Pester framework (100+ tests)
+  - Rust: Cargo test (25+ tests)
+  - Elixir: ExUnit (20+ tests)
+  - PHP: PHPUnit (30+ tests)
+  - TypeScript: Bun test (40+ tests)
+  - E2E: PowerShell integration tests (30+ tests)
+  - GitHub Actions CI/CD pipeline configured
+
+==== Documentation
+- **Core Documentation**
+  - `README.md` - Comprehensive project overview with quick start
+  - `CLAUDE.md` - Complete AI assistant development guide (494 lines)
+  - `IMPLEMENTATION_SUMMARY.md` - Full feature breakdown (618 lines)
+  - `SECURITY.md` - Security policy and reporting procedures
+  - `CONTRIBUTING.md` - Contribution guidelines with TPCF framework
+  - `CODE_OF_CONDUCT.md` - Community guidelines with emotional safety focus
+  - `MAINTAINERS.md` - Maintainer roles and responsibilities
+  - `CHANGELOG.md` - This file
+
+- **Examples & Tutorials** (6,100+ lines)
+  - 5 complete workflow manifests (WordPress operations)
+  - 5 step-by-step tutorials (15-30 minutes each)
+  - `examples/README.md` - Examples index (520+ lines)
+  - `examples/QUICKSTART.md` - Three quick start methods (210+ lines)
+  - `examples/FAQ.md` - 47 frequently asked questions (540+ lines)
+  - `examples/TROUBLESHOOTING.md` - Problem-solving guide (450+ lines)
+  - Video demonstration script (10-minute walkthrough)
+
+- **Component Documentation**
+  - All 12 components have dedicated README.md files
+  - Architecture diagrams (component, data flow, sequence, state machine)
+  - API references (GraphQL schema guide, REST endpoints)
+  - Configuration guides for each component
+
+==== Infrastructure
+- **Docker Support**
+  - Full-stack Docker Compose setup (WordPress, PostgreSQL, all services)
+  - All-in-one Dockerfile for containerized deployment
+  - Production-ready container configurations
+
+- **Build Tools**
+  - GitHub Actions CI workflow (multi-platform testing)
+  - Quick start automation script (Bash)
+  - Component-specific build configurations (Cargo, Mix, package.json)
+
+==== RSR Compliance
+- Documentation files (README, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT, MAINTAINERS, CHANGELOG)
+- `.well-known/` directory (security.txt, ai.txt, humans.txt)
+- `justfile` with 30+ build/test/validation tasks
+- `flake.nix` for Nix reproducible builds
+- RSR compliance scorecard and self-verification
+- TPCF Perimeter 3 (Community Sandbox) classification
+
+=== Security
+- WordPress nonce verification and capability checks throughout
+- SQL injection protection via prepared statements (Rust SQLx, WordPress $wpdb, Ecto)
+- Input sanitization and output escaping in all user-facing components
+- Role-based access control (RBAC) with `Validate-SymbolicRoles.ps1`
+- JWT authentication for GraphQL and REST APIs
+- Audit logging of all state-changing operations
+- Security.txt (RFC 9116) for vulnerability disclosure
+
+=== Fixed
+- N/A (initial release)
+
+=== Changed
+- N/A (initial release)
+
+=== Deprecated
+- N/A (initial release)
+
+=== Removed
+- N/A (initial release)
+
+== Version History
+
+=== Version Numbering
+
+We use [Semantic Versioning](https://semver.org/):
+- **MAJOR**: Incompatible API changes
+- **MINOR**: Backward-compatible functionality additions
+- **PATCH**: Backward-compatible bug fixes
+
+=== Release Process
+
+1. Update CHANGELOG.md with all changes
+2. Update version in all package files (Cargo.toml, mix.exs, package.json, etc.)
+3. Create git tag: `git tag -a v0.1.0 -m "Release v0.1.0"`
+4. Push tags: `git push --tags`
+5. GitHub Actions creates release artifacts
+6. Update documentation with new version
+
+=== Support Policy
+
+- **Current**: v0.1.x - Full support
+- **Previous Major**: One version back receives security updates only
+- **End of Life**: Announced 6 months in advance
+
+== Links
+
+- [Repository](https://github.com/hyperpolymath/wp-praxis)
+- [Issues](https://github.com/hyperpolymath/wp-praxis/issues)
+- [Discussions](https://github.com/hyperpolymath/wp-praxis/discussions)
+- [Security Policy](SECURITY.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+
+---
+
+**Maintained by**: WP Praxis Community
+**License**: GNU AGPL-3.0
+**Format**: [Keep a Changelog](https://keepachangelog.com/)
+**Versioning**: [Semantic Versioning](https://semver.org/)

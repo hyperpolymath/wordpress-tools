@@ -1,0 +1,36 @@
+= wp-sinople-theme - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{wp-sinople-theme_2025,
+  author = {Polymath, Hyper},
+  title = {wp-sinople-theme},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/wp-sinople-theme},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _wp-sinople-theme_ [Computer software]. Available at: https://github.com/hyperpolymath/wp-sinople-theme
+
+== OSCOLA
+
+Hyper Polymath, 'wp-sinople-theme' (2025) <https://github.com/hyperpolymath/wp-sinople-theme>
+
+== MLA
+
+Polymath, Hyper. "wp-sinople-theme." 2025, github.com/hyperpolymath/wp-sinople-theme.
+
+== APA 7
+
+Polymath, H. (2025). _wp-sinople-theme_ [Computer software]. GitHub. https://github.com/hyperpolymath/wp-sinople-theme
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

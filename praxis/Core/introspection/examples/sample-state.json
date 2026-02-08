@@ -1,0 +1,49 @@
+{
+  "symbols": [
+    {
+      "name": "validate_user",
+      "type": "action",
+      "context": "wordpress",
+      "metadata": {
+        "dispatch": "rust_injector",
+        "priority": 10,
+        "hook-name": "wp_authenticate_user",
+        "parameters": {
+          "strict_mode": true,
+          "allowed_roles": ["admin", "editor"]
+        }
+      },
+      "children": []
+    },
+    {
+      "name": "process_payment",
+      "type": "action",
+      "context": "wordpress",
+      "metadata": {
+        "dispatch": "rust_injector",
+        "priority": 20,
+        "depends-on": ["validate_user"],
+        "parameters": {
+          "gateway": "stripe",
+          "currency": "USD"
+        }
+      },
+      "children": []
+    },
+    {
+      "name": "send_notification",
+      "type": "filter",
+      "context": "wordpress",
+      "metadata": {
+        "dispatch": "powershell",
+        "priority": 30,
+        "depends-on": ["process_payment"],
+        "parameters": {
+          "notification_type": "email",
+          "template": "payment_confirmation"
+        }
+      },
+      "children": []
+    }
+  ]
+}

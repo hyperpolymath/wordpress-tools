@@ -1,0 +1,222 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Changelog
+
+All notable changes to WP Plugin Conflict Mapper will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+== [1.0.0] - 2025-07-31
+
+=== Added
+- Initial release of WP Plugin Conflict Mapper
+- **Core Scanning Features**
+  - Plugin scanner to detect all installed WordPress plugins
+  - Conflict detector for hooks, functions, globals, and database tables
+  - Overlap analyzer to identify plugins with similar functionality
+  - Security scanner for potential vulnerabilities
+  - Performance analyzer for plugin resource usage
+
+- **Conflict Detection**
+  - Hook conflict detection across all active plugins
+  - Function name collision detection
+  - Global variable conflict identification
+  - Database table conflict detection
+  - Severity classification (low, medium, high, critical)
+
+- **Plugin Analysis**
+  - Comprehensive plugin ranking system (0-100 score)
+  - Performance metrics (size, complexity, asset count)
+  - Security vulnerability scanning
+  - Code complexity analysis
+  - Database impact assessment
+
+- **Overlap Detection**
+  - 12 category classifications (SEO, caching, security, etc.)
+  - Automatic plugin categorization
+  - Similarity detection algorithms
+  - Recommended alternatives database
+  - Consolidation recommendations
+
+- **Admin Interface**
+  - Dashboard with statistics and quick actions
+  - Reports page with scan history
+  - Rankings page with sortable plugin scores
+  - Settings page for configuration
+  - Modal dialogs for detailed views
+  - Export functionality (JSON, CSV)
+
+- **User Interface**
+  - Clean, responsive admin design
+  - Real-time scan progress
+  - Interactive plugin analysis
+  - Detailed conflict reporting
+  - Visual severity indicators
+  - Score badges and color coding
+
+- **REST API**
+  - `/plugins` endpoint - Get all plugins
+  - `/scan` endpoint - Run new scan
+  - `/scan/{id}` endpoint - Get scan details
+  - `/scans` endpoint - List recent scans
+  - `/stats` endpoint - Get statistics
+  - Bearer token authentication support
+
+- **WP-CLI Commands**
+  - `wp conflict-mapper scan` - Run conflict scan
+  - `wp conflict-mapper list-plugins` - List with scores
+  - `wp conflict-mapper report <plugin>` - Detailed plugin report
+  - `wp conflict-mapper clear-cache` - Clear scan cache
+  - Multiple output formats (table, JSON, CSV)
+
+- **Data Management**
+  - Database storage for scan results
+  - Historical scan tracking
+  - Conflict archiving
+  - Configurable data retention
+  - Automatic cleanup of old scans
+
+- **Caching System**
+  - WordPress transients integration
+  - Scan result caching
+  - Plugin rankings cache
+  - Configurable cache duration
+  - Manual cache clearing
+
+- **Security Features**
+  - Nonce verification on all AJAX requests
+  - Capability checks (manage_options required)
+  - SQL injection prevention with prepared statements
+  - XSS protection with output escaping
+  - Secure file operation checks
+  - Dangerous function detection
+
+- **Performance Features**
+  - Efficient file scanning with limits
+  - Recursive directory traversal
+  - Optimized database queries
+  - Lazy loading of results
+  - Pagination support
+
+- **Internationalization**
+  - Full i18n support
+  - Text domain: wp-plugin-conflict-mapper
+  - Translation-ready strings
+  - Multiple language support
+
+- **Documentation**
+  - Comprehensive README with examples
+  - CLAUDE.md for AI development context
+  - Inline PHPDoc comments
+  - Code usage examples
+  - Troubleshooting guide
+  - Best practices documentation
+
+- **Settings & Configuration**
+  - Automatic scan scheduling
+  - Scan frequency options (daily, weekly, monthly)
+  - Email notification settings
+  - Data retention configuration
+  - Severity threshold settings
+  - Maintenance tools
+
+=== Technical Details
+
+- **Requirements**
+  - WordPress 5.8+
+  - PHP 7.4+
+  - MySQL 5.6+
+
+- **Architecture**
+  - Object-oriented design
+  - Singleton pattern for main class
+  - Modular class structure
+  - PSR-12 coding standards
+  - WordPress coding standards compliance
+
+- **Database Tables**
+  - `wp_wpcm_scans` - Scan results storage
+  - `wp_wpcm_conflicts` - Conflict details storage
+  - Proper indexing for performance
+  - Foreign key relationships
+
+- **File Structure**
+  [source,]
+----
+  wp-plugin-conflict-mapper/
+  ├── admin/                  # Admin interface
+  │   ├── class-wpcm-admin.php
+  │   ├── class-wpcm-ajax.php
+  │   ├── class-wpcm-settings.php
+  │   └── views/              # Admin templates
+  ├── assets/                 # CSS and JavaScript
+  │   ├── css/
+  │   └── js/
+  ├── includes/               # Core functionality
+  │   ├── class-wpcm-plugin-scanner.php
+  │   ├── class-wpcm-conflict-detector.php
+  │   ├── class-wpcm-overlap-analyzer.php
+  │   ├── class-wpcm-ranking-engine.php
+  │   ├── class-wpcm-database.php
+  │   ├── class-wpcm-cache.php
+  │   ├── class-wpcm-security-scanner.php
+  │   ├── class-wpcm-performance-analyzer.php
+  │   ├── class-wpcm-rest-api.php
+  │   ├── class-wpcm-cli.php
+  │   └── class-wpcm-installer.php
+  ├── languages/              # Translations
+  ├── CHANGELOG.md
+  ├── CLAUDE.md
+  ├── LICENSE
+  ├── README.md
+  ├── uninstall.php
+  └── wp-plugin-conflict-mapper.php
+  [source,]
+----
+
+=== Known Limitations
+
+- Scan performance decreases with 50+ plugins
+- Some hook conflicts are unavoidable (WordPress core hooks)
+- Security scanning uses pattern matching (may have false positives/negatives)
+- Overlap detection relies on plugin names and descriptions
+- WP-CLI requires WP-CLI to be installed
+- REST API requires authentication
+
+=== Future Enhancements
+
+See README.md roadmap section for planned features.
+
+---
+
+== Release Notes
+
+=== Version 1.0.0 - Initial Release
+
+This is the first production-ready release of WP Plugin Conflict Mapper. The plugin provides a comprehensive solution for identifying and resolving plugin conflicts in WordPress installations.
+
+**Key Highlights:**
+- Complete conflict detection across multiple dimensions
+- User-friendly admin interface with real-time scanning
+- Developer-friendly CLI and REST API
+- Built-in security and performance analysis
+- Extensive documentation and examples
+
+**Who Should Use This:**
+- WordPress site administrators managing multiple plugins
+- Developers debugging plugin compatibility issues
+- Security professionals auditing WordPress installations
+- Performance optimization specialists
+- Agencies managing client WordPress sites
+
+**Getting Started:**
+1. Install and activate the plugin
+2. Navigate to Conflict Mapper → Dashboard
+3. Click "Run New Scan"
+4. Review results and follow recommendations
+
+For detailed usage instructions, see README.md.
+
+---
+
+[1.0.0]: https://github.com/Hyperpolymath/wp-plugin-conflict-mapper/releases/tag/v1.0.0

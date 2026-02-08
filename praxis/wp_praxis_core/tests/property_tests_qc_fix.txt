@@ -1,0 +1,71 @@
+// ============================================================================
+// QuickCheck Tests (Functional API)
+// ============================================================================
+
+#[cfg(test)]
+mod quickcheck_tests {
+    use super::*;
+    use quickcheck::{quickcheck, TestResult};
+
+    #[test]
+    fn qc_semver_validation() {
+        fn prop(major: u8, minor: u8, patch: u8) -> bool {
+            let version = format!("{}.{}.{}", major, minor, patch);
+            let manifest = Manifest::new("test", &version);
+            manifest.version == version
+        }
+        quickcheck(prop as fn(u8, u8, u8) -> bool);
+    }
+
+    #[test]
+    fn qc_manifest_name_non_empty() {
+        fn prop(name: String) -> TestResult {
+            if name.is_empty() {
+                return TestResult::discard();
+            }
+
+            let manifest = Manifest::new(&name, "1.0.0");
+            let engine = ValidationEngine::new();
+            let result = engine.validate(&manifest).unwrap();
+
+            TestResult::from_bool(!result.errors().iter().any(|e| e.contains("name") && e.contains("empty")))
+        }
+        quickcheck(prop as fn(String) -> TestResult);
+    }
+
+    #[test]
+    fn qc_symbol_builder_chain() {
+        fn prop(name: String) -> TestResult {
+            if name.is_empty() || name.len() > 100 {
+                return TestResult::discard();
+            }
+
+            let symbol = Symbol::new(&name, SymbolType::Option, Operation::Set)
+                .with_target("target")
+                .with_value("value")
+                .with_tag("tag1")
+                .with_tag("tag2");
+
+            TestResult::from_bool(
+                symbol.name == name &&
+                symbol.target == Some("target".to_string()) &&
+                symbol.value == Some("value".to_string()) &&
+                symbol.tags.len() == 2
+            )
+        }
+        quickcheck(prop as fn(String) -> TestResult);
+    }
+
+    #[test]
+    fn qc_operation_type_consistency() {
+        fn prop(op_str: String) -> bool {
+            if let Some(op) = Operation::from_str(&op_str.to_lowercase()) {
+                let serialized = op.as_str();
+                Operation::from_str(serialized) == Some(op)
+            } else {
+                true
+            }
+        }
+        quickcheck(prop as fn(String) -> bool);
+    }
+}

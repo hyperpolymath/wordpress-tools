@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+[package]
+name = "socp-tui"
+version = "0.1.0"
+edition = "2021"
+description = "Site Operations Control Plane - Terminal User Interface"
+authors = ["hyperpolymath"]
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/hyperpolymath/wp-resurrect"
+keywords = ["tui", "sysadmin", "wordpress", "infrastructure"]
+categories = ["command-line-interface", "development-tools"]
+
+[dependencies]
+# TUI framework
+ratatui = "0.29"
+crossterm = "0.28"
+
+# Async runtime
+tokio = { version = "1.42", features = ["full"] }
+
+# HTTP client for API calls
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+
+# WebSocket for real-time updates
+tokio-tungstenite = { version = "0.24", features = ["rustls-tls-native-roots"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# CLI argument parsing
+clap = { version = "4.5", features = ["derive"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+
+# Configuration
+config = "0.14"
+directories = "5.0"
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Color themes
+tui-textarea = "0.7"
+
+[dev-dependencies]
+pretty_assertions = "1.4"

@@ -1,0 +1,123 @@
+# WP Praxis Dashboard Configuration
+# This file configures the symbolic engine dashboard backend and frontend
+
+[server]
+host = "localhost"
+port = 3000
+env = "development"  # development, staging, production
+
+[server.cors]
+enabled = true
+origins = ["http://localhost:3000", "http://localhost:8080"]
+methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+credentials = true
+
+[server.websocket]
+enabled = true
+path = "/ws"
+heartbeat_interval = 30000  # milliseconds
+max_payload = 1048576  # 1MB
+
+[database]
+# PostgreSQL connection for Ecto database
+host = "localhost"
+port = 5432
+database = "wp_praxis_dev"
+user = "postgres"
+password = ""
+max_connections = 20
+idle_timeout = 30000
+connection_timeout = 5000
+
+[database.ssl]
+enabled = false
+reject_unauthorized = true
+
+[api]
+prefix = "/api"
+version = "v1"
+rate_limit_enabled = true
+rate_limit_max = 100  # requests per window
+rate_limit_window = 60000  # 1 minute
+
+[api.pagination]
+default_limit = 20
+max_limit = 100
+
+[auth]
+enabled = false  # Set to true when implementing authentication
+jwt_secret = ""  # Set in production via environment variable
+jwt_expiry = 3600  # seconds
+session_timeout = 86400  # 24 hours
+
+[logging]
+level = "info"  # debug, info, warn, error
+format = "json"  # json, pretty
+log_requests = true
+log_responses = false
+
+[state]
+# State aggregation sources
+sources = ["ecto_db", "swarm_state", "powershell_state"]
+
+[state.ecto_db]
+enabled = true
+refresh_interval = 5000  # milliseconds
+
+[state.swarm_state]
+enabled = true
+endpoint = "http://localhost:8080/state"
+refresh_interval = 3000
+
+[state.powershell_state]
+enabled = true
+script_path = "../core/symbolic.ps1"
+refresh_interval = 10000
+
+[cache]
+enabled = true
+ttl = 300  # seconds
+max_size = 1000  # entries
+
+[features]
+# Feature flags
+real_time_updates = true
+workflow_visualization = true
+symbol_inspection = true
+audit_reports = true
+baseline_management = true
+execution_tracking = true
+performance_metrics = true
+
+[ui]
+theme = "auto"  # light, dark, auto
+auto_refresh = true
+refresh_interval = 5000  # milliseconds
+max_log_lines = 1000
+chart_animation = true
+
+[ui.colors]
+primary = "#6366f1"
+secondary = "#8b5cf6"
+success = "#10b981"
+warning = "#f59e0b"
+error = "#ef4444"
+info = "#3b82f6"
+
+[monitoring]
+health_check_enabled = true
+health_check_interval = 30000
+metrics_enabled = true
+metrics_endpoint = "/metrics"
+
+[security]
+# Security settings
+helmet_enabled = true
+csrf_enabled = false  # Enable when implementing forms
+xss_protection = true
+content_security_policy = true
+
+[security.headers]
+"X-Frame-Options" = "DENY"
+"X-Content-Type-Options" = "nosniff"
+"Referrer-Policy" = "strict-origin-when-cross-origin"

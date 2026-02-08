@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Security Policy for wp-resurrect (SOCP)
+# https://securitytxt.org/
+
+Contact: mailto:security@example.com
+Expires: 2026-12-31T23:59:59.000Z
+Encryption: https://example.com/.well-known/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://example.com/.well-known/security.txt
+Policy: https://github.com/hyperpolymath/wp-resurrect/blob/main/SECURITY.md
+Hiring: https://example.com/careers
+
+# Acknowledgments
+Acknowledgments: https://example.com/security/hall-of-fame

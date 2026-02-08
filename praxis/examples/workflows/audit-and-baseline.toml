@@ -1,0 +1,555 @@
+# Audit and Baseline Workflow
+# Create baseline, execute changes, run audit, generate comprehensive report
+
+version = "1.0"
+
+[metadata]
+name = "audit-and-baseline"
+description = "Complete audit workflow with baseline creation, change execution, and reporting"
+author = "WP Praxis"
+tags = ["audit", "baseline", "reporting", "governance"]
+
+[config.wordpress]
+path = "/var/www/html"
+url = "https://example.com"
+
+[config.execution]
+mode = "sequential"
+timeout = 300
+retry_on_failure = false  # Audits should not retry
+max_retries = 0
+
+[config.audit]
+verbose = true
+include_checksums = true
+track_changes = true
+comparison_mode = "deep"
+
+# Symbol 1: Create comprehensive baseline
+[[symbols]]
+name = "create_initial_baseline"
+type = "audit"
+description = "Create comprehensive baseline of current WordPress state"
+dispatch = "powershell"
+context = "wordpress"
+
+[symbols.parameters]
+operation = "create_baseline"
+baseline_name = "audit_workflow_initial"
+baseline_type = "comprehensive"
+
+[symbols.parameters.scope]
+include_options = true
+include_posts = true
+include_users = true
+include_comments = true
+include_terms = true
+include_plugins = true
+include_themes = true
+include_uploads = true
+include_database_schema = true
+
+[symbols.parameters.options_filter]
+exclude_transients = false  # Include everything for audit
+exclude_patterns = ["_transient_timeout_*"]
+include_autoload_flag = true
+
+[symbols.parameters.posts_filter]
+post_types = ["post", "page", "attachment"]
+post_status = ["publish", "draft", "pending", "private"]
+include_meta = true
+include_revisions = false
+
+[symbols.parameters.users_filter]
+include_meta = true
+include_capabilities = true
+exclude_passwords = true  # Never include password hashes
+
+[symbols.parameters.checksums]
+enabled = true
+algorithm = "sha256"
+include_file_checksums = true
+
+[symbols.parameters.output]
+format = "json"
+compression = "gzip"
+encryption = false
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "baseline_id"
+[[symbols.outputs]]
+name = "baseline_path"
+[[symbols.outputs]]
+name = "baseline_timestamp"
+[[symbols.outputs]]
+name = "total_items_captured"
+
+# Symbol 2: Set normative baseline
+[[symbols]]
+name = "set_normative_baseline"
+type = "governance"
+description = "Mark this baseline as the normative reference point"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["create_initial_baseline"]
+
+[symbols.parameters]
+operation = "set_normative"
+baseline_id = "${create_initial_baseline.baseline_id}"
+normative_type = "audit_reference"
+approval_required = false
+
+[symbols.parameters.metadata]
+created_by = "wp_praxis_workflow"
+purpose = "audit_and_baseline_workflow"
+environment = "production"
+compliance_standard = "internal"
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "normative_set"
+[[symbols.outputs]]
+name = "normative_id"
+
+# Symbol 3: Execute planned changes (example: site configuration updates)
+[[symbols]]
+name = "execute_configuration_changes"
+type = "action"
+description = "Execute a series of configuration changes for demonstration"
+dispatch = "rust_injector"
+context = "wordpress"
+depends_on = ["set_normative_baseline"]
+
+[symbols.parameters]
+operation = "batch_update_options"
+
+[[symbols.parameters.updates]]
+option_name = "blogname"
+option_value = "Audited WordPress Site"
+autoload = true
+
+[[symbols.parameters.updates]]
+option_name = "blogdescription"
+option_value = "A WordPress site with comprehensive audit trail"
+autoload = true
+
+[[symbols.parameters.updates]]
+option_name = "posts_per_page"
+option_value = 20
+autoload = true
+
+[[symbols.parameters.updates]]
+option_name = "default_comment_status"
+option_value = "closed"
+autoload = true
+
+[[symbols.parameters.updates]]
+option_name = "timezone_string"
+option_value = "America/New_York"
+autoload = true
+
+[symbols.rollback]
+enabled = true
+strategy = "restore_from_baseline"
+baseline = "audit_workflow_initial"
+
+[[symbols.outputs]]
+name = "options_updated"
+[[symbols.outputs]]
+name = "update_count"
+
+# Symbol 4: Create post-change baseline
+[[symbols]]
+name = "create_post_change_baseline"
+type = "audit"
+description = "Create baseline after configuration changes"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["execute_configuration_changes"]
+
+[symbols.parameters]
+operation = "create_baseline"
+baseline_name = "audit_workflow_post_change"
+baseline_type = "comprehensive"
+
+[symbols.parameters.scope]
+include_options = true
+include_posts = true
+include_users = true
+include_comments = true
+include_terms = true
+include_plugins = true
+include_themes = true
+include_uploads = true
+include_database_schema = true
+
+[symbols.parameters.checksums]
+enabled = true
+algorithm = "sha256"
+include_file_checksums = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "baseline_id"
+[[symbols.outputs]]
+name = "baseline_path"
+
+# Symbol 5: Run comprehensive audit
+[[symbols]]
+name = "run_comprehensive_audit"
+type = "audit"
+description = "Run comprehensive symbolic audit comparing baselines"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["create_post_change_baseline"]
+
+[symbols.parameters]
+operation = "run_audit"
+audit_type = "comprehensive"
+
+[symbols.parameters.comparison]
+baseline_before = "${create_initial_baseline.baseline_id}"
+baseline_after = "${create_post_change_baseline.baseline_id}"
+comparison_mode = "deep"
+include_unchanged = false
+
+[symbols.parameters.checks]
+verify_integrity = true
+check_permissions = true
+validate_data_types = true
+detect_anomalies = true
+
+[symbols.parameters.anomaly_detection]
+enabled = true
+sensitivity = "medium"
+patterns = [
+  "unexpected_option_changes",
+  "unauthorized_user_modifications",
+  "suspicious_file_changes",
+  "database_schema_drift"
+]
+
+[symbols.parameters.output]
+format = "json"
+verbosity = "detailed"
+include_context = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "audit_id"
+[[symbols.outputs]]
+name = "audit_report_path"
+[[symbols.outputs]]
+name = "changes_detected"
+[[symbols.outputs]]
+name = "anomalies_found"
+[[symbols.outputs]]
+name = "integrity_status"
+
+# Symbol 6: Validate symbolic roles
+[[symbols]]
+name = "validate_symbolic_roles"
+type = "validation"
+description = "Validate that all symbolic roles are correctly configured"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["run_comprehensive_audit"]
+
+[symbols.parameters]
+operation = "validate_roles"
+validation_type = "comprehensive"
+
+[symbols.parameters.role_checks]
+verify_role_assignments = true
+check_capability_mappings = true
+validate_role_hierarchy = true
+detect_privilege_escalation = false  # Not checking for security issues in this audit
+
+[symbols.parameters.normative_reference]
+baseline_id = "${create_initial_baseline.baseline_id}"
+compare_against_normative = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "validation_passed"
+[[symbols.outputs]]
+name = "validation_errors"
+[[symbols.outputs]]
+name = "role_discrepancies"
+
+# Symbol 7: Trigger symbolic actions based on audit
+[[symbols]]
+name = "trigger_post_audit_actions"
+type = "action"
+description = "Trigger symbolic actions based on audit findings"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["run_comprehensive_audit", "validate_symbolic_roles"]
+
+[symbols.parameters]
+operation = "trigger_actions"
+trigger_mode = "conditional"
+
+[[symbols.parameters.triggers]]
+condition = "changes_detected > 0"
+action = "log_changes"
+severity = "info"
+
+[[symbols.parameters.triggers]]
+condition = "anomalies_found > 0"
+action = "alert_administrators"
+severity = "warning"
+
+[[symbols.parameters.triggers]]
+condition = "integrity_status == 'failed'"
+action = "escalate_security_team"
+severity = "critical"
+
+[[symbols.parameters.triggers]]
+condition = "validation_errors > 0"
+action = "create_remediation_plan"
+severity = "warning"
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "actions_triggered"
+[[symbols.outputs]]
+name = "action_results"
+
+# Symbol 8: Generate visual diff report
+[[symbols]]
+name = "generate_visual_diff_report"
+type = "reporting"
+description = "Generate comprehensive visual diff report"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["run_comprehensive_audit"]
+
+[symbols.parameters]
+operation = "visualize_diff"
+
+[symbols.parameters.comparison]
+baseline_before = "${create_initial_baseline.baseline_id}"
+baseline_after = "${create_post_change_baseline.baseline_id}"
+normative_baseline = "${set_normative_baseline.normative_id}"
+
+[symbols.parameters.visualization]
+output_formats = ["html", "json", "pdf", "markdown"]
+include_charts = true
+include_graphs = true
+include_statistics = true
+color_scheme = "professional"
+
+[symbols.parameters.charts]
+change_distribution = true
+category_breakdown = true
+timeline_view = true
+impact_analysis = true
+
+[symbols.parameters.sections]
+executive_summary = true
+detailed_changes = true
+anomaly_report = true
+recommendations = true
+appendices = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "diff_report_html"
+[[symbols.outputs]]
+name = "diff_report_json"
+[[symbols.outputs]]
+name = "diff_report_pdf"
+[[symbols.outputs]]
+name = "diff_report_markdown"
+
+# Symbol 9: Generate compliance report
+[[symbols]]
+name = "generate_compliance_report"
+type = "reporting"
+description = "Generate compliance and governance report"
+dispatch = "powershell"
+context = "wordpress"
+depends_on = ["run_comprehensive_audit", "validate_symbolic_roles"]
+
+[symbols.parameters]
+operation = "generate_report"
+report_type = "compliance"
+
+[symbols.parameters.compliance_standards]
+standards = ["internal_policy", "data_governance"]
+include_evidence = true
+include_attestations = false
+
+[symbols.parameters.report_sections]
+audit_summary = true
+baseline_comparison = true
+change_tracking = true
+role_validation = true
+security_posture = true
+recommendations = true
+action_items = true
+
+[symbols.parameters.output]
+format = "pdf"
+template = "formal"
+include_signatures = false
+include_timestamps = true
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "compliance_report_path"
+[[symbols.outputs]]
+name = "compliance_score"
+[[symbols.outputs]]
+name = "action_items_count"
+
+# Symbol 10: Archive audit artifacts
+[[symbols]]
+name = "archive_audit_artifacts"
+type = "archival"
+description = "Archive all audit artifacts for long-term storage"
+dispatch = "rust_injector"
+context = "filesystem"
+depends_on = ["generate_visual_diff_report", "generate_compliance_report"]
+
+[symbols.parameters]
+operation = "archive_artifacts"
+
+[symbols.parameters.artifacts]
+baselines = [
+  "${create_initial_baseline.baseline_path}",
+  "${create_post_change_baseline.baseline_path}"
+]
+reports = [
+  "${run_comprehensive_audit.audit_report_path}",
+  "${generate_visual_diff_report.diff_report_json}",
+  "${generate_compliance_report.compliance_report_path}"
+]
+
+[symbols.parameters.archive_settings]
+compression = "gzip"
+encryption = false
+archive_format = "tar.gz"
+archive_name = "audit-${timestamp}.tar.gz"
+archive_path = "./archives/"
+
+[symbols.parameters.metadata]
+workflow_name = "audit-and-baseline"
+audit_id = "${run_comprehensive_audit.audit_id}"
+timestamp = "${system.timestamp}"
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "archive_path"
+[[symbols.outputs]]
+name = "archive_size"
+[[symbols.outputs]]
+name = "archive_checksum"
+
+# Symbol 11: Update audit log database (Elixir)
+[[symbols]]
+name = "update_audit_log"
+type = "state"
+description = "Update audit log in database for tracking and reporting"
+dispatch = "elixir"
+context = "database"
+depends_on = ["archive_audit_artifacts"]
+
+[symbols.parameters]
+operation = "create_audit_log_entry"
+
+[symbols.parameters.log_entry]
+audit_id = "${run_comprehensive_audit.audit_id}"
+workflow_name = "audit-and-baseline"
+baseline_before = "${create_initial_baseline.baseline_id}"
+baseline_after = "${create_post_change_baseline.baseline_id}"
+normative_baseline = "${set_normative_baseline.normative_id}"
+changes_detected = "${run_comprehensive_audit.changes_detected}"
+anomalies_found = "${run_comprehensive_audit.anomalies_found}"
+integrity_status = "${run_comprehensive_audit.integrity_status}"
+compliance_score = "${generate_compliance_report.compliance_score}"
+archive_path = "${archive_audit_artifacts.archive_path}"
+
+[symbols.rollback]
+enabled = false
+
+[[symbols.outputs]]
+name = "log_entry_id"
+[[symbols.outputs]]
+name = "logged_at"
+
+# Rollback configuration
+[rollback]
+on_error = "manual"  # Audits should not auto-rollback
+preserve_baselines = true
+preserve_reports = true
+
+[rollback.notification]
+enabled = true
+channels = ["log", "email"]
+
+# Notifications
+[[notifications.on_success]]
+type = "log"
+message = "Audit and baseline workflow completed successfully"
+level = "info"
+
+[[notifications.on_success]]
+type = "email"
+to = "audit@example.com"
+subject = "WP Praxis: Audit Report Available"
+body = """
+The audit and baseline workflow has completed successfully.
+
+Audit ID: ${run_comprehensive_audit.audit_id}
+Changes Detected: ${run_comprehensive_audit.changes_detected}
+Anomalies Found: ${run_comprehensive_audit.anomalies_found}
+Compliance Score: ${generate_compliance_report.compliance_score}
+
+Reports are available at:
+- HTML: ${generate_visual_diff_report.diff_report_html}
+- PDF: ${generate_visual_diff_report.diff_report_pdf}
+- Compliance: ${generate_compliance_report.compliance_report_path}
+
+Archive: ${archive_audit_artifacts.archive_path}
+"""
+
+[[notifications.on_failure]]
+type = "log"
+message = "Audit workflow failed"
+level = "error"
+
+[[notifications.on_failure]]
+type = "email"
+to = "audit@example.com"
+subject = "WP Praxis: Audit Workflow Failed"
+body = "The audit and baseline workflow has failed. Please review the logs."
+
+# Output configuration
+[outputs]
+format = "json"
+destination = "./outputs/audit-baseline-${timestamp}.json"
+include_metadata = true
+include_timings = true
+include_all_artifacts = true
+pretty_print = true
