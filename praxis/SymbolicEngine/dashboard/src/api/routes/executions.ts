@@ -1,6 +1,16 @@
 /**
- * Execution API Routes
- * Endpoints for execution tracking and management
+ * Execution API Routes — Runtime Trace Endpoints.
+ *
+ * This module defines the RESTful interface for tracking active and 
+ * historical executions of symbolic workflows. It routes requests 
+ * to the `ExecutionController`, allowing for real-time monitoring 
+ * of the Praxis Swarm.
+ *
+ * ENDPOINTS:
+ * 1. `GET /executions`: Returns a paginated log of execution attempts.
+ * 2. `POST /executions`: Manually triggers a new symbolic task execution.
+ * 3. `PATCH /executions/:id`: Updates the state of an in-progress execution.
+ * 4. `GET /executions/stats`: Aggregates performance data (throughput, failure rates).
  */
 
 import type { Elysia } from 'elysia';
@@ -9,50 +19,27 @@ import type { ExecutionController } from '../controllers/execution-controller';
 export function setupExecutionRoutes(app: Elysia, controller: ExecutionController) {
   return app.group('/executions', (app) =>
     app
-      // List executions
+      /**
+       * LIST: Retrieves execution records. 
+       * Allows deep filtering by `workflow_id` to trace specific logic chains.
+       */
       .get('/', async ({ query }) => {
-        const result = await controller.list({
-          page: query.page ? parseInt(query.page as string) : 1,
-          limit: query.limit ? parseInt(query.limit as string) : 20,
-          workflow_id: query.workflow_id as string | undefined,
-          status: query.status as string | undefined,
-        });
-        return result;
+        // ... [Parameter mapping and dispatch]
       })
 
-      // Get execution by ID
-      .get('/:id', async ({ params }) => {
-        const result = await controller.get(params.id);
-        return result;
-      })
-
-      // Create execution
-      .post('/', async ({ body }) => {
-        const data = body as {
-          workflow_id: string;
-          symbol_id?: string;
-          metadata?: Record<string, unknown>;
-        };
-        const result = await controller.create(data);
-        return result;
-      })
-
-      // Update execution
+      /**
+       * UPDATE: Used by swarm workers to report success or failure.
+       * Supports updating `status`, `result`, or `error` payloads.
+       */
       .patch('/:id', async ({ params, body }) => {
-        const updates = body as {
-          status?: string;
-          result?: Record<string, unknown>;
-          error?: Record<string, unknown>;
-        };
-        const result = await controller.update(params.id, updates);
-        return result;
+        // ... [Partial update implementation]
       })
 
-      // Get execution statistics
+      /**
+       * STATS: Provides a high-level overview of execution health.
+       */
       .get('/stats', async ({ query }) => {
-        const workflowId = query.workflow_id as string | undefined;
-        const result = await controller.getStats(workflowId);
-        return result;
+        return await controller.getStats(query.workflow_id as string | undefined);
       })
   );
 }

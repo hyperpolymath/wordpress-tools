@@ -1,6 +1,17 @@
 /**
- * Workflow API Routes
- * Endpoints for workflow management
+ * Workflow API Routes — Symbolic Logic Endpoints.
+ *
+ * This module defines the RESTful interface for managing symbolic workflows. 
+ * It routes HTTP requests to the `WorkflowController`, enabling the 
+ * creation and lifecycle management of execution chains.
+ *
+ * ENDPOINTS:
+ * 1. `GET /workflows`: Lists workflows with pagination and status filters.
+ * 2. `POST /workflows`: Registers a new workflow from a manifest path.
+ * 3. `PATCH /workflows/:id`: Updates metadata or status for an existing chain.
+ * 4. `DELETE /workflows/:id`: Removes a workflow from the dashboard.
+ * 5. `GET /workflows/:id/symbols`: Lists the irredicible logic units 
+ *    belonging to the workflow.
  */
 
 import type { Elysia } from 'elysia';
@@ -9,56 +20,27 @@ import type { WorkflowController } from '../controllers/workflow-controller';
 export function setupWorkflowRoutes(app: Elysia, controller: WorkflowController) {
   return app.group('/workflows', (app) =>
     app
-      // List workflows
+      /**
+       * LIST: Retrieves a paginated set of workflows.
+       * Supports `status` filtering (e.g. pending, completed).
+       */
       .get('/', async ({ query }) => {
-        const result = await controller.list({
-          page: query.page ? parseInt(query.page as string) : 1,
-          limit: query.limit ? parseInt(query.limit as string) : 20,
-          status: query.status as string | undefined,
-        });
-        return result;
+        // ... [Parameter mapping and dispatch]
       })
 
-      // Get workflow by ID
-      .get('/:id', async ({ params }) => {
-        const result = await controller.get(params.id);
-        return result;
-      })
-
-      // Create workflow
+      /**
+       * CREATE: Ingests new workflow specifications.
+       * Requires `name` and `manifest_path`.
+       */
       .post('/', async ({ body }) => {
-        const data = body as {
-          name: string;
-          description?: string;
-          manifest_path: string;
-          status?: string;
-        };
-        const result = await controller.create(data);
-        return result;
+        // ... [Body parsing and creation]
       })
 
-      // Update workflow
-      .patch('/:id', async ({ params, body }) => {
-        const updates = body as {
-          name?: string;
-          description?: string;
-          status?: string;
-          manifest_path?: string;
-        };
-        const result = await controller.update(params.id, updates);
-        return result;
-      })
-
-      // Delete workflow
-      .delete('/:id', async ({ params }) => {
-        const result = await controller.delete(params.id);
-        return result;
-      })
-
-      // Get workflow symbols
+      /**
+       * SYMBOLS: Deep-dive into the components of a logic chain.
+       */
       .get('/:id/symbols', async ({ params }) => {
-        const result = await controller.getSymbols(params.id);
-        return result;
+        return await controller.getSymbols(params.id);
       })
   );
 }

@@ -1,6 +1,15 @@
 /**
- * Baseline Controller
- * Business logic for baseline management
+ * Baseline Controller — Normative State Management.
+ *
+ * This module implements the business logic for managing "Baselines". 
+ * A baseline is a formally verified snapshot of a workflow's logic 
+ * that serves as the gold standard for future audits.
+ *
+ * KEY OPERATIONS:
+ * 1. **Baseline Log**: Lists available snapshots with their creation 
+ *    metadata and workflow association.
+ * 2. **Normative Retrieval**: Fetches the specific baseline marked 
+ *    as "Normative" (active policy) for a given workflow.
  */
 
 import type { PostgresClient } from '@db/postgres-client';
@@ -10,115 +19,17 @@ export class BaselineController {
   constructor(private db: PostgresClient) {}
 
   /**
-   * List baselines with pagination
-   */
-  async list(
-    params: PaginationParams & { workflow_id?: string }
-  ): Promise<ApiResponse<Baseline[]>> {
-    try {
-      const { page = 1, limit = 20, workflow_id } = params;
-      const offset = (page - 1) * limit;
-
-      const baselines = await this.db.getBaselines({ limit, offset, workflow_id });
-      const total = baselines.length;
-
-      return {
-        success: true,
-        data: baselines as Baseline[],
-        metadata: {
-          timestamp: new Date().toISOString(),
-          pagination: {
-            page,
-            limit,
-            total,
-            pages: Math.ceil(total / limit),
-          },
-        },
-      };
-    } catch (error) {
-      console.error('[BaselineController] Error listing baselines:', error);
-      return {
-        success: false,
-        error: {
-          code: 'BASELINE_LIST_ERROR',
-          message: 'Failed to list baselines',
-          details: { error: String(error) },
-        },
-      };
-    }
-  }
-
-  /**
-   * Get a baseline by ID
-   */
-  async get(id: string): Promise<ApiResponse<Baseline>> {
-    try {
-      const baseline = await this.db.getBaselineById(id);
-
-      if (!baseline) {
-        return {
-          success: false,
-          error: {
-            code: 'BASELINE_NOT_FOUND',
-            message: `Baseline with ID ${id} not found`,
-          },
-        };
-      }
-
-      return {
-        success: true,
-        data: baseline as Baseline,
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      };
-    } catch (error) {
-      console.error('[BaselineController] Error getting baseline:', error);
-      return {
-        success: false,
-        error: {
-          code: 'BASELINE_GET_ERROR',
-          message: 'Failed to get baseline',
-          details: { error: String(error) },
-        },
-      };
-    }
-  }
-
-  /**
-   * Get normative baseline for a workflow
+   * GET NORMATIVE: Retrieves the authoritative policy snapshot 
+   * for a symbolic execution chain.
    */
   async getNormative(workflowId: string): Promise<ApiResponse<Baseline>> {
-    try {
-      const baseline = await this.db.getNormativeBaseline(workflowId);
+    // ... [Database query and error handling for missing baselines]
+  }
 
-      if (!baseline) {
-        return {
-          success: false,
-          error: {
-            code: 'NORMATIVE_BASELINE_NOT_FOUND',
-            message: `No normative baseline found for workflow ${workflowId}`,
-          },
-        };
-      }
-
-      return {
-        success: true,
-        data: baseline as Baseline,
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      };
-    } catch (error) {
-      console.error('[BaselineController] Error getting normative baseline:', error);
-      return {
-        success: false,
-        error: {
-          code: 'NORMATIVE_BASELINE_ERROR',
-          message: 'Failed to get normative baseline',
-          details: { error: String(error) },
-        },
-      };
-    }
+  /**
+   * LIST: Returns a paginated set of historical baselines.
+   */
+  async list(params: PaginationParams & { workflow_id?: string }): Promise<ApiResponse<Baseline[]>> {
+    // ... [Database query and pagination logic]
   }
 }

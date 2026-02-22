@@ -1,21 +1,29 @@
 <?php
 /**
- * Main template file
+ * Sinople Theme Index — Primary Fallback Template.
+ *
+ * This template acts as the base layout for the WordPress site. it is 
+ * used to render the main post loop when a more specific template 
+ * (like archive.php or search.php) is not present.
+ *
  * @package Sinople
  */
+
 get_header(); ?>
 
 <main id="main" class="site-main" role="main">
-    <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-        <article id="post-<?php the_ID(); ?>" <?php post_class( 'h-entry' ); ?>>
-            <header class="entry-header">
-                <h2 class="entry-title p-name"><a href="<?php the_permalink(); ?>" class="u-url"><?php the_title(); ?></a></h2>
-            </header>
-            <div class="entry-content e-content">
-                <?php the_excerpt(); ?>
-            </div>
-        </article>
-    <?php endwhile; endif; ?>
+    <?php if ( have_posts() ) : ?>
+        <?php while ( have_posts() ) : the_post(); ?>
+            <?php 
+            /** DISPATCH: Renders the appropriate content fragment based on post type. */
+            get_template_part( 'template-parts/content', get_post_type() ); 
+            ?>
+        <?php endwhile; ?>
+
+        <?php the_posts_navigation(); ?>
+    <?php else : ?>
+        <?php get_template_part( 'template-parts/content', 'none' ); ?>
+    <?php endif; ?>
 </main>
 
 <?php get_sidebar(); get_footer();

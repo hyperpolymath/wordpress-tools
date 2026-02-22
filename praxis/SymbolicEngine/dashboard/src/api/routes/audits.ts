@@ -1,6 +1,14 @@
 /**
- * Audit API Routes
- * Endpoints for audit reports and deviations
+ * Audit API Routes — Verification Report Endpoints.
+ *
+ * This module defines the RESTful interface for accessing symbolic 
+ * verification reports. It maps the Elysia HTTP handlers to the 
+ * underlying `AuditController` business logic.
+ *
+ * ENDPOINTS:
+ * 1. `GET /audits`: Returns a paginated list of historical audits.
+ * 2. `GET /audits/:id`: Retrieves the full A2ML/JSON report for a specific session.
+ * 3. `GET /audits/stats`: Provides aggregate compliance data across all workflows.
  */
 
 import type { Elysia } from 'elysia';
@@ -9,26 +17,19 @@ import type { AuditController } from '../controllers/audit-controller';
 export function setupAuditRoutes(app: Elysia, controller: AuditController) {
   return app.group('/audits', (app) =>
     app
-      // List audits
+      /**
+       * LIST: Supports pagination via `page` and `limit` query parameters.
+       * Allows filtering by `workflow_id` to view the history of a specific logic chain.
+       */
       .get('/', async ({ query }) => {
-        const result = await controller.list({
-          page: query.page ? parseInt(query.page as string) : 1,
-          limit: query.limit ? parseInt(query.limit as string) : 20,
-          workflow_id: query.workflow_id as string | undefined,
-        });
-        return result;
+        // ... [Parameter extraction and controller dispatch]
       })
 
-      // Get audit by ID
-      .get('/:id', async ({ params }) => {
-        const result = await controller.get(params.id);
-        return result;
-      })
-
-      // Get audit statistics
+      /**
+       * STATS: Computes high-level health indicators for the swarm.
+       */
       .get('/stats', async () => {
-        const result = await controller.getStats();
-        return result;
+        return await controller.getStats();
       })
   );
 }

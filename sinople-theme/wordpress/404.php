@@ -1,8 +1,14 @@
 <?php
 /**
- * 404 Not Found template
+ * Sinople 404 Error Template — User Recovery Page.
+ *
+ * This template is rendered when a requested semantic resource or page 
+ * cannot be found. it is designed to facilitate user recovery through 
+ * search and discovery of related constructs.
+ *
  * @package Sinople
  */
+
 get_header(); ?>
 
 <main id="main" class="site-main" role="main">
@@ -11,18 +17,17 @@ get_header(); ?>
     </header>
 
     <div class="page-content">
-        <p><?php esc_html_e( 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.', 'sinople' ); ?></p>
+        <p><?php esc_html_e( 'The semantic resource you requested is unavailable.', 'sinople' ); ?></p>
 
+        <?php /** RECOVERY: Search interface for knowledge discovery. */ ?>
         <h2><?php esc_html_e( 'Try searching:', 'sinople' ); ?></h2>
         <?php get_search_form(); ?>
 
+        <?php /** DISCOVERY: Recommends recent knowledge constructs. */ ?>
         <h2><?php esc_html_e( 'Recent Constructs:', 'sinople' ); ?></h2>
         <ul>
         <?php
-        $recent = get_posts( array(
-            'post_type' => 'sinople_construct',
-            'numberposts' => 5,
-        ));
+        $recent = get_posts( array( 'post_type' => 'sinople_construct', 'numberposts' => 5 ) );
         foreach ( $recent as $post ) :
             setup_postdata( $post );
             ?>

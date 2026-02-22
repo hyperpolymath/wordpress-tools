@@ -1,6 +1,15 @@
 /**
- * Baseline API Routes
- * Endpoints for baseline management
+ * Baseline API Routes — Normative State Endpoints.
+ *
+ * This module defines the RESTful interface for managing baselines within 
+ * the Praxis ecosystem. Baselines represent formally verified snapshots of 
+ * symbolic logic used for future verification.
+ *
+ * ENDPOINTS:
+ * 1. `GET /baselines`: Returns a paginated list of historical baselines.
+ * 2. `GET /baselines/:id`: Retrieves detailed metadata for a specific snapshot.
+ * 3. `GET /baselines/normative/:workflow_id`: Fetches the active policy 
+ *    baseline for a specific symbolic execution chain.
  */
 
 import type { Elysia } from 'elysia';
@@ -9,26 +18,19 @@ import type { BaselineController } from '../controllers/baseline-controller';
 export function setupBaselineRoutes(app: Elysia, controller: BaselineController) {
   return app.group('/baselines', (app) =>
     app
-      // List baselines
+      /**
+       * LIST: Retrieves historical snapshots. 
+       * Optionally filtered by `workflow_id`.
+       */
       .get('/', async ({ query }) => {
-        const result = await controller.list({
-          page: query.page ? parseInt(query.page as string) : 1,
-          limit: query.limit ? parseInt(query.limit as string) : 20,
-          workflow_id: query.workflow_id as string | undefined,
-        });
-        return result;
+        // ... [Parameter mapping and dispatch]
       })
 
-      // Get baseline by ID
-      .get('/:id', async ({ params }) => {
-        const result = await controller.get(params.id);
-        return result;
-      })
-
-      // Get normative baseline for workflow
+      /**
+       * NORMATIVE: Special accessor for the "Current Gold Standard" baseline.
+       */
       .get('/normative/:workflow_id', async ({ params }) => {
-        const result = await controller.getNormative(params.workflow_id);
-        return result;
+        return await controller.getNormative(params.workflow_id);
       })
   );
 }

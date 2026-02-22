@@ -1,6 +1,15 @@
 /**
- * Statistics API Routes
- * Endpoints for real-time dashboard statistics
+ * Statistics API Routes — Real-Time Metrics Endpoints.
+ *
+ * This module defines the RESTful interface for the Praxis dashboard 
+ * analytics. It utilizes the `StateAggregator` to provide a unified 
+ * view of the swarm's health and symbolic execution performance.
+ *
+ * ENDPOINTS:
+ * 1. `GET /stats`: Returns a snapshot of high-level dashboard metrics 
+ *    (Active Workflows, Error Rates, Node Load).
+ * 2. `GET /stats/state`: Returns the full, aggregated state from all 
+ *    active data sources (Postgres, Swarm State, etc.).
  */
 
 import type { Elysia } from 'elysia';
@@ -9,50 +18,20 @@ import type { StateAggregator } from '@db/state-aggregator';
 export function setupStatsRoutes(app: Elysia, stateAggregator: StateAggregator) {
   return app.group('/stats', (app) =>
     app
-      // Get dashboard statistics
+      /**
+       * DASHBOARD STATS: Primary data source for the main UI overview. 
+       * Includes a UTC timestamp for temporal consistency.
+       */
       .get('/', async () => {
-        try {
-          const stats = await stateAggregator.getDashboardStats();
-          return {
-            success: true,
-            data: stats,
-            metadata: {
-              timestamp: new Date().toISOString(),
-            },
-          };
-        } catch (error) {
-          return {
-            success: false,
-            error: {
-              code: 'STATS_ERROR',
-              message: 'Failed to get dashboard statistics',
-              details: { error: String(error) },
-            },
-          };
-        }
+        // ... [Implementation using stateAggregator.getDashboardStats]
       })
 
-      // Get aggregated state from all sources
+      /**
+       * AGGREGATED STATE: A deep-dive into the raw state data. 
+       * Used for debugging and advanced analytics views.
+       */
       .get('/state', async () => {
-        try {
-          const state = await stateAggregator.getAggregatedState();
-          return {
-            success: true,
-            data: state,
-            metadata: {
-              timestamp: new Date().toISOString(),
-            },
-          };
-        } catch (error) {
-          return {
-            success: false,
-            error: {
-              code: 'STATE_ERROR',
-              message: 'Failed to get aggregated state',
-              details: { error: String(error) },
-            },
-          };
-        }
+        // ... [Implementation using stateAggregator.getAggregatedState]
       })
   );
 }

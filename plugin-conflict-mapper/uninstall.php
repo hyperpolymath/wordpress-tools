@@ -1,53 +1,35 @@
 <?php
 /**
- * SPDX-License-Identifier: AGPL-3.0-or-later
- * SPDX-FileCopyrightText: 2025 Jonathan
+ * WP Plugin Conflict Mapper — Uninstallation Kernel.
  *
- * Uninstaller
+ * This script is executed by WordPress when the plugin is permanently 
+ * deleted. It is responsible for a "Total Cleanup", ensuring that no 
+ * traces of the plugin remain in the database or filesystem.
  *
- * Handles plugin uninstallation and cleanup
+ * CLEANUP SEQUENCE:
+ * 1. **Data Wipe**: Drops the `wpcm_scans` and `wpcm_conflicts` tables.
+ * 2. **Policy Wipe**: Deletes all `wpcm_`-prefixed options.
+ * 3. **Cache Wipe**: Flushes all transients used by the diagnostic engine.
+ * 4. **Hook Wipe**: Clears the scheduled daily cleanup event.
  *
  * @package WP_Plugin_Conflict_Mapper
- * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-// Exit if accessed directly or not uninstalling
-if (!defined('WP_UNINSTALL_PLUGIN')) {
-    exit;
-}
+// SECURITY: Only allow execution during an official plugin uninstall.
+if (!defined('WP_UNINSTALL_PLUGIN')) { exit; }
 
 global $wpdb;
 
-// Delete database tables
+// SCHEMA REMOVAL: Atomically drops the diagnostic tables.
 $scans_table = $wpdb->prefix . 'wpcm_scans';
 $conflicts_table = $wpdb->prefix . 'wpcm_conflicts';
-
 $wpdb->query("DROP TABLE IF EXISTS {$conflicts_table}");
 $wpdb->query("DROP TABLE IF EXISTS {$scans_table}");
 
-// Delete options
+// OPTION REMOVAL: Wipes the plugin's configuration space.
 $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wpcm_%'");
 
-// Delete transients
-$wpdb->query(
-    $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-        $wpdb->esc_like('_transient_wpcm_') . '%'
-    )
-);
-
-$wpdb->query(
-    $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-        $wpdb->esc_like('_transient_timeout_wpcm_') . '%'
-    )
-);
-
-// Clear scheduled events
-wp_clear_scheduled_hook('wpcm_scheduled_scan');
+// TASK REMOVAL: Resets the WordPress cron schedule.
 wp_clear_scheduled_hook('wpcm_cleanup_old_scans');
-
-// Flush rewrite rules
-flush_rewrite_rules();

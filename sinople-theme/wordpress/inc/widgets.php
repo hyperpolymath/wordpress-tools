@@ -1,16 +1,17 @@
 <?php
 /**
- * Custom Widgets for Sinople Theme
+ * Sinople Widgets — Semantic UI Components.
+ *
+ * This module defines the custom widgets provided by the Sinople theme. 
+ * These components are designed to present semantic metadata and 
+ * IndieWeb information in the site's sidebars and footers.
  *
  * @package Sinople
- * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-// Prevent direct access
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// Widget functionality placeholder
+// WIDGET REGISTRY: Future implementations of semantic widgets 
+// will be registered here using the standard WordPress Widget API.

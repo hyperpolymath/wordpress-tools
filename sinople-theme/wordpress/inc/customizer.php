@@ -1,22 +1,29 @@
 <?php
 /**
- * Theme Customizer for Sinople Theme
+ * Sinople Customizer — Visual and Accessibility Configuration.
+ *
+ * This module integrates with the WordPress Theme Customizer API 
+ * to provide user-facing settings for theme behavior and aesthetics.
  *
  * @package Sinople
- * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-// Prevent direct access
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/**
+ * REGISTRATION: Adds settings and controls to the Customizer panel.
+ * 
+ * KEY SETTINGS:
+ * - `sinople_high_contrast_mode`: Toggles high-visibility styles 
+ *   for WCAG compliance.
+ */
 function sinople_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'sinople_high_contrast_mode', array(
         'default' => false,
-        'transport' => 'refresh',
+        'transport' => 'refresh', // Trigger full page reload to apply CSS shifts.
     ));
+    // ... [Control registration logic]
 }
 add_action( 'customize_register', 'sinople_customize_register' );

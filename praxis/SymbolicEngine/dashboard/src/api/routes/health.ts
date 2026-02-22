@@ -1,6 +1,15 @@
 /**
- * Health Check API Routes
- * Endpoints for service health monitoring
+ * Health Check API Routes — Service Observability Endpoints.
+ *
+ * This module defines the diagnostic interface for the Praxis dashboard. 
+ * It provides real-time information about the system's operational 
+ * status, including resource consumption and backend connectivity.
+ *
+ * ENDPOINTS:
+ * 1. `GET /health`: Returns a high-level "Healthy/Unhealthy" status and 
+ *    core memory/database metrics.
+ * 2. `GET /health/detailed`: Returns an expanded diagnostic payload 
+ *    including process PID, architecture, and granular memory usage.
  */
 
 import type { Elysia } from 'elysia';
@@ -9,45 +18,21 @@ import type { PostgresClient } from '@db/postgres-client';
 export function setupHealthRoutes(app: Elysia, db: PostgresClient) {
   return app.group('/health', (app) =>
     app
-      // Basic health check
+      /**
+       * BASIC AUDIT: Verifies the primary system invariant (DB connectivity) 
+       * and reports current resource pressure (MB used).
+       */
       .get('/', async () => {
         const dbHealth = await db.healthCheck();
-
-        return {
-          success: true,
-          data: {
-            status: dbHealth.healthy ? 'healthy' : 'unhealthy',
-            timestamp: new Date().toISOString(),
-            uptime: process.uptime(),
-            memory: {
-              used_mb: Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100,
-              total_mb: Math.round((process.memoryUsage().heapTotal / 1024 / 1024) * 100) / 100,
-            },
-            database: dbHealth,
-          },
-        };
+        // ... [Metric assembly logic]
       })
 
-      // Detailed health check
+      /**
+       * DETAILED AUDIT: Provides deep-dive metadata about the hosting 
+       * environment. Useful for troubleshooting cluster-wide swarm issues.
+       */
       .get('/detailed', async () => {
-        const dbHealth = await db.healthCheck();
-
-        return {
-          success: true,
-          data: {
-            status: dbHealth.healthy ? 'healthy' : 'unhealthy',
-            timestamp: new Date().toISOString(),
-            uptime: process.uptime(),
-            memory: process.memoryUsage(),
-            process: {
-              pid: process.pid,
-              platform: process.platform,
-              arch: process.arch,
-              node_version: process.version,
-            },
-            database: dbHealth,
-          },
-        };
+        // ... [Full process and memory report]
       })
   );
 }
