@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+          xml:base="https://sinople.example.com/vocab"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+          xmlns:sin="https://sinople.example.com/vocab#"
+          ontologyIRI="https://sinople.example.com/vocab">
+
+    <!-- 🧵 Core Classes -->
+
+    <owl:Class rdf:about="sin:Construct">
+        <rdfs:label>Construct</rdfs:label>
+        <rdfs:comment>A symbolic entity such as Eteri Mistveil or Luna Vladivostoka</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="sin:Thread">
+        <rdfs:label>Thread</rdfs:label>
+        <rdfs:comment>A thematic or emotional line that connects constructs and glosses</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="sin:Gloss">
+        <rdfs:label>Gloss</rdfs:label>
+        <rdfs:comment>A conceptual or symbolic annotation applied to constructs, entries, or portals</rdfs:comment>
+    </owl:Class>
+
+    <!-- 🧩 Gloss Subclasses -->
+
+    <owl:Class rdf:about="sin:FogGloss">
+        <rdfs:subClassOf rdf:resource="sin:Gloss"/>
+        <rdfs:comment>Gloss associated with motifs of concealment, ambiguity, or fog</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="sin:ThreadGloss">
+        <rdfs:subClassOf rdf:resource="sin:Gloss"/>
+        <rdfs:comment>Gloss representing emotional or symbolic narrative threads</rdfs:comment>
+    </owl:Class>
+
+    <!-- 🌐 Portal Class -->
+
+    <owl:Class rdf:about="sin:Portal">
+        <rdfs:label>Portal</rdfs:label>
+        <rdfs:comment>An external link, influence, or symbolic reference connected to the journal</rdfs:comment>
+    </owl:Class>
+
+    <!-- ✨ Properties -->
+
+    <!-- Construct Relationships -->
+    <owl:DatatypeProperty rdf:about="sin:hasThread">
+        <rdfs:domain rdf:resource="sin:Construct"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+        <rdfs:comment>A textual thread or motif attached to a construct</rdfs:comment>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="sin:entanglesWith">
+        <rdfs:domain rdf:resource="sin:Construct"/>
+        <rdfs:range rdf:resource="sin:Construct"/>
+        <rdfs:comment>Symbolic entanglement between constructs</rdfs:comment>
+    </owl:ObjectProperty>
+
+    <!-- Gloss Relationships -->
+    <owl:DatatypeProperty rdf:about="sin:glossText">
+        <rdfs:domain rdf:resource="sin:Gloss"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+        <rdfs:comment>Text content of a gloss</rdfs:comment>
+    </owl:DatatypeProperty>
+
+    <owl:ObjectProperty rdf:about="sin:appliesTo">
+        <rdfs:domain rdf:resource="sin:Gloss"/>
+        <rdfs:range rdf:resource="sin:Construct"/>
+        <rdfs:comment>Indicates what construct or entry the gloss describes</rdfs:comment>
+    </owl:ObjectProperty>
+
+    <!-- Portal Relationships -->
+    <owl:ObjectProperty rdf:about="sin:inspiredBy">
+        <rdfs:domain rdf:resource="sin:Construct"/>
+        <rdfs:range rdf:resource="sin:Portal"/>
+        <rdfs:comment>Links a construct to an external inspiration</rdfs:comment>
+    </owl:ObjectProperty>
+
+    <owl:DatatypeProperty rdf:about="sin:portalURL">
+        <rdfs:domain rdf:resource="sin:Portal"/>
+        <rdfs:range rdf:resource="xsd:anyURI"/>
+        <rdfs:comment>Direct link to the portal target</rdfs:comment>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="sin:hasSignalText">
+        <rdfs:domain rdf:resource="sin:Portal"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+        <rdfs:comment>Poetic annotation or description that accompanies the portal</rdfs:comment>
+    </owl:DatatypeProperty>
+
+</Ontology>

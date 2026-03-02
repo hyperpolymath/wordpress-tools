@@ -1,0 +1,16 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://sinople.example.com/constructs/eteri-mistveil",
+  "name": "Eteri Mistveil",
+  "alternateName": "Mist-Stitched Sentinel",
+  "image": "https://sinople.example.com/assets/images/eteri.jpg",
+  "description": "A symbolic construct embodying veiled agency, archival resistance, and fog-threaded mythos.",
+  "knows": {
+    "@id": "https://sinople.example.com/constructs/luna-vladivostoka"
+  },
+  "sameAs": [
+    "https://indieweb.org/EteriMistveil",
+    "https://foaf.example.org/constructs/eteri"
+  ]
+}

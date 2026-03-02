@@ -1,0 +1,23 @@
+{
+  "name": "sinople-theme",
+  "version": "0.1.0",
+  "sources": [
+    {
+      "dir": "assets/rescript/src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": false
+    }
+  ],
+  "suffix": ".res.js",
+  "bs-dependencies": [],
+  "warnings": {
+    "number": "+a-4-9-27-40-42-44-48-50-61-102",
+    "error": "+5+6+8+101"
+  },
+  "bsc-flags": ["-bs-no-version-header"]
+}

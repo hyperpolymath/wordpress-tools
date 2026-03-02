@@ -1,0 +1,198 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Changelog
+
+All notable changes to the Sinople WordPress theme will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+== [Unreleased]
+
+=== Planned
+- Automated security scanning in CI/CD
+- SBOM (Software Bill of Materials) generation
+- Signed containers with cosign/sigstore
+- FIDO2/WebAuthn support for 2FA
+
+== [0.1.0] - 2025-01-22
+
+=== Added
+
+==== Core WordPress Theme
+- Complete theme structure (style.css, functions.php, index.php, header.php, footer.php, sidebar.php)
+- 16 modular inc/ PHP files for all functionality
+- Template files with full semantic markup
+- Custom post types: field_note, construct, gloss, portal
+- Custom taxonomies: emotion, color, motif, archetype, symbol, inspiration_type
+
+==== Accessibility (WCAG 2.3 AAA)
+- Skip links with ARIA landmarks
+- Keyboard navigation support throughout
+- Screen reader optimizations
+- Font size controls (decrease/increase)
+- Theme toggle (dark/light mode with system preference detection)
+- High contrast mode toggle
+- `prefers-reduced-motion` respect
+- Visible focus indicators (3px, customizable)
+- Reading time calculation and display
+
+==== Security
+- Strict Content-Security-Policy (CSP) with minimal unsafe directives
+- Cross-Origin headers (COEP, COOP, CORP)
+- HSTS with preload
+- Permissions-Policy (all dangerous features disabled)
+- Seccomp profile for container syscall filtering
+- Mixed content prevention and automatic HTTPS upgrade
+- XSS protection via output escaping
+- SQL injection prevention via prepared statements
+- File upload validation with MIME type checking
+- SVG sanitization
+
+==== Semantic Web & IndieWeb
+- JSON-LD structured data with Schema.org vocabulary
+- Open Graph and Twitter Cards metadata
+- Microformats v2 (h-entry, h-card, p-name, dt-published, u-url, etc.)
+- VoID dataset description endpoint (/void.rdf)
+- RDF/Turtle export capability for posts
+- Webmention support
+- POSSE integration (u-syndication links)
+- JSON Feed endpoint
+- IndieAuth, Micropub, Microsub endpoint declarations
+
+==== Serialization (First-Class)
+- **NDJSON**: Enhanced streaming feed with SSE, real-time updates, filtering
+- **FlatBuffers**: Complete schema with zero-copy deserialization support
+- **Cap'n Proto**: Full schema with RPC interface, binary/packed/JSON formats
+- Endpoints: /feed/ndjson, /feed/flatbuffers, /feed/capnproto
+- RPC endpoint: /rpc/capnp
+- Content negotiation via Accept header
+
+==== BEAM/Elixir Integration
+- Complete Ecto Post schema with validation
+- RabbitMQ consumer with automatic message processing
+- NDJSON stream client with Flow concurrency
+- mix.exs with all dependencies
+- WordPress → Elixir data pipeline
+- Type-safe parsing from PHP arrays
+
+==== Modern Web Technologies
+- TypeScript with strict mode and ESBuild bundling
+- SCSS architecture with CSS custom properties
+- WebAssembly modules (Rust source included)
+- ReScript functional programming support
+- Service Worker for offline support
+- View Transitions API integration
+- Scroll-driven Animations support
+- Container queries, :has() selector, color-mix()
+- Popover API, Anchor Positioning
+- WebRTC, WebGPU, WebCodecs detection
+- File System Access API, Web Share API
+
+==== Performance
+- Critical CSS inlining
+- Resource hints (preconnect, dns-prefetch, preload)
+- Native lazy loading (`loading="lazy"`)
+- WebP support with automatic conversion
+- Gzip compression
+- Cache-Control headers with appropriate max-age
+- HTML minification (optional)
+- WASM acceleration for heavy operations
+
+==== Privacy
+- Partitioned cookies (CHIPS) for cross-site tracking prevention
+- ECH (Encrypted Client Hello) support readiness
+- Do Not Track (DNT) header respect
+- No external resources loaded without user consent
+- IP anonymization in logs and comments
+- Consent management UI
+- Privacy-first embed handling
+
+==== Containerization (Podman/Docker)
+- Chainguard Wolfi base images for supply chain security
+- Multi-stage builds for minimal attack surface
+- Development (`docker-compose.dev.yml`) and production (`docker-compose.prod.yml`) configs
+- RabbitMQ for BEAM interoperability
+- Redis caching integration
+- Fail2ban security (production)
+- Network isolation (internal-only backend network)
+- Resource limits and health checks
+- Non-root container user (UID 10001)
+- Read-only filesystem with tmpfs for writes
+- Capability dropping (minimal privileges)
+
+==== Server Configurations
+- Nginx configuration with HTTP/2, HTTP/3 (QUIC), and strict security headers
+- Apache configuration (generated via script)
+- Caddy configuration (generated via script)
+- Rate limiting and DDoS protection
+- SSL/TLS hardening (TLS 1.3, modern ciphers only)
+- Gzip/Brotli compression
+- Static asset caching with long max-age
+- PHP-FPM optimization
+
+==== Build System
+- npm scripts for all operations (dev, build, lint, test)
+- SCSS compilation with Sass
+- TypeScript/ESBuild bundling (ESM modules)
+- WASM compilation (Rust + Cargo)
+- ReScript compilation
+- Image optimization (imagemin with pngquant, mozjpeg, svgo)
+- Minification and optimization (cssnano, terser)
+- Development watch modes
+- Linting (ESLint, Stylelint, PHPCS)
+- Formatting (Prettier)
+
+==== Documentation
+- Comprehensive README.md with project overview
+- CLAUDE.md for AI assistant guidance
+- README-DEPLOYMENT.md with full deployment instructions
+- CONTRIBUTING.md with contribution guidelines
+- CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+- SECURITY.md with vulnerability reporting process
+- MAINTAINERS.md with governance model
+- CHANGELOG.md (this file)
+
+==== RSR Compliance
+- SECURITY.md (RFC 9116 compliant)
+- CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+- MAINTAINERS.md (governance documentation)
+- .well-known/security.txt (RFC 9116)
+- .well-known/ai.txt (AI training policies)
+- .well-known/humans.txt (attribution)
+- Tri-Perimeter Contribution Framework (TPCF) implemented
+- Offline-first architecture (no mandatory external dependencies)
+- Type safety (PHP 8.1+, TypeScript strict mode, Rust, ReScript)
+- Memory safety (Rust ownership model, no unsafe blocks in WASM)
+
+=== Changed
+- N/A (initial release)
+
+=== Deprecated
+- N/A (initial release)
+
+=== Removed
+- N/A (initial release)
+
+=== Fixed
+- N/A (initial release)
+
+=== Security
+- All OWASP Top 10 2021 vulnerabilities mitigated
+- Supply chain security via Chainguard Wolfi images
+- Container security via seccomp, AppArmor, capability dropping
+
+== Release Process
+
+1. Update version in `style.css`, `package.json`, `Cargo.toml`, `mix.exs`
+2. Update CHANGELOG.md with changes since last release
+3. Create git tag: `git tag -a v0.1.0 -m "Release v0.1.0"`
+4. Push tag: `git push origin v0.1.0`
+5. Create GitHub release with changelog excerpt
+6. Build production assets: `npm run build`
+7. Create zip for WordPress.org distribution
+8. Submit to WordPress.org theme directory (when approved)
+
+---
+
+[Unreleased]: https://github.com/hyperpolymath/sinople-theme/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/hyperpolymath/sinople-theme/releases/tag/v0.1.0

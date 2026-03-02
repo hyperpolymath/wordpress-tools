@@ -1,0 +1,47 @@
+[package]
+name = "sinople-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jonathan"]
+description = "WebAssembly modules for Sinople theme performance optimization"
+license = "GPL-3.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde-wasm-bindgen = "0.6"
+web-sys = { version = "0.3", features = [
+    "console",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "Node",
+    "Window",
+    "CryptoKey",
+    "SubtleCrypto",
+] }
+js-sys = "0.3"
+getrandom = { version = "0.2", features = ["js"] }
+capnp = "0.19"
+capnp-rpc = "0.19"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console",
+    "Performance",
+    "PerformanceObserver",
+]
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[build-dependencies]
+capnpc = "0.19"

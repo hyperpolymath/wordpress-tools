@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+          xml:base="https://sinople.example.com/glosses/glosses.owl"
+          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+          xmlns:sin="https://sinople.example.com/vocab#"
+          ontologyIRI="https://sinople.example.com/glosses/glosses.owl">
+
+    <!-- 💠 Gloss Class -->
+    <Class rdf:about="sin:Gloss">
+        <rdfs:label>Gloss</rdfs:label>
+        <rdfs:comment>A symbolic annotation applied to constructs, entries, or portals in Sinople.</rdfs:comment>
+    </Class>
+
+    <!-- 🧶 Specific Types -->
+    <Class rdf:about="sin:FogGloss">
+        <rdfs:subClassOf rdf:resource="sin:Gloss"/>
+        <rdfs:comment>Gloss associated with motifs of concealment, ambiguity, or fog.</rdfs:comment>
+    </Class>
+
+    <Class rdf:about="sin:ThreadGloss">
+        <rdfs:subClassOf rdf:resource="sin:Gloss"/>
+        <rdfs:comment>Gloss representing conceptual threads or emotional lines.</rdfs:comment>
+    </Class>
+
+    <!-- ✏️ Properties -->
+    <DatatypeProperty rdf:about="sin:glossText">
+        <rdfs:domain rdf:resource="sin:Gloss"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+        <rdfs:comment>Text content of the gloss.</rdfs:comment>
+    </DatatypeProperty>
+
+    <ObjectProperty rdf:about="sin:appliesTo">
+        <rdfs:domain rdf:resource="sin:Gloss"/>
+        <rdfs:range rdf:resource="sin:Construct"/>
+        <rdfs:comment>Indicates what construct or entry the gloss describes.</rdfs:comment>
+    </ObjectProperty>
+</Ontology>

@@ -1,0 +1,17 @@
+@prefix sin: <https://sinople.example.com/vocab#> .
+@prefix schema: <https://schema.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sin:EteriMistveil a sin:Construct, foaf:Person ;
+  foaf:name "Eteri Mistveil" ;
+  sin:hasThread "Veiled agency and resistance woven from mist" ;
+  sin:entanglesWith sin:LunaVladivostoka .
+
+sin:LunaVladivostoka a sin:Construct ;
+  foaf:name "Luna Vladivostoka" ;
+  sin:embodies "Fog-bound curiosity and portside charm" .
+
+sin:ResistanceBreathing a schema:BlogPosting ;
+  schema:author sin:EteriMistveil ;
+  schema:datePublished "2025-07-21" ;
+  schema:keywords "fog", "agency", "thread" .

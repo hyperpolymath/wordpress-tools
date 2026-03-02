@@ -1,0 +1,10 @@
+@prefix sin: <https://sinople.example.com/vocab#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+
+sin:LunaVladivostoka a sin:Construct ;
+  foaf:name "Luna Vladivostoka" ;
+  schema:description "Fog-bound feline with portside charm and semantic curiosity." ;
+  sin:embodies "Boundary-crossing observation and mythic ambiguity" ;
+  sin:threadsAcross sin:Portals ;
+  sin:knows sin:EteriMistveil .

@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<ruleset name="Sinople Theme Coding Standards">
+	<description>WordPress Coding Standards for Sinople Theme</description>
+
+	<!-- Scan all PHP files -->
+	<file>.</file>
+	<arg name="extensions" value="php"/>
+
+	<!-- Exclude directories -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/assets/wasm/*</exclude-pattern>
+	<exclude-pattern>/tests/bootstrap.php</exclude-pattern>
+
+	<!-- Show progress and colors -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+
+	<!-- Use WordPress Coding Standards -->
+	<rule ref="WordPress">
+		<!-- Allow short array syntax -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<!-- Allow modern null coalesce -->
+		<exclude name="Universal.Operators.DisallowShortTernary"/>
+	</rule>
+
+	<!-- Prefer short array syntax -->
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+	<!-- WordPress Extra for themes -->
+	<rule ref="WordPress-Extra">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
+	<!-- WordPress Docs -->
+	<rule ref="WordPress-Docs"/>
+
+	<!-- PHPCompatibility for WordPress -->
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Set minimum PHP version -->
+	<config name="testVersion" value="8.1-"/>
+
+	<!-- WordPress minimum version -->
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<!-- Text domain for i18n -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="sinople"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Prefix for functions, classes, constants -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="sinople"/>
+				<element value="Sinople"/>
+				<element value="SINOPLE"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Allow theme-specific file names -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="is_theme" value="true"/>
+		</properties>
+	</rule>
+
+	<!-- Security rules -->
+	<rule ref="WordPress.Security"/>
+
+	<!-- Verify nonces -->
+	<rule ref="WordPress.Security.NonceVerification"/>
+
+	<!-- Escape output -->
+	<rule ref="WordPress.Security.EscapeOutput"/>
+
+	<!-- Validate and sanitize input -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
+
+	<!-- Database queries -->
+	<rule ref="WordPress.DB.PreparedSQL"/>
+	<rule ref="WordPress.DB.DirectDatabaseQuery"/>
+
+	<!-- Tests can use different standards -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow test methods without doc blocks -->
+	<rule ref="Squiz.Commenting.FunctionComment.Missing">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+</ruleset>

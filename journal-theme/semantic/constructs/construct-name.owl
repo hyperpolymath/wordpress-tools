@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+          xml:base="https://sinople.example.com/constructs/construct-name"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+          xmlns:sin="https://sinople.example.com/vocab#"
+          ontologyIRI="https://sinople.example.com/constructs/construct-name">
+
+    <!-- 🧵 Class Definitions -->
+    <!-- Declare symbolic types your construct belongs to -->
+    <Class rdf:about="sin:Construct"/>
+    <Class rdf:about="sin:MythicEntity"/>
+    <Class rdf:about="sin:FogBound"/>
+
+    <!-- 🧶 Individual Construct Declaration -->
+    <!-- This is your character or symbolic entity -->
+    <NamedIndividual rdf:about="sin:ConstructName">
+        <!-- Attach multiple class memberships -->
+        <rdf:type rdf:resource="sin:Construct"/>
+        <rdf:type rdf:resource="sin:MythicEntity"/>
+        <sin:hasThread rdf:datatype="xsd:string">Textual thread or motif</sin:hasThread>
+        <sin:embodies rdf:datatype="xsd:string">Symbolic quality or emotional resonance</sin:embodies>
+        <sin:entanglesWith rdf:resource="sin:OtherConstruct"/>
+    </NamedIndividual>
+
+    <!-- 🔗 Related Construct -->
+    <!-- Define linked constructs by reference -->
+    <NamedIndividual rdf:about="sin:OtherConstruct">
+        <rdf:type rdf:resource="sin:Construct"/>
+    </NamedIndividual>
+
+    <!-- 🧠 Properties -->
+    <!-- Define custom properties used above -->
+    <DatatypeProperty rdf:about="sin:hasThread">
+        <rdfs:domain rdf:resource="sin:Construct"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+    </DatatypeProperty>
+
+    <ObjectProperty rdf:about="sin:entanglesWith">
+        <rdfs:domain rdf:resource="sin:Construct"/>
+        <rdfs:range rdf:resource="sin:Construct"/>
+    </ObjectProperty>
+
+</Ontology>

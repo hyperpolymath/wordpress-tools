@@ -1,0 +1,27 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["tailwind", "apply", "layer"]
+      }
+    ],
+    "color-function-notation": "modern",
+    "alpha-value-notation": "number",
+    "color-hex-length": "long",
+    "declaration-block-no-redundant-longhand-properties": true,
+    "shorthand-property-no-redundant-values": true,
+    "declaration-no-important": true,
+    "selector-max-id": 0,
+    "max-nesting-depth": 4,
+    "no-descending-specificity": null,
+    "at-rule-no-vendor-prefix": true,
+    "media-feature-name-no-vendor-prefix": true,
+    "property-no-vendor-prefix": true,
+    "selector-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true
+  }
+}

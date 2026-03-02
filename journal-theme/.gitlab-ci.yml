@@ -1,0 +1,278 @@
+# GitLab CI/CD Pipeline for Sinople Theme
+# Implements RSR-compliant CI/CD with parallel jobs
+
+variables:
+  MYSQL_DATABASE: wordpress_test
+  MYSQL_ROOT_PASSWORD: root
+  WP_VERSION: latest
+  PHP_VERSION: "8.3"
+  NODE_VERSION: "20"
+
+stages:
+  - lint
+  - test
+  - security
+  - build
+  - deploy
+
+# Cache configuration
+.cache-composer: &cache-composer
+  cache:
+    key: composer-$CI_COMMIT_REF_SLUG
+    paths:
+      - vendor/
+      - .composer-cache/
+
+.cache-npm: &cache-npm
+  cache:
+    key: npm-$CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+      - .npm/
+
+.cache-cargo: &cache-cargo
+  cache:
+    key: cargo-$CI_COMMIT_REF_SLUG
+    paths:
+      - assets/wasm/target/
+      - .cargo/
+
+# PHP Linting
+lint:php:
+  stage: lint
+  image: php:${PHP_VERSION}-cli
+  <<: *cache-composer
+  before_script:
+    - apt-get update && apt-get install -y git zip unzip
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-progress
+  script:
+    - vendor/bin/phpcs --standard=WordPress --report=summary,source *.php inc/ templates/
+    - vendor/bin/phpstan analyse --no-progress
+  allow_failure: false
+
+# JavaScript Linting
+lint:js:
+  stage: lint
+  image: node:${NODE_VERSION}
+  <<: *cache-npm
+  before_script:
+    - npm ci
+  script:
+    - npm run lint:js
+    - npm run lint:scss
+  allow_failure: false
+
+# Rust Linting
+lint:rust:
+  stage: lint
+  image: rust:latest
+  <<: *cache-cargo
+  before_script:
+    - rustup component add rustfmt clippy
+  script:
+    - cd assets/wasm
+    - cargo fmt -- --check
+    - cargo clippy --all-targets --all-features -- -D warnings
+  allow_failure: false
+
+# PHP Unit Tests (Matrix)
+.test-php-template: &test-php
+  stage: test
+  services:
+    - mariadb:10.11
+  variables:
+    MYSQL_DATABASE: wordpress_test
+    MYSQL_ROOT_PASSWORD: root
+  <<: *cache-composer
+  before_script:
+    - apt-get update && apt-get install -y git zip unzip mariadb-client subversion
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-progress
+    - bash bin/install-wp-tests.sh wordpress_test root root mariadb $WP_VERSION true
+  script:
+    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --testdox
+  coverage: '/^\s*Lines:\s*\d+\.\d+\%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage/
+
+test:php:8.1:
+  <<: *test-php
+  image: php:8.1-cli
+  variables:
+    PHP_VERSION: "8.1"
+
+test:php:8.2:
+  <<: *test-php
+  image: php:8.2-cli
+  variables:
+    PHP_VERSION: "8.2"
+
+test:php:8.3:
+  <<: *test-php
+  image: php:8.3-cli
+  variables:
+    PHP_VERSION: "8.3"
+
+# JavaScript Tests
+test:js:
+  stage: test
+  image: node:${NODE_VERSION}
+  <<: *cache-npm
+  before_script:
+    - npm ci
+  script:
+    - npm test -- --coverage --coverageReporters=text --coverageReporters=cobertura
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+
+# Rust Tests
+test:rust:
+  stage: test
+  image: rust:latest
+  <<: *cache-cargo
+  before_script:
+    - rustup target add wasm32-unknown-unknown
+  script:
+    - cd assets/wasm
+    - cargo test --verbose
+    - cargo test --target wasm32-unknown-unknown
+  allow_failure: false
+
+# Security Audits (Parallel)
+security:npm:
+  stage: security
+  image: node:${NODE_VERSION}
+  <<: *cache-npm
+  before_script:
+    - npm ci
+  script:
+    - npm audit --audit-level=moderate
+  allow_failure: true
+
+security:composer:
+  stage: security
+  image: php:${PHP_VERSION}-cli
+  <<: *cache-composer
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-progress
+  script:
+    - composer audit
+  allow_failure: true
+
+security:cargo:
+  stage: security
+  image: rust:latest
+  <<: *cache-cargo
+  before_script:
+    - cargo install cargo-audit
+  script:
+    - cd assets/wasm && cargo audit
+  allow_failure: true
+
+# Container Security Scan
+security:container:
+  stage: security
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t sinople-theme:$CI_COMMIT_SHA -f Containerfile .
+    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --severity HIGH,CRITICAL sinople-theme:$CI_COMMIT_SHA
+  allow_failure: true
+
+# Build Assets
+build:assets:
+  stage: build
+  image: node:${NODE_VERSION}
+  <<: *cache-npm
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y
+    - export PATH="$HOME/.cargo/bin:$PATH"
+    - rustup target add wasm32-unknown-unknown
+    - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - assets/css/min/
+      - assets/js/dist/
+      - assets/wasm/pkg/
+    expire_in: 1 week
+
+# Build Container
+build:container:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - main
+    - tags
+  script:
+    - docker build -t sinople-theme:$CI_COMMIT_SHA -f Containerfile .
+    - docker tag sinople-theme:$CI_COMMIT_SHA sinople-theme:latest
+  artifacts:
+    reports:
+      dotenv: build.env
+
+# Deploy to Development
+deploy:dev:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync
+  script:
+    - echo "Deploying to development environment..."
+    - rsync -avz --exclude=node_modules --exclude=target . $DEV_SERVER:/var/www/sinople-dev/
+  environment:
+    name: development
+    url: https://dev.example.com
+  only:
+    - develop
+  when: manual
+
+# Deploy to Production
+deploy:prod:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync
+  script:
+    - echo "Deploying to production environment..."
+    - rsync -avz --exclude=node_modules --exclude=target . $PROD_SERVER:/var/www/sinople-prod/
+  environment:
+    name: production
+    url: https://example.com
+  only:
+    - tags
+    - main
+  when: manual
+
+# Generate SBOM
+sbom:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - npm install -g @cyclonedx/cyclonedx-npm
+    - cyclonedx-npm --output-file sbom.json
+  artifacts:
+    paths:
+      - sbom.json
+    expire_in: 30 days
+  only:
+    - tags

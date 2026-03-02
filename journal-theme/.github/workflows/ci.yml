@@ -1,0 +1,326 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly on Mondays at 9am UTC
+    - cron: '0 9 * * 1'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  lint-php:
+    name: PHP Lint & Code Standards
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --standard=WordPress --report=checkstyle | cs2pr
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github
+        continue-on-error: true
+
+  test-php:
+    name: PHP Tests (PHP ${{ matrix.php }}, WP ${{ matrix.wordpress }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+        wordpress: ['6.4', '6.5', 'latest']
+
+    services:
+      mysql:
+        image: mariadb:10.11
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, mysql
+          coverage: xdebug
+          tools: composer
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install WordPress test suite
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wordpress }} true
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml --testdox
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          flags: php-${{ matrix.php }}-wp-${{ matrix.wordpress }}
+          name: php-${{ matrix.php }}-wp-${{ matrix.wordpress }}
+
+  lint-js:
+    name: JavaScript/TypeScript Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint:js
+
+      - name: Run Stylelint
+        run: npm run lint:scss
+
+  test-js:
+    name: JavaScript Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests
+        run: npm test -- --coverage --coverageReporters=json --coverageReporters=lcov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage/lcov.info
+          flags: javascript
+          name: javascript
+
+  test-rust:
+    name: Rust/WASM Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry
+        uses: actions/cache@v5
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo index
+        uses: actions/cache@v5
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo build
+        uses: actions/cache@v5
+        with:
+          path: assets/wasm/target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Run rustfmt
+        run: cd assets/wasm && cargo fmt -- --check
+
+      - name: Run clippy
+        run: cd assets/wasm && cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Run tests
+        run: cd assets/wasm && cargo test
+
+      - name: Build WASM
+        run: cd assets/wasm && cargo build --release --target wasm32-unknown-unknown
+
+  build:
+    name: Build Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build all assets
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: build-artifacts
+          path: |
+            assets/css/min/
+            assets/js/dist/
+            assets/wasm/pkg/
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Composer audit
+        run: composer audit
+        continue-on-error: true
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+
+      - name: Cargo audit
+        run: cd assets/wasm && cargo audit
+        continue-on-error: true
+
+  container:
+    name: Build & Scan Container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build container
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Containerfile
+          push: false
+          tags: sinople-theme:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: sinople-theme:test
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  accessibility:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run accessibility tests
+        run: npm run test:a11y
+        continue-on-error: true

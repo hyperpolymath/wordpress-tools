@@ -1,0 +1,8 @@
+@prefix schema: <https://schema.org/> .
+@prefix sin: <https://sinople.example.com/vocab#> .
+
+sin:fog-threading a schema:DefinedTerm ;
+    schema:name "Fog Threading" ;
+    schema:termCode "fog-threading" ;
+    schema:description "Motif symbolizing veiled emotional resistance and layered mythic presence." ;
+    schema:inDefinedTermSet <https://sinople.example.com/glosses> .

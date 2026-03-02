@@ -1,0 +1,128 @@
+// FlatBuffers schema for Sinople WordPress data
+// Provides zero-copy serialization for high-performance data exchange
+
+namespace Sinople;
+
+// Base metadata for all content types
+table Metadata {
+  id: ulong;
+  created_at: long;
+  updated_at: long;
+  author_id: ulong;
+  author_name: string;
+  language: string;
+  status: string;
+}
+
+// Post/Article structure
+table Post {
+  metadata: Metadata;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  post_type: string;
+  categories: [string];
+  tags: [string];
+  emotions: [string];
+  colors: [string];
+  motifs: [string];
+  featured_image: Image (required);
+  reading_time: float;
+  word_count: uint;
+  custom_fields: [CustomField];
+}
+
+// Image/Media structure
+table Image {
+  id: ulong;
+  url: string;
+  width: uint;
+  height: uint;
+  mime_type: string;
+  alt_text: string;
+  sizes: [ImageSize];
+}
+
+table ImageSize {
+  name: string;
+  url: string;
+  width: uint;
+  height: uint;
+}
+
+// Custom fields (flexible key-value)
+table CustomField {
+  key: string;
+  value: string;
+  type: string; // string, int, float, bool, json
+}
+
+// User/Author structure
+table User {
+  id: ulong;
+  username: string;
+  display_name: string;
+  email: string;
+  bio: string;
+  avatar_url: string;
+  social_links: [SocialLink];
+  post_count: uint;
+}
+
+table SocialLink {
+  platform: string;
+  url: string;
+  rel: string; // For rel=me
+}
+
+// Comment structure
+table Comment {
+  id: ulong;
+  post_id: ulong;
+  author_name: string;
+  author_email: string;
+  author_url: string;
+  content: string;
+  created_at: long;
+  parent_id: ulong;
+  status: string;
+  is_webmention: bool;
+}
+
+// Taxonomy term
+table Term {
+  id: ulong;
+  name: string;
+  slug: string;
+  taxonomy: string;
+  description: string;
+  count: uint;
+  meta: [CustomField];
+}
+
+// Site/Blog structure
+table Site {
+  name: string;
+  description: string;
+  url: string;
+  language: string;
+  timezone: string;
+  post_count: uint;
+  page_count: uint;
+  last_updated: long;
+}
+
+// NDJSON-compatible feed structure
+table Feed {
+  site: Site;
+  posts: [Post];
+  version: string;
+  generated_at: long;
+}
+
+// Root type for single post
+root_type Post;
+
+// Root type for feed
+// root_type Feed;

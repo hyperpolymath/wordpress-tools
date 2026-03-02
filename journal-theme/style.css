@@ -1,0 +1,20 @@
+/*
+Theme Name: Sinople
+Theme URI: https://github.com/hyperpolymath/sinople-theme
+Author: Jonathan
+Author URI: https://github.com/hyperpolymath
+Description: WordPress journal theme for layered, narrative-rich content. Named after a heraldic pigment that transformed from red to green, embodying contradiction and agency. CSS-first architecture with WCAG 2.3 AAA compliance, IndieWeb integration, semantic web support via JSON-LD, and experimental browser features. Built for poetic storytelling, resistance, and decentralized publishing.
+Version: 0.1.0
+Requires at least: 6.4
+Tested up to: 6.5
+Requires PHP: 8.1
+License: GPL v3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Text Domain: sinople
+Tags: blog, journal, accessibility-ready, custom-colors, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, semantic-markup, threaded-comments, translation-ready, indieweb
+
+Sinople is stitched with care, contradiction, and quiet resistance.
+*/
+
+/* Core styles are loaded from assets/css/main.css via functions.php */
+/* This file serves as the WordPress theme header only */

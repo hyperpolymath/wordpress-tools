@@ -1,0 +1,125 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: PHP Security Check
+on: [push, pull_request]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Basic PHP Security Scan
+        run: |
+          # Check for dangerous functions
+          DANGEROUS=$(grep -rE 'eval\s*\(|exec\s*\(|system\s*\(|passthru\s*\(|shell_exec\s*\(|`.*\$' --include="*.php" . 2>/dev/null | grep -v 'vendor/' | head -10 || true)
+          if [ -n "$DANGEROUS" ]; then
+            echo "::warning::Potentially dangerous PHP functions found"
+            echo "$DANGEROUS"
+          fi
+
+          # Check for SQL injection patterns
+          SQLI=$(grep -rE '\$_(GET|POST|REQUEST).*query|mysqli_query.*\$_' --include="*.php" . 2>/dev/null | grep -v 'vendor/' | head -5 || true)
+          if [ -n "$SQLI" ]; then
+            echo "::warning::Potential SQL injection patterns"
+            echo "$SQLI"
+          fi
+
+          # Check for XSS patterns
+          XSS=$(grep -rE 'echo\s+\$_(GET|POST|REQUEST)' --include="*.php" . 2>/dev/null | grep -v 'vendor/' | head -5 || true)
+          if [ -n "$XSS" ]; then
+            echo "::warning::Potential XSS patterns (unescaped output)"
+            echo "$XSS"
+          fi
+
+          echo "✅ Basic PHP security scan completed"
+
+  sanctify-analysis:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # Don't fail build if sanctify unavailable
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Cache sanctify-php build
+        uses: actions/cache@v5
+        with:
+          path: ~/.cabal
+          key: ${{ runner.os }}-sanctify-${{ hashFiles('**/sanctify-php.cabal') }}
+          restore-keys: |
+            ${{ runner.os }}-sanctify-
+
+      - name: Build sanctify-php
+        run: |
+          # Clone and build sanctify-php
+          git clone --depth 1 https://github.com/hyperpolymath/sanctify-php.git /tmp/sanctify-php
+          cd /tmp/sanctify-php
+
+          # Try nix build first, fall back to cabal
+          if nix build 2>/dev/null; then
+            cp result/bin/sanctify ~/.local/bin/sanctify || true
+          else
+            echo "Nix build unavailable, trying cabal..."
+            nix-shell -p ghc cabal-install --run "cabal update && cabal install --installdir=$HOME/.local/bin" || true
+          fi
+
+      - name: Run sanctify-php analysis
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          if command -v sanctify &>/dev/null; then
+            echo "🔍 Running sanctify-php analysis..."
+            sanctify analyze . 2>&1 | tee sanctify-report.txt || true
+
+            # Check for critical issues
+            if grep -q '\[High\]' sanctify-report.txt; then
+              echo "::error::High severity security issues found"
+              cat sanctify-report.txt
+              exit 1
+            elif grep -q '\[Medium\]' sanctify-report.txt; then
+              echo "::warning::Medium severity security issues found"
+              cat sanctify-report.txt
+            fi
+
+            echo "✅ sanctify-php analysis completed"
+          else
+            echo "⚠️ sanctify-php not available, skipping AST-based analysis"
+            echo "Install from: https://github.com/hyperpolymath/sanctify-php"
+          fi
+
+      - name: Upload sanctify report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanctify-report
+          path: sanctify-report.txt
+          if-no-files-found: ignore
+
+  aegis-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Verify php-aegis integration
+        run: |
+          # Check that php-aegis is installed
+          if php -r "echo class_exists('\PhpAegis\Sanitizer') ? 'loaded' : 'not-found';" | grep -q 'loaded'; then
+            echo "✅ php-aegis classes available"
+          else
+            echo "::warning::php-aegis not loaded - fallbacks will be used"
+          fi
+
+          # Verify TurtleEscaper for semantic web features
+          if php -r "echo class_exists('\PhpAegis\TurtleEscaper') ? 'loaded' : 'not-found';" | grep -q 'loaded'; then
+            echo "✅ TurtleEscaper available for RDF output"
+          fi

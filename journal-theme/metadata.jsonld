@@ -1,0 +1,22 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://sinople.example.com/constructs/eteri-mistveil",
+      "name": "Eteri Mistveil",
+      "description": "Fog-woven construct of stitched resistance and veiled agency.",
+      "image": "https://sinople.example.com/assets/images/eteri.jpg"
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://sinople.example.com/field-notes/resistance-breathing",
+      "headline": "Resistance Breathing",
+      "author": {
+        "@id": "https://sinople.example.com/constructs/eteri-mistveil"
+      },
+      "datePublished": "2025-07-21",
+      "keywords": ["fog", "construct", "agency", "thread"]
+    }
+  ]
+}

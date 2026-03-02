@@ -1,0 +1,22 @@
+parameters:
+  level: 8
+  paths:
+    - inc
+    - functions.php
+    - index.php
+    - header.php
+    - footer.php
+    - sidebar.php
+  bootstrapFiles:
+    - vendor/autoload.php
+  excludePaths:
+    - vendor
+    - node_modules
+    - tests
+  ignoreErrors:
+    # WordPress core functions
+    - '#Function (get_bloginfo|get_template_directory_uri|wp_enqueue_script|wp_enqueue_style) not found#'
+    - '#Function (add_theme_support|register_nav_menus|register_sidebar) not found#'
+  treatPhpDocTypesAsCertain: false
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false

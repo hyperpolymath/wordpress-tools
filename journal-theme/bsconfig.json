@@ -1,0 +1,29 @@
+{
+  "name": "sinople-theme",
+  "version": "0.1.0",
+  "sources": [
+    {
+      "dir": "assets/rescript",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@rescript/core"
+  ],
+  "warnings": {
+    "error": "+101"
+  },
+  "bsc-flags": [
+    "-bs-super-errors"
+  ],
+  "ppx-flags": [],
+  "namespace": true,
+  "refmt": 3
+}

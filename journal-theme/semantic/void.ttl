@@ -1,0 +1,16 @@
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix sin: <https://sinople.example.com/vocab#> .
+
+<https://sinople.example.com/semantic/dataset>
+    a void:Dataset ;
+    dcterms:title "Sinople Journal Semantic Archive" ;
+    dcterms:description "Structured data describing symbolic constructs, field notes, glosses, and emotional threads from the Sinople Journal WordPress theme." ;
+    dcterms:creator [ foaf:name "Jonathan" ] ;
+    void:uriSpace "https://sinople.example.com/" ;
+    void:vocabulary <https://schema.org/> , <http://xmlns.com/foaf/0.1/> , <https://sinople.example.com/vocab#> ;
+    void:exampleResource <https://sinople.example.com/constructs/eteri-mistveil> ;
+    void:feature void:rdfDump , void:sparqlEndpoint ;
+    void:dataDump <https://sinople.example.com/semantic/sinople.ttl> .
+

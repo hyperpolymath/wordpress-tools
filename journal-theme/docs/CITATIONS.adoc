@@ -1,0 +1,36 @@
+= sinople-theme - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{sinople-theme_2025,
+  author = {Polymath, Hyper},
+  title = {sinople-theme},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/sinople-theme},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _sinople-theme_ [Computer software]. Available at: https://github.com/hyperpolymath/sinople-theme
+
+== OSCOLA
+
+Hyper Polymath, 'sinople-theme' (2025) <https://github.com/hyperpolymath/sinople-theme>
+
+== MLA
+
+Polymath, Hyper. "sinople-theme." 2025, github.com/hyperpolymath/sinople-theme.
+
+== APA 7
+
+Polymath, H. (2025). _sinople-theme_ [Computer software]. GitHub. https://github.com/hyperpolymath/sinople-theme
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

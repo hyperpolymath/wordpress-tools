@@ -1,0 +1,135 @@
+/**
+ * CSS Custom Properties (Runtime Variables)
+ *
+ * These can be modified dynamically via JavaScript
+ * for theming, accessibility, and user preferences.
+ */
+
+:root {
+  // Color scheme - Light mode (default)
+  --color-bg: #{$color-fog-100};
+  --color-bg-subtle: #{$color-fog-200};
+  --color-bg-muted: #{$color-fog-300};
+
+  --color-text: #{$color-fog-900};
+  --color-text-muted: #{$color-fog-700};
+  --color-text-subtle: #{$color-fog-500};
+
+  --color-border: #{$color-fog-300};
+  --color-border-subtle: #{$color-fog-200};
+
+  --color-accent: #{$color-sinople};
+  --color-accent-hover: #{$color-sinople-dark};
+  --color-accent-light: #{$color-sinople-light};
+
+  // Semantic colors
+  --color-success: #{$color-success};
+  --color-warning: #{$color-warning};
+  --color-error: #{$color-error};
+  --color-info: #{$color-info};
+
+  // Typography
+  --font-sans: #{$font-sans};
+  --font-serif: #{$font-serif};
+  --font-mono: #{$font-mono};
+  --font-base: var(--font-sans);
+
+  // Font sizes (user-adjustable)
+  --text-scale: 1;
+  --text-xs: calc(#{$text-xs} * var(--text-scale));
+  --text-sm: calc(#{$text-sm} * var(--text-scale));
+  --text-base: calc(#{$text-base} * var(--text-scale));
+  --text-lg: calc(#{$text-lg} * var(--text-scale));
+  --text-xl: calc(#{$text-xl} * var(--text-scale));
+  --text-2xl: calc(#{$text-2xl} * var(--text-scale));
+  --text-3xl: calc(#{$text-3xl} * var(--text-scale));
+  --text-4xl: calc(#{$text-4xl} * var(--text-scale));
+
+  // Line height
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  --leading-loose: 2;
+
+  // Spacing
+  --spacing-unit: 1rem;
+
+  // Focus indicators (WCAG AAA)
+  --focus-color: #0066cc;
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --focus-style: solid;
+
+  // Transitions (respects prefers-reduced-motion)
+  --transition-fast: #{$transition-fast};
+  --transition-base: #{$transition-base};
+  --transition-slow: #{$transition-slow};
+
+  // Container widths
+  --container-sm: #{$breakpoint-sm};
+  --container-md: #{$breakpoint-md};
+  --container-lg: #{$breakpoint-lg};
+  --container-xl: #{$breakpoint-xl};
+  --container-2xl: #{$breakpoint-2xl};
+
+  // Z-index
+  --z-dropdown: #{$z-dropdown};
+  --z-sticky: #{$z-sticky};
+  --z-fixed: #{$z-fixed};
+  --z-modal: #{$z-modal};
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #{$color-fog-900};
+    --color-bg-subtle: #{$color-fog-800};
+    --color-bg-muted: #{$color-fog-700};
+
+    --color-text: #{$color-fog-100};
+    --color-text-muted: #{$color-fog-300};
+    --color-text-subtle: #{$color-fog-400};
+
+    --color-border: #{$color-fog-700};
+    --color-border-subtle: #{$color-fog-800};
+  }
+}
+
+// Dark mode (user preference)
+[data-theme="dark"] {
+  --color-bg: #{$color-fog-900};
+  --color-bg-subtle: #{$color-fog-800};
+  --color-bg-muted: #{$color-fog-700};
+
+  --color-text: #{$color-fog-100};
+  --color-text-muted: #{$color-fog-300};
+  --color-text-subtle: #{$color-fog-400};
+
+  --color-border: #{$color-fog-700};
+  --color-border-subtle: #{$color-fog-800};
+}
+
+// High contrast mode
+[data-contrast="high"],
+@media (prefers-contrast: high) {
+  :root {
+    --color-text: #000;
+    --color-bg: #fff;
+    --color-accent: #0066cc;
+    --focus-width: 4px;
+  }
+
+  [data-theme="dark"] {
+    --color-text: #fff;
+    --color-bg: #000;
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+  }
+}

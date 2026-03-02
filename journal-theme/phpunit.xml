@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         executionOrder="random"
+         cacheDirectory=".phpunit.cache"
+         testdox="true">
+    <testsuites>
+        <testsuite name="Sinople Theme Test Suite">
+            <directory>tests/php</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">inc</directory>
+        </include>
+        <exclude>
+            <directory>vendor</directory>
+            <directory>tests</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="coverage/html"/>
+            <clover outputFile="coverage/clover.xml"/>
+            <text outputFile="php://stdout" showUncoveredFiles="true"/>
+        </report>
+    </coverage>
+
+    <php>
+        <const name="WP_TESTS_PHPUNIT_POLYFILLS_PATH" value="vendor/yoast/phpunit-polyfills"/>
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php"/>
+    </php>
+
+    <logging>
+        <junit outputFile="coverage/junit.xml"/>
+    </logging>
+</phpunit>

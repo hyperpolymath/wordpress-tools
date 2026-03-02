@@ -1,0 +1,6 @@
+@prefix sin: <https://sinople.example.com/vocab#> .
+@prefix schema: <https://schema.org/> .
+
+sin:threaded-inspiration a sin:Portal ;
+  sin:portalURL <https://melanierichard.github.io/thread/> ;
+  sin:hasSignalText "A minimal theme soaked in emotional texture and fog-threaded design." .

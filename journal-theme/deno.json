@@ -1,0 +1,57 @@
+{
+  "name": "sinople-theme",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "dev": "deno task watch:scss & deno task watch:rescript",
+    "build": "deno task build:scss && deno task build:rescript && deno task build:wasm && deno task optimize",
+    "build:scss": "sass --style=compressed --no-source-map assets/scss:assets/css",
+    "build:rescript": "rescript build",
+    "build:wasm": "cd assets/wasm && cargo build --release --target wasm32-unknown-unknown && wasm-opt -Oz -o ../js/dist/sinople.wasm target/wasm32-unknown-unknown/release/sinople_wasm.wasm",
+    "watch:scss": "sass --watch --style=expanded assets/scss:assets/css",
+    "watch:rescript": "rescript build -w",
+    "optimize": "deno task optimize:css && deno task optimize:images",
+    "optimize:css": "deno run --allow-read --allow-write scripts/optimize-css.ts",
+    "optimize:images": "deno run --allow-read --allow-write scripts/optimize-images.ts",
+    "lint": "deno lint && deno task lint:scss && deno task lint:php",
+    "lint:scss": "stylelint 'assets/scss/**/*.scss'",
+    "lint:php": "phpcs --standard=WordPress .",
+    "format": "deno fmt",
+    "test": "deno test --allow-read --allow-write --allow-env tests/",
+    "test:coverage": "deno test --coverage=coverage/ tests/",
+    "test:a11y": "deno run --allow-read --allow-write --allow-net scripts/test-accessibility.ts",
+    "test:semantics": "deno run --allow-read --allow-write scripts/test-semantics.ts",
+    "server:nginx": "deno run --allow-read --allow-write --allow-env scripts/generate-nginx-config.ts",
+    "server:apache": "deno run --allow-read --allow-write --allow-env scripts/generate-apache-config.ts",
+    "server:caddy": "deno run --allow-read --allow-write --allow-env scripts/generate-caddy-config.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/fs": "jsr:@std/fs@1",
+    "@std/path": "jsr:@std/path@1",
+    "@std/testing": "jsr:@std/testing@1"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.window", "dom", "dom.iterable"]
+  },
+  "lint": {
+    "include": ["scripts/", "tests/"],
+    "exclude": ["assets/rescript/lib/"],
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": true,
+    "proseWrap": "preserve",
+    "include": ["scripts/", "tests/"]
+  },
+  "test": {
+    "include": ["tests/"]
+  }
+}

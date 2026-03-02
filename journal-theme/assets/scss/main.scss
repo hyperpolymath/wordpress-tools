@@ -1,0 +1,45 @@
+/**
+ * Sinople Theme Main Stylesheet
+ *
+ * CSS-first architecture with modern features,
+ * WCAG 2.3 AAA compliance, and fog-bound aesthetic.
+ *
+ * @package Sinople
+ * @since 0.1.0
+ */
+
+// ============================================================================
+// Import Order:
+// 1. Variables & Custom Properties
+// 2. Base & Reset
+// 3. Components
+// 4. Spans
+// 5. Accessibility
+// 6. Utilities
+// ============================================================================
+
+@import 'base/variables';
+@import 'base/custom-properties';
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/layout';
+
+@import 'components/navigation';
+@import 'components/header';
+@import 'components/footer';
+@import 'components/cards';
+@import 'components/forms';
+@import 'components/buttons';
+
+@import 'spans/field-notes';
+@import 'spans/constructs';
+@import 'spans/glosses';
+@import 'spans/portals';
+
+@import 'accessibility/focus';
+@import 'accessibility/skip-links';
+@import 'accessibility/reduced-motion';
+@import 'accessibility/high-contrast';
+
+@import 'utils/helpers';
+@import 'utils/print';

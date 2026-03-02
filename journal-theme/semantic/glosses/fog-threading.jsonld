@@ -1,0 +1,7 @@
+{
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "name": "Fog Threading",
+  "description": "A symbolic motif in Sinople denoting obscured resistance through layered storytelling.",
+  "inDefinedTermSet": "https://sinople.example.com/glosses"
+}

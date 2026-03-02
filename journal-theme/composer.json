@@ -1,0 +1,116 @@
+{
+  "name": "hyperpolymath/sinople-theme",
+  "description": "WordPress journal theme for layered, narrative-rich content with WCAG 2.3 AAA compliance",
+  "type": "wordpress-theme",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Jonathan",
+      "email": "jonathan@example.com",
+      "role": "Lead Developer"
+    }
+  ],
+  "keywords": [
+    "wordpress",
+    "theme",
+    "accessibility",
+    "indieweb",
+    "semantic-web",
+    "microformats",
+    "wcag-aaa"
+  ],
+  "homepage": "https://github.com/hyperpolymath/sinople-theme",
+  "support": {
+    "issues": "https://github.com/hyperpolymath/sinople-theme/issues",
+    "source": "https://github.com/hyperpolymath/sinople-theme",
+    "docs": "https://github.com/hyperpolymath/sinople-theme/blob/main/README.md",
+    "security": "https://github.com/hyperpolymath/sinople-theme/blob/main/SECURITY.md"
+  },
+  "require": {
+    "php": ">=8.1",
+    "composer/installers": "^2.2",
+    "hyperpolymath/php-aegis": "^0.1"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/hyperpolymath/php-aegis"
+    }
+  ],
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpunit/phpunit": "^10.5",
+    "wp-coding-standards/wpcs": "^3.0",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpstan/phpstan": "^1.10",
+    "phpstan/extension-installer": "^1.3",
+    "szepeviktor/phpstan-wordpress": "^1.3",
+    "yoast/phpunit-polyfills": "^2.0",
+    "mockery/mockery": "^1.6",
+    "brain/monkey": "^2.6"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true,
+      "composer/installers": true
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "platform": {
+      "php": "8.1"
+    }
+  },
+  "scripts": {
+    "lint": [
+      "@php ./vendor/bin/phpcs"
+    ],
+    "format": [
+      "@php ./vendor/bin/phpcbf"
+    ],
+    "analyze": [
+      "@php ./vendor/bin/phpstan analyse --memory-limit=1G"
+    ],
+    "test": [
+      "@php ./vendor/bin/phpunit"
+    ],
+    "test:coverage": [
+      "@php ./vendor/bin/phpunit --coverage-html coverage/html --coverage-text"
+    ],
+    "audit": [
+      "@composer audit"
+    ],
+    "check": [
+      "@lint",
+      "@analyze",
+      "@test"
+    ]
+  },
+  "autoload": {
+    "files": [
+      "inc/setup.php",
+      "inc/enqueue.php",
+      "inc/security.php",
+      "inc/accessibility.php",
+      "inc/semantic.php",
+      "inc/indieweb.php",
+      "inc/privacy.php",
+      "inc/performance.php",
+      "inc/void-integration.php",
+      "inc/modern-features.php",
+      "inc/serialization.php",
+      "inc/ndjson-feed.php",
+      "inc/flatbuffers.php",
+      "inc/capnproto.php",
+      "inc/spans.php",
+      "inc/taxonomies.php",
+      "inc/aegis-integration.php",
+      "inc/turtle-output.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sinople\\Tests\\": "tests/php/"
+    }
+  }
+}

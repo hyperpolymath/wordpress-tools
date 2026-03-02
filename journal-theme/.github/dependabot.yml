@@ -1,0 +1,74 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "hyperpolymath"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "deno"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for breaking changes
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Composer dependencies
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "hyperpolymath"
+    labels:
+      - "dependencies"
+      - "composer"
+      - "php"
+    commit-message:
+      prefix: "composer"
+      include: "scope"
+
+  # Cargo dependencies
+  - package-ecosystem: "cargo"
+    directory: "/assets/wasm"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "hyperpolymath"
+    labels:
+      - "dependencies"
+      - "cargo"
+      - "rust"
+    commit-message:
+      prefix: "cargo"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "hyperpolymath"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
