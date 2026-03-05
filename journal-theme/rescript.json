@@ -3,21 +3,27 @@
   "version": "0.1.0",
   "sources": [
     {
-      "dir": "assets/rescript/src",
+      "dir": "assets/rescript",
       "subdirs": true
     }
   ],
   "package-specs": [
     {
-      "module": "esmodule",
-      "in-source": false
+      "module": "es6",
+      "in-source": true
     }
   ],
-  "suffix": ".res.js",
-  "bs-dependencies": [],
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@rescript/core"
+  ],
   "warnings": {
-    "number": "+a-4-9-27-40-42-44-48-50-61-102",
-    "error": "+5+6+8+101"
+    "error": "+101"
   },
-  "bsc-flags": ["-bs-no-version-header"]
+  "bsc-flags": [
+    "-bs-super-errors"
+  ],
+  "ppx-flags": [],
+  "namespace": true,
+  "refmt": 3
 }

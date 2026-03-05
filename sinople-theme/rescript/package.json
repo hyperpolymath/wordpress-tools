@@ -17,6 +17,6 @@
   "author": "Sinople Theme Contributors",
   "license": "GPL-2.0-or-later",
   "devDependencies": {
-    "rescript": "^11.0.0"
+    "rescript": "^12.0.0"
   }
 }
