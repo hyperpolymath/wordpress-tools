@@ -98,8 +98,8 @@ echo "[4/5] Checking WordPress installation..."
 if [ ! -f "$WHARF_ROOT/sites/$DOMAIN/html/wp-config.php" ]; then
     echo "  No WordPress found. Downloading..."
     curl -sL https://wordpress.org/latest.tar.gz | tar xz -C /tmp/
-    cp -r /tmp/wordpress/* "$WHARF_ROOT/sites/$DOMAIN/html/"
-    rm -rf /tmp/wordpress
+    cp -r "$HYPATIA_TMPDIR/wordpress"/* "$WHARF_ROOT/sites/$DOMAIN/html/"
+    rm -rf "$HYPATIA_TMPDIR/wordpress"
 
     # Write wp-config.php pointing DB through the yacht-agent proxy
     cat > "$WHARF_ROOT/sites/$DOMAIN/html/wp-config.php" << 'WPEOF'
