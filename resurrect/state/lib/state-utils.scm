@@ -53,7 +53,7 @@
 (define (save-state state filename)
   (with-output-to-file filename
     (lambda ()
-      (display ";; SPDX-License-Identifier: AGPL-3.0-or-later\n")
+      (display ";; SPDX-License-Identifier: PMPL-1.0-or-later\n")
       (display ";; SOCP State - Auto-generated, do not edit manually\n")
       (display ";; Updated: ")
       (display (date->string (current-date) "~Y-~m-~dT~H:~M:~SZ"))

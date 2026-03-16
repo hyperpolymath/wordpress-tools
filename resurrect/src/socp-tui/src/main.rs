@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 //! SOCP TUI - Site Operations Control Plane Terminal Interface
 //!
 //! A ncurses-style dashboard for managing multiple web sites

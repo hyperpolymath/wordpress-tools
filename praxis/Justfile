@@ -533,7 +533,7 @@ fix-spdx:
     @find wp_praxis_core -name "*.rs" -type f | while read file; do \
         if ! grep -q "SPDX-License-Identifier" "$$file"; then \
             tmpfile=$$(mktemp); \
-            { echo "// SPDX-License-Identifier: AGPL-3.0-or-later"; \
+            { echo "// SPDX-License-Identifier: PMPL-1.0-or-later"; \
               echo "// SPDX-FileCopyrightText: 2025 WP Praxis Contributors"; \
               echo "//"; \
               cat "$$file"; \

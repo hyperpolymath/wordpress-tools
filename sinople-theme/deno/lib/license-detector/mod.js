@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 // License Detection Module
 // Detects licenses from multiple sources: security.txt, LICENSE files, meta tags, WordPress headers
 
