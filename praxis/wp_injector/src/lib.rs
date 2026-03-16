@@ -1,6 +1,7 @@
 // WP Praxis Injector Library
 // Core functionality for symbolic injection into WordPress
 
+#![forbid(unsafe_code)]
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

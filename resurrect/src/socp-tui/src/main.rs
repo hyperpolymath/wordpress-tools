@@ -4,6 +4,7 @@
 //! A ncurses-style dashboard for managing multiple web sites
 //! through a centralized, security-hardened control plane.
 
+#![forbid(unsafe_code)]
 mod app;
 mod api;
 mod ui;

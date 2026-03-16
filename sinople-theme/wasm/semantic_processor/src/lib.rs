@@ -18,6 +18,7 @@
 //! const constructs = await processor.query_constructs();
 //! ```
 
+#![forbid(unsafe_code)]
 use wasm_bindgen::prelude::*;
 use serde::{Deserialize, Serialize};
 use sophia_api::graph::Graph;

@@ -20,6 +20,7 @@
 #![deny(unsafe_code)]
 #![warn(missing_docs)]
 
+#![forbid(unsafe_code)]
 pub mod manifest;
 pub mod parser;
 pub mod symbol;
