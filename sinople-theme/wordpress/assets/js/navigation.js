@@ -36,7 +36,14 @@
     toggleButton.className = 'menu-toggle';
     toggleButton.setAttribute('aria-expanded', 'false');
     toggleButton.setAttribute('aria-controls', 'primary-menu');
-    toggleButton.innerHTML = '<span class="screen-reader-text">Menu</span><span aria-hidden="true">☰</span>';
+    const srText = document.createElement('span');
+    srText.className = 'screen-reader-text';
+    srText.textContent = 'Menu';
+    toggleButton.appendChild(srText);
+    const iconSpan = document.createElement('span');
+    iconSpan.setAttribute('aria-hidden', 'true');
+    iconSpan.textContent = '\u2630';
+    toggleButton.appendChild(iconSpan);
 
     nav.insertBefore(toggleButton, nav.firstChild);
 

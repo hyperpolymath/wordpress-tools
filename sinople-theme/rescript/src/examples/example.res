@@ -16,24 +16,24 @@ let loadAndQueryConstructs = async () => {
 
   // Sample Turtle ontology
   let ontologyTTL = `
-    @prefix sn: <http://sinople.org/ontology#> .
-    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix sn: <https://sinople.org/ontology#> .
+    @prefix rdfs: <https://www.w3.org/2000/01/rdf-schema#> .
+    @prefix rdf: <https://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-    <http://sinople.org/constructs/time> a sn:Construct ;
+    <https://sinople.org/constructs/time> a sn:Construct ;
         rdfs:label "Time" ;
         rdfs:comment "The concept of temporal progression" ;
         sn:hasGloss "A dimension in which events occur in sequence" .
 
-    <http://sinople.org/constructs/space> a sn:Construct ;
+    <https://sinople.org/constructs/space> a sn:Construct ;
         rdfs:label "Space" ;
         rdfs:comment "The boundless three-dimensional extent" ;
         sn:hasGloss "A continuous area or expanse which is free, available, or unoccupied" .
 
-    <http://sinople.org/entanglements/time-space> a sn:Entanglement ;
+    <https://sinople.org/entanglements/time-space> a sn:Entanglement ;
         rdfs:label "Time-Space Relationship" ;
-        sn:hasSource <http://sinople.org/constructs/time> ;
-        sn:hasTarget <http://sinople.org/constructs/space> ;
+        sn:hasSource <https://sinople.org/constructs/time> ;
+        sn:hasTarget <https://sinople.org/constructs/space> ;
         sn:relationshipType "interdependent" ;
         rdfs:comment "The fundamental relationship between temporal and spatial dimensions" .
   `

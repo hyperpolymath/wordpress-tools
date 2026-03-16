@@ -7,7 +7,7 @@ import config from './fresh.config.js';
 
 // NOTE: Routes and Islands are not yet implemented.
 // When implementing, add routes in deno/routes/ and islands in deno/islands/
-// and regenerate this file with `deno run -A https://deno.land/x/fresh/init.ts .`
+// and regenerate this file with `deno run --allow-read --allow-write --allow-net https://deno.land/x/fresh/init.ts .`
 
 const manifest = {
   routes: {

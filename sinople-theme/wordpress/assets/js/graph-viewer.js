@@ -30,7 +30,11 @@
    */
   async function initSemanticGraph(container) {
     // Show loading state
-    container.innerHTML = '<div class="graph-loading">Loading semantic graph...</div>';
+    while (container.firstChild) { container.removeChild(container.firstChild); }
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'graph-loading';
+    loadingDiv.textContent = 'Loading semantic graph...';
+    container.appendChild(loadingDiv);
 
     // Fetch semantic graph data from WordPress REST API
     const response = await fetch(sinople.rest_url + 'sinople/v1/semantic-graph', {
@@ -162,15 +166,27 @@
     // Add controls
     const controls = document.createElement('div');
     controls.className = 'graph-controls';
-    controls.innerHTML = `
-      <label for="graph-filter">Filter constructs:</label>
-      <input type="search" id="graph-filter" placeholder="Search..." aria-label="Filter constructs">
-      <span role="status" aria-live="polite" id="graph-status">
-        Showing ${data.nodes.length} constructs
-      </span>
-    `;
 
-    container.innerHTML = '';
+    const label = document.createElement('label');
+    label.setAttribute('for', 'graph-filter');
+    label.textContent = 'Filter constructs:';
+    controls.appendChild(label);
+
+    const input = document.createElement('input');
+    input.type = 'search';
+    input.id = 'graph-filter';
+    input.placeholder = 'Search...';
+    input.setAttribute('aria-label', 'Filter constructs');
+    controls.appendChild(input);
+
+    const statusSpan = document.createElement('span');
+    statusSpan.setAttribute('role', 'status');
+    statusSpan.setAttribute('aria-live', 'polite');
+    statusSpan.id = 'graph-status';
+    statusSpan.textContent = `Showing ${data.nodes.length} constructs`;
+    controls.appendChild(statusSpan);
+
+    while (container.firstChild) { container.removeChild(container.firstChild); }
     container.appendChild(controls);
     container.appendChild(svg);
 
@@ -222,12 +238,24 @@
    * Show Error Message
    */
   function showError(container, message) {
-    container.innerHTML = `
-      <div class="graph-error" role="alert">
-        <p><strong>Error:</strong> ${message}</p>
-        <p>Please try refreshing the page or contact the administrator if the problem persists.</p>
-      </div>
-    `;
+    while (container.firstChild) { container.removeChild(container.firstChild); }
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'graph-error';
+    errorDiv.setAttribute('role', 'alert');
+
+    const errorP = document.createElement('p');
+    const strong = document.createElement('strong');
+    strong.textContent = 'Error:';
+    errorP.appendChild(strong);
+    errorP.appendChild(document.createTextNode(' ' + message));
+    errorDiv.appendChild(errorP);
+
+    const helpP = document.createElement('p');
+    helpP.textContent = 'Please try refreshing the page or contact the administrator if the problem persists.';
+    errorDiv.appendChild(helpP);
+
+    container.appendChild(errorDiv);
   }
 
 })();
