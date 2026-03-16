@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "acfe8316-9ed7-5734-b81a-7289672a7dbe"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "wordpress-tools"
+prefixed-name = "dx-wordpress-tools"
+
+[clade]
+primary = "dx"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/wordpress-tools"
+gitlab = "hyperpolymath/wordpress-tools"
+bitbucket = "hyperpolymath/wordpress-tools"
+
+[lineage]
+type = "standalone"
+parent = "WordPress development tools"
+born = "2026-03-16"
