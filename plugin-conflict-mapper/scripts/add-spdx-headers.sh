@@ -10,7 +10,7 @@ read -r -d '' SPDX_HEADER << 'EOF' || true
  * SPDX-License-Identifier: PMPL-1.0-or-later OR Palimpsest-0.8
  *
  * @package WP_Plugin_Conflict_Mapper
- * @license AGPL-3.0-or-later OR Palimpsest-0.8
+ * @license PMPL-1.0-or-later OR Palimpsest-0.8
  */
 EOF
 

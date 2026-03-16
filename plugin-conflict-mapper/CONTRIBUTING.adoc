@@ -264,7 +264,7 @@ All source files must include SPDX headers:
  *
  * @package WP_Plugin_Conflict_Mapper
  * @since   1.0.0
- * @license AGPL-3.0-or-later OR Palimpsest-0.8
+ * @license PMPL-1.0-or-later OR Palimpsest-0.8
  * SPDX-License-Identifier: PMPL-1.0-or-later
  */
 ----
@@ -528,7 +528,7 @@ Contributors are recognized in:
 
 == License
 
-By contributing, you agree that your contributions will be licensed under the project's dual license (AGPL-3.0-or-later OR Palimpsest-0.8).
+By contributing, you agree that your contributions will be licensed under the project's dual license (PMPL-1.0-or-later OR Palimpsest-0.8).
 
 See link:LICENSE.txt[LICENSE.txt] for full license details.
 

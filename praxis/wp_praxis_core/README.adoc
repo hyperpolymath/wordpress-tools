@@ -360,7 +360,7 @@ This crate achieves **RSR Gold** compliance:
 
 == License
 
-GNU AGPL-3.0-or-later
+GNU PMPL-1.0-or-later
 
 See link:../LICENSE.txt[LICENSE.txt] for details.
 
@@ -382,7 +382,7 @@ See link:../SECURITY.md[SECURITY.md] for security policy and vulnerability repor
 ---
 
 **Version**: 0.1.0 +
-**License**: AGPL-3.0-or-later +
+**License**: PMPL-1.0-or-later +
 **Rust Version**: 1.70+ +
 **Status**: Gold RSR Compliance
 

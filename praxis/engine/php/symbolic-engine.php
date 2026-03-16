@@ -6,7 +6,7 @@
  * Manages symbolic state, provides introspection API, and integrates with WordPress.
  *
  * @package WPPraxis\Engine
- * @license AGPL-3.0-or-later
+ * @license PMPL-1.0-or-later
  */
 
 namespace WPPraxis\Engine;

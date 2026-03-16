@@ -6,7 +6,7 @@
  * with WordPress hooks and external injectors (Rust, PowerShell).
  *
  * @package WPPraxis\Engine
- * @license AGPL-3.0-or-later
+ * @license PMPL-1.0-or-later
  */
 
 namespace WPPraxis\Engine;

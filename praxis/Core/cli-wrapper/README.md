@@ -136,4 +136,4 @@ mix escript.build
 
 **Status**: Alpha (needs integration work)
 **Version**: 0.1.0
-**License**: AGPL-3.0-or-later
+**License**: PMPL-1.0-or-later

@@ -11,7 +11,7 @@
 
 (define pkg-authors '("WP Praxis Project"))
 
-(define license 'AGPL-3.0-or-later)
+(define license 'PMPL-1.0-or-later)
 
 (define deps
   '("base"
