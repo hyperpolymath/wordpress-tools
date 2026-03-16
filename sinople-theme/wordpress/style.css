@@ -2,10 +2,15 @@
 Theme Name: Sinople
 Theme URI: https://github.com/hyperpolymath/sinople-theme
 Author: Jonathan D.A. Jewell
+Author URI: https://jewell.nexus
 Description: High-assurance, semantic WordPress theme with IndieWeb integration.
-Version: 1.0.0
+Version: 2.0.3
+Requires at least: 6.0
+Requires PHP: 8.1
 License: PMPL-1.0-or-later
+License URI: https://github.com/hyperpolymath/palimpsest-license
 Text Domain: sinople
+Tags: blog, news, one-column, custom-menu, featured-images, translation-ready, accessibility-ready
 
 DESIGN SYSTEM: 
 This theme follows the "Reflexive UI" principles, where the CSS state 
