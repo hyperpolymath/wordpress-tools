@@ -17,7 +17,7 @@
     "playground": "bun run --hot client/playground-server.ts"
   },
   "dependencies": {
-    "@apollo/server": "^4.10.0",
+    "@apollo/server": "^5.5.0",
     "@apollo/subgraph": "^2.7.0",
     "@graphql-tools/schema": "^10.0.3",
     "@graphql-tools/load-files": "^7.0.0",
