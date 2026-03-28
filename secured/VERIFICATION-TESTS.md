@@ -172,7 +172,7 @@ After completing WordPress installation wizard:
 ### Create Cerro Torre Package
 
 ```bash
-cd /var/mnt/eclipse/wordpress-secured
+cd /var$ECLIPSE_DIR/wordpress-secured
 
 # Package the WordPress container with Cerro Torre
 ct pack \
@@ -233,7 +233,7 @@ stealth:
 
 ```bash
 # Clone http-capability-gateway
-cd /var/mnt/eclipse/repos/http-capability-gateway
+cd /var$REPOS_DIR/http-capability-gateway
 
 # Compile policy
 mix policy.compile ../wordpress-secured/wordpress-policy.yml

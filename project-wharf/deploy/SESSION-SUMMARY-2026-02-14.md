@@ -111,7 +111,7 @@ rm -rf /tmp/wharf-push.git
 The local `.git` has a broken pack object (`501faf18`) from the old GitLab fetch. Not urgent — local repo works fine for everything except `git gc`.
 
 ```bash
-cd /var/mnt/eclipse/repos/project-wharf
+cd /var$REPOS_DIR/project-wharf
 git remote remove gitlab
 git remote add gitlab git@gitlab.com:hyperpolymath/project-wharf.git
 # After GitLab is force-pushed with clean history:
@@ -123,7 +123,7 @@ git fetch gitlab
 ## How to Use the Local Stack
 
 ```bash
-cd /var/mnt/eclipse/repos/project-wharf/deploy
+cd /var$REPOS_DIR/project-wharf/deploy
 
 # Start everything (downloads WP, builds containers, starts stack)
 bash local-test.sh

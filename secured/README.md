@@ -185,7 +185,7 @@ See: [Cerro Torre Documentation](https://github.com/hyperpolymath/cerro-torre)
 Enforce HTTP verb governance with Policy DSL:
 
 ```bash
-cd /var/mnt/eclipse/repos/http-capability-gateway
+cd /var$REPOS_DIR/http-capability-gateway
 
 # Configure proxy target
 export PROXY_TARGET_URL=http://localhost:8082
@@ -194,7 +194,7 @@ export PROXY_TARGET_URL=http://localhost:8082
 mix phx.server
 ```
 
-See: `/var/mnt/eclipse/repos/cerro-torre/docs/WORDPRESS-SECURITY-STACK.md`
+See: `/var$REPOS_DIR/cerro-torre/docs/WORDPRESS-SECURITY-STACK.md`
 
 ### Vörðr (Runtime Security)
 
@@ -279,10 +279,10 @@ podman exec wordpress-secured_wordpress_1 chown www-data:www-data /tmp/rate-limi
 
 ## Documentation
 
-- **Deployment Guide**: `/var/mnt/eclipse/repos/cerro-torre/docs/WORDPRESS-SECURITY-STACK.md`
+- **Deployment Guide**: `/var$REPOS_DIR/cerro-torre/docs/WORDPRESS-SECURITY-STACK.md`
 - **Verification Tests**: [VERIFICATION-TESTS.md](VERIFICATION-TESTS.md)
-- **php-aegis Validation Report**: `/var/mnt/eclipse/repos/php-aegis/validation/VALIDATION-REPORT.md`
-- **php-aegis Findings**: `/var/mnt/eclipse/repos/php-aegis/validation/FINDINGS-AND-RECOMMENDATIONS.md`
+- **php-aegis Validation Report**: `/var$REPOS_DIR/php-aegis/validation/VALIDATION-REPORT.md`
+- **php-aegis Findings**: `/var$REPOS_DIR/php-aegis/validation/FINDINGS-AND-RECOMMENDATIONS.md`
 
 ## License
 

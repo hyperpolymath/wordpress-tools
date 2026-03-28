@@ -95,7 +95,7 @@ Recent enhancements to make Sinople a production-ready, user-friendly WordPress 
 
 ### 7. Absolute Max Cryptographic Suite Integration (Phase 1)
 - **Goal:** Implement post-quantum ready cryptography where feasible in PHP
-- **Spec:** Based on `/home/hyper/Documents/Absolute-Max-Cryptographic-Suite.csv`
+- **Spec:** Based on `$HOME/Documents/Absolute-Max-Cryptographic-Suite.csv`
 - **File:** `wordpress/inc/cryptography.php` (277 lines)
 - **Examples:** `wordpress/inc/cryptography-examples.php` (reference only)
 
