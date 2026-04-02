@@ -3,20 +3,48 @@
 
 == Current Status
 
-Initial development phase.
+This repo is a broad prototype and integration surface, not a finished platform.
+
+* The theme contains real implementation across WordPress, Rust/WASM, and ReScript.
+* Public-facing claims currently outrun the evidence in `RSR_AUDIT.md` and the small test surface.
+* The most useful role for this repo right now is to act as the application proving ground for the rest of the stack.
+
+== P0 Release Blockers
+
+* [ ] Reconcile README-level claims with `RSR_AUDIT.md`, especially around RSR status, Micropub, and production readiness.
+* [ ] Replace placeholder or partial security/auth flows, especially the documented Micropub-auth placeholder.
+* [ ] Create a real automated test baseline for the WordPress theme and semantic components.
+* [ ] Define a narrower supported feature set instead of claiming the full conceptual surface at once.
+
+== P1 Product Focus
+
+* [ ] Treat the WordPress theme plus one or two distinctive semantic features as the release core.
+* [ ] Add accessibility regression checks before making WCAG AAA-style claims.
+* [ ] Add deployment and operator guidance that clearly distinguishes experimental features from supported ones.
+* [ ] Use `php-aegis`, `project-wharf`, and `http-capability-gateway` as upstream hardening layers rather than replicating their responsibilities here.
+
+== P2 Platform Growth
+
+* [ ] Expand tests across WASM, ReScript, and WordPress integration paths.
+* [ ] Decide which advanced features are real near-term scope and which belong in design documents only.
+* [ ] Add one authoritative current-status document and demote stale or aspirational summaries.
 
 == Milestones
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+=== v0.2.x - Honest Integration Prototype
+* [ ] Claims reduced to tested features
+* [ ] Automated test baseline in place
+* [ ] Micropub/auth posture clarified
+
+=== v0.3.x - Deployable Theme Core
+* [ ] Theme core, semantic feature subset, and operator docs aligned
+* [ ] Accessibility and security regressions covered
 
 === v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+* [ ] README claims are evidence-backed
+* [ ] Theme-level integrations are tested and supported
+* [ ] The repo is a trustworthy application surface for the wider stack
 
 == Future Directions
 
-_To be determined based on community feedback._
+Broaden scope only after the core theme, auth, and semantic pathways are measurably reliable.

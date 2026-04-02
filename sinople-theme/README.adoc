@@ -6,11 +6,19 @@ image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,l
 
 A modern, semantically-aware WordPress theme powered by *ReScript*, *Deno*, and *WASM*. Sinople (from the heraldic term for green) combines traditional WordPress theming with cutting-edge semantic web technologies for character relationships, glosses, and knowledge graphs.
 
+== Current Status
+
+Sinople is currently best understood as an ambitious integration prototype rather than a finished production platform.
+
+* The repo contains real WordPress, ReScript, and WASM implementation work.
+* Several headline claims still outrun the automated test surface and the audit record in link:RSR_AUDIT.md[RSR_AUDIT.md].
+* In particular, Micropub/auth, accessibility verification, and standards-compliance claims should be treated as in-progress unless separately evidenced.
+
 == Features
 
 - 🧠 *Semantic Web Processing*: RDF/OWL processing via Rust WASM for construct relationships
-- 🌐 *IndieWeb Level 4*: Full Webmention and Micropub support
-- ♿ *WCAG 2.3 AAA*: Maximum accessibility compliance
+- 🌐 *IndieWeb Integration Work*: Webmention and Micropub-related endpoints exist, but the auth/completeness story is still in progress
+- ♿ *Accessibility-First Direction*: strong accessibility intent, but full AAA-style verification is still pending
 - 🔒 *Type Safety*: ReScript-only architecture (NO TypeScript)
 - ⚡ *Performance*: Rust-powered WASM semantic processor
 - 🎨 *Modern Stack*: Deno + Fresh framework for server-side rendering
@@ -167,7 +175,7 @@ Relationships between constructs (e.g., "Time → Space", "Consciousness → Fre
 == IndieWeb Features
 
 - *Webmention*: `/wp-json/sinople/v1/webmention`
-- *Micropub*: `/wp-json/sinople/v1/micropub`
+- *Micropub*: `/wp-json/sinople/v1/micropub` (endpoint present; authentication and production posture still need tightening)
 - *Microformats2*: All posts include h-entry markup
 
 == Semantic Web APIs
@@ -178,7 +186,7 @@ Relationships between constructs (e.g., "Time → Space", "Consciousness → Fre
 
 == Accessibility
 
-Sinople meets *WCAG 2.3 AAA* standards:
+Sinople is designed with strong accessibility goals, but full WCAG AAA-style verification is still pending:
 
 - 7:1 contrast ratio for normal text
 - Full keyboard navigation support
@@ -244,9 +252,9 @@ See [LICENSE.txt](LICENSE.txt) for full terms.
 
 == Standards Compliance
 
-- ✅ *RSR Bronze Level*: ~75% Rhodium Standard Repository compliance
-- ✅ *WCAG 2.3 AAA*: Maximum web accessibility
-- ✅ *IndieWeb Level 4*: Webmention + Micropub
+- ⚠️ *RSR*: see link:RSR_AUDIT.md[RSR_AUDIT.md] for the real current audit posture
+- ⚠️ *Accessibility*: goals are strong, but full verification is not yet evidenced here
+- ⚠️ *IndieWeb*: endpoints and integration work exist, but production-complete Micropub/auth claims are premature
 - ✅ *Semantic Versioning 2.0.0*: Version management
 - ✅ *Conventional Commits*: Commit message format
 - ✅ *RFC 9116*: security.txt implementation
