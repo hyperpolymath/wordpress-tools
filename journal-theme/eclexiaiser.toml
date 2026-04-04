@@ -5,15 +5,16 @@
 name = "journal-theme"
 
 [[functions]]
-name = "process_batch"
-source = "src/batch.rs"
-energy-budget-mj = 50.0
-carbon-budget-mg = 10.0
+name = "sinople_setup"
+source = "functions.php"
+energy-budget-mj = 15.0
+carbon-budget-mg = 3.0
 
 [[functions]]
-name = "render_page"
-source = "src/web.rs"
+name = "sinople_enforce_image_alt"
+source = "inc/accessibility.php"
 energy-budget-mj = 5.0
+carbon-budget-mg = 1.0
 
 [carbon]
 provider = "static"

@@ -5,15 +5,16 @@
 name = "secured"
 
 [[functions]]
-name = "process_batch"
-source = "src/batch.rs"
-energy-budget-mj = 50.0
-carbon-budget-mg = 10.0
+name = "attempt"
+source = "php-aegis/src/RateLimit/RateLimiter.php"
+energy-budget-mj = 10.0
+carbon-budget-mg = 2.0
 
 [[functions]]
-name = "render_page"
-source = "src/web.rs"
+name = "perMinute"
+source = "php-aegis/src/RateLimit/RateLimiter.php"
 energy-budget-mj = 5.0
+carbon-budget-mg = 1.0
 
 [carbon]
 provider = "static"
