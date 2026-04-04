@@ -4,12 +4,12 @@
     "team"
   ],
   "capabilities": {
-    "primary": {
-      "description": "TODO: describe this service's primary capability",
+    "cli": {
+      "description": "CLI tools for WordPress security hardening, plugin conflict detection, and theme management.",
       "panel_compatible": true,
       "protocol": "cli",
       "requires_auth": false,
-      "type": "custom"
+      "type": "cli"
     }
   },
   "consumes": [],
