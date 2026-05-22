@@ -25,7 +25,7 @@ This document tracks progress toward achieving RSR Gold-level compliance for the
 - Source code highlighting
 
 ✅ **LICENSE.txt** - Plain text dual license declaration
-- SPDX-identified: `PMPL-1.0-or-later OR Palimpsest-0.8`
+- SPDX-identified: `MPL-2.0 OR Palimpsest-0.8`
 - Plain text format (not .md)
 - Comprehensive license comparison
 - Contributor licensing terms

@@ -24,7 +24,7 @@ This document details the integration of `php-aegis` and `sanctify-php` security
 
 - **Type**: Haskell static analysis tool
 - **Purpose**: PHP code transformation and security analysis
-- **License**: PMPL-1.0-or-later
+- **License**: MPL-2.0
 - **Status**: **Added to CI/development workflow**
 
 **Features**:

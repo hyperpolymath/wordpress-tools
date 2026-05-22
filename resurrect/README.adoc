@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 = WP-Resurrect: Site Operations Control Plane (SOCP)
 
 image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
@@ -256,7 +256,7 @@ Per link:.claude/CLAUDE.md[RSR Language Policy]:
 
 == License
 
-SPDX-License-Identifier: PMPL-1.0-or-later-or-later
+SPDX-License-Identifier: MPL-2.0-or-later
 
 == Links
 

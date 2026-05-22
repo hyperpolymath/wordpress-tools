@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 /**
  * WP Praxis Swarm — Task Distribution Coordinator
  * Fully ported to ReScript v12

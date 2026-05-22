@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # Web server state management
 # Supports: nginx, apache, litespeed, openlitespeed
 

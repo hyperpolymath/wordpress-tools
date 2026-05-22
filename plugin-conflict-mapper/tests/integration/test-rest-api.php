@@ -1,9 +1,9 @@
 <?php
 /**
- * SPDX-License-Identifier: PMPL-1.0-or-later OR Palimpsest-0.8
+ * SPDX-License-Identifier: MPL-2.0 OR Palimpsest-0.8
  *
  * @package WP_Plugin_Conflict_Mapper
- * @license PMPL-1.0-or-later OR Palimpsest-0.8
+ * @license MPL-2.0 OR Palimpsest-0.8
  */
 /**
  * Integration Tests for REST API

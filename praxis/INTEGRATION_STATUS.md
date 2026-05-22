@@ -61,7 +61,7 @@ WP Praxis is at **Alpha (Integration Phase)** with 90%+ RSR Gold compliance. The
 - **Coverage**: 100% of Elixir codebase now has proper licensing headers
 - **Format**:
   ```elixir
-  # SPDX-License-Identifier: PMPL-1.0-or-later
+  # SPDX-License-Identifier: MPL-2.0
   # SPDX-FileCopyrightText: 2025 WP Praxis Contributors
   ```
 - **Commit**: `55b528c` - "chore: Add SPDX headers to all Elixir files in Core/db-schema"

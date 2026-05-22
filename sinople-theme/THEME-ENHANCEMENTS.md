@@ -397,7 +397,7 @@ volumes:
 
 ## License
 
-All enhancements follow theme license: **PMPL-1.0-or-later**
+All enhancements follow theme license: **MPL-2.0**
 
 ---
 

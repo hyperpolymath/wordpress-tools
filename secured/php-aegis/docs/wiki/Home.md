@@ -92,7 +92,7 @@ echo aegis_turtle_triple($subject, $predicate, $object, 'en') . "\n";
 
 **Version**: 0.2.0
 **Completion**: 83%
-**License**: PMPL-1.0-or-later
+**License**: MPL-2.0
 
 **Completed**:
 - ✅ Core validators and sanitizers
@@ -116,6 +116,6 @@ echo aegis_turtle_triple($subject, $predicate, $object, 'en') . "\n";
 
 ## License
 
-php-aegis is licensed under the **PMPL-1.0-or-later** (Polymath Public License).
+php-aegis is licensed under the **MPL-2.0** (Polymath Public License).
 
 See [LICENSE](../../LICENSE) for details.

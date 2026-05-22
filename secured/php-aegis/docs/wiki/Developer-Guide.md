@@ -9,7 +9,7 @@ Complete API reference for php-aegis developers.
 - **Zero dependencies**: Only PHP 8.1+ required
 - **Strict types**: `declare(strict_types=1)` throughout
 - **PSR-12 compliant**: Follows PHP coding standards
-- **PMPL-1.0-or-later**: Polymath Public License
+- **MPL-2.0**: Polymath Public License
 
 ### Directory Structure
 ```
@@ -381,4 +381,4 @@ See [Contributing Guide](Contributing.md) for development setup and guidelines.
 
 ## License
 
-php-aegis is licensed under **PMPL-1.0-or-later** (Polymath Public License).
+php-aegis is licensed under **MPL-2.0** (Polymath Public License).

@@ -8,7 +8,7 @@
  * Requires PHP: 7.4
  * Author: WP Praxis Project
  * Author URI: https://github.com/wp-praxis
- * License: PMPL-1.0-or-later
+ * License: MPL-2.0
  * License URI: https://www.gnu.org/licenses/agpl-3.0.html
  * Text Domain: wp-praxis
  * Domain Path: /languages

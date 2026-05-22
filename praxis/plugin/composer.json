@@ -2,7 +2,7 @@
     "name": "wp-praxis/wordpress-plugin",
     "description": "WP Praxis WordPress Plugin - Symbolic workflow orchestration for WordPress",
     "type": "wordpress-plugin",
-    "license": "PMPL-1.0-or-later",
+    "license": "MPL-2.0",
     "require": {
         "php": ">=7.4",
         "composer/installers": "^1.0|^2.0"

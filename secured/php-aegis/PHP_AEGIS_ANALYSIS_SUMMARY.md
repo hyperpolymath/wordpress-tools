@@ -40,7 +40,7 @@ php-aegis is a PHP 8.1+ security and hardening toolkit providing input validatio
 | **Test Coverage** | ~85% (estimated) |
 | **Dependencies** | 0 (runtime) |
 | **PHP Version** | 8.1+ |
-| **License** | MIT OR PMPL-1.0-or-later (SPDX) |
+| **License** | MIT OR MPL-2.0 (SPDX) |
 
 ### Implemented Features (100% Complete)
 

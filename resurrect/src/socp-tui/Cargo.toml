@@ -1,11 +1,11 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 [package]
 name = "socp-tui"
 version = "0.1.0"
 edition = "2021"
 description = "Site Operations Control Plane - Terminal User Interface"
 authors = ["Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"]
-license = "PMPL-1.0-or-later"
+license = "MPL-2.0"
 repository = "https://github.com/hyperpolymath/wp-resurrect"
 keywords = ["tui", "sysadmin", "wordpress", "infrastructure"]
 categories = ["command-line-interface", "development-tools"]

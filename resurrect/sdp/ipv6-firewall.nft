@@ -1,5 +1,5 @@
 #!/usr/sbin/nft -f
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # nftables rules for IPv6-only control plane access
 #
 # This configuration:

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2025 WP Praxis Contributors
 
 # WP Praxis CLI Wrapper
@@ -136,4 +136,4 @@ mix escript.build
 
 **Status**: Alpha (needs integration work)
 **Version**: 0.1.0
-**License**: PMPL-1.0-or-later
+**License**: MPL-2.0

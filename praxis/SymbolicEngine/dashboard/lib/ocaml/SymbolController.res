@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 /**
  * Symbol Controller — Atomic Logic Unit Management
  * Fully ported to ReScript v12

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2025 WP Praxis Contributors
 
 = WP Praxis Core
@@ -360,7 +360,7 @@ This crate achieves **RSR Gold** compliance:
 
 == License
 
-GNU PMPL-1.0-or-later
+GNU MPL-2.0
 
 See link:../LICENSE.txt[LICENSE.txt] for details.
 
@@ -382,7 +382,7 @@ See link:../SECURITY.md[SECURITY.md] for security policy and vulnerability repor
 ---
 
 **Version**: 0.1.0 +
-**License**: PMPL-1.0-or-later +
+**License**: MPL-2.0 +
 **Rust Version**: 1.70+ +
 **Status**: Gold RSR Compliance
 

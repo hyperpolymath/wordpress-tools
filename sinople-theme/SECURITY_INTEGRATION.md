@@ -175,7 +175,7 @@ public function escape(string $input, EscapeContext $context): string;
 **Fix:** Add to all source files:
 ```php
 <?php
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 ```
 
 ---

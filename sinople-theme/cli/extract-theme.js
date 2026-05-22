@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run --allow-net --allow-write --allow-read
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 // Theme Extraction CLI Tool
 // Usage: ./cli/extract-theme.js --url <URL> --output <FILE>

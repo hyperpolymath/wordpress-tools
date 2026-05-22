@@ -518,7 +518,7 @@ audit-spdx:
 audit-licence:
     @echo "=== License Compliance Audit ==="
     @echo ""
-    @echo "Primary License: PMPL-1.0-or-later"
+    @echo "Primary License: MPL-2.0"
     @test -f LICENSE.txt && echo "✓ LICENSE.txt present" || echo "❌ LICENSE.txt missing"
     @test -f LICENSE && echo "✓ LICENSE present" || echo "❌ LICENSE missing"
     @echo ""
@@ -533,7 +533,7 @@ fix-spdx:
     @find wp_praxis_core -name "*.rs" -type f | while read file; do \
         if ! grep -q "SPDX-License-Identifier" "$$file"; then \
             tmpfile=$$(mktemp); \
-            { echo "// SPDX-License-Identifier: PMPL-1.0-or-later"; \
+            { echo "// SPDX-License-Identifier: MPL-2.0"; \
               echo "// SPDX-FileCopyrightText: 2025 WP Praxis Contributors"; \
               echo "//"; \
               cat "$$file"; \

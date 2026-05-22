@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # Add SPDX headers to all PHP files for RSR Gold compliance
-# SPDX-License-Identifier: PMPL-1.0-or-later OR Palimpsest-0.8
+# SPDX-License-Identifier: MPL-2.0 OR Palimpsest-0.8
 
 set -euo pipefail
 
 # SPDX header template
 read -r -d '' SPDX_HEADER << 'EOF' || true
 /**
- * SPDX-License-Identifier: PMPL-1.0-or-later OR Palimpsest-0.8
+ * SPDX-License-Identifier: MPL-2.0 OR Palimpsest-0.8
  *
  * @package WP_Plugin_Conflict_Mapper
- * @license PMPL-1.0-or-later OR Palimpsest-0.8
+ * @license MPL-2.0 OR Palimpsest-0.8
  */
 EOF
 

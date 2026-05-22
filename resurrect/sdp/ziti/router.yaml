@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # OpenZiti Edge Router Configuration
 # Deployed on each site to tunnel traffic through the zero-trust network
 

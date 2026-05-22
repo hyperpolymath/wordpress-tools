@@ -1,6 +1,6 @@
 # Cerro Torre Package Manifest
 # php-aegis WordPress Container
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 
 [package]
 name = "php-aegis-wordpress"
@@ -10,7 +10,7 @@ description = "WordPress with php-aegis security library for input validation, o
 
 [metadata]
 homepage = "https://github.com/hyperpolymath/php-aegis"
-license = "PMPL-1.0-or-later"
+license = "MPL-2.0"
 maintainer = "Jonathan D.A. Jewell <jonathan@hyperpolymath.org>"
 source = "https://github.com/hyperpolymath/php-aegis"
 category = "web"
@@ -258,7 +258,7 @@ minimum-logs = 2
 [verification.sbom-requirements]
 # SBOM must be present and valid
 require-sbom = true
-allowed-licenses = ["PMPL-1.0-or-later", "MIT", "BSD-3-Clause", "Apache-2.0", "GPL-2.0-or-later", "LGPL-2.1-or-later"]
+allowed-licenses = ["MPL-2.0", "MIT", "BSD-3-Clause", "Apache-2.0", "GPL-2.0-or-later", "LGPL-2.1-or-later"]
 deny-licenses = ["proprietary", "unknown"]
 
 [verification.vulnerability-scanning]

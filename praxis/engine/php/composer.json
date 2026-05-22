@@ -2,7 +2,7 @@
     "name": "wp-praxis/symbolic-engine",
     "description": "PHP Symbolic Engine for WP Praxis - Declarative WordPress workflow orchestration",
     "type": "library",
-    "license": "PMPL-1.0-or-later",
+    "license": "MPL-2.0",
     "require": {
         "php": ">=7.4",
         "symfony/yaml": "^5.4|^6.0",

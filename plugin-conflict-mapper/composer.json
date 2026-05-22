@@ -2,7 +2,7 @@
     "name": "hyperpolymath/wp-plugin-conflict-mapper",
     "description": "WordPress plugin for detecting and resolving plugin conflicts with security and performance analysis",
     "type": "wordpress-plugin",
-    "license": "PMPL-1.0-or-later",
+    "license": "MPL-2.0",
     "authors": [
         {
             "name": "Jonathan",

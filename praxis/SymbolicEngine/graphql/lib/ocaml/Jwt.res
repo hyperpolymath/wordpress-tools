@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 /**
  * JWT Authentication for Praxis GraphQL
  * Fully ported to ReScript v12

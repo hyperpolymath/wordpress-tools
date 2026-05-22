@@ -286,10 +286,10 @@ podman exec wordpress-secured_wordpress_1 chown www-data:www-data /tmp/rate-limi
 
 ## License
 
-- **php-aegis**: PMPL-1.0-or-later
+- **php-aegis**: MPL-2.0
 - **WordPress**: GPL-2.0-or-later
 - **MariaDB**: GPL-2.0
-- **Deployment Scripts**: PMPL-1.0-or-later
+- **Deployment Scripts**: MPL-2.0
 
 ## Support
 

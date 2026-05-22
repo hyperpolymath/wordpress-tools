@@ -30,10 +30,10 @@ find . -name "*.php" \
         (
             echo "<?php"
             echo "/**"
-            echo " * SPDX-License-Identifier: PMPL-1.0-or-later OR Palimpsest-0.8"
+            echo " * SPDX-License-Identifier: MPL-2.0 OR Palimpsest-0.8"
             echo " *"
             echo " * @package WP_Plugin_Conflict_Mapper"
-            echo " * @license PMPL-1.0-or-later OR Palimpsest-0.8"
+            echo " * @license MPL-2.0 OR Palimpsest-0.8"
             echo " */"
             tail -n +2 "$file.bak"
         ) > "$file"

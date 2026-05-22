@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # Cryptographic Suite Integration for WordPress + Sinople Theme
 
 Based on `$HOME/Documents/Absolute-Max-Cryptographic-Suite.csv`
