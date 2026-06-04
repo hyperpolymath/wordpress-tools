@@ -10,6 +10,6 @@ Self-validating components for configuration, trust, and deployment.
 [horizontal]
 `k9/`:: K9 contractiles (Nickel-based config + automation)
 `dust/`:: Dust contractiles (cleanup and lifecycle)
-`lust/`:: Lust contractiles (desire/requirement specs)
+`intend/`:: Lust contractiles (desire/requirement specs)
 `must/`:: Must contractiles (mandatory constraints)
 `trust/`:: Trust contractiles (trust chain and signatures)
