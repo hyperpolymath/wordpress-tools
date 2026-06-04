@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # WP Praxis Symbolic Engine Dashboard
 
 Complete real-time monitoring and control interface for the WP Praxis symbolic workflow system. Built with Bun, TypeScript, Elysia, and PostgreSQL.

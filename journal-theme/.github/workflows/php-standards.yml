@@ -28,6 +28,7 @@ jobs:
   phpcs:
     name: WordPress Coding Standards
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -71,6 +72,7 @@ jobs:
   phpstan:
     name: PHPStan Static Analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -103,6 +105,7 @@ jobs:
   php-compatibility:
     name: PHP ${{ matrix.php }} Compatibility
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -134,6 +137,7 @@ jobs:
   wp-compatibility:
     name: WordPress ${{ matrix.wp }} Compatibility
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -183,6 +187,7 @@ jobs:
   theme-check:
     name: WordPress Theme Check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -280,6 +285,7 @@ jobs:
   summary:
     name: Standards Summary
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [phpcs, phpstan, php-compatibility, wp-compatibility, theme-check]
     if: always()
 

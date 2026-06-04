@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! SOCP TUI - Site Operations Control Plane Terminal Interface
 //!
 //! A ncurses-style dashboard for managing multiple web sites

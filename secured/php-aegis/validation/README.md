@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # php-aegis Real-World Validation Suite
 
 This directory contains a comprehensive test suite for validating php-aegis against real-world WordPress installations, popular plugins, and themes.

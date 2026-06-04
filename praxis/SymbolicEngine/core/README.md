@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # WP Praxis Symbolic Engine - PowerShell Core
 
 This directory contains the PowerShell implementation of the WP Praxis Symbolic Engine, which serves as the core orchestration layer for symbolic workflow execution.

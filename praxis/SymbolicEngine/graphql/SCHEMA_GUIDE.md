@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # GraphQL Schema Guide
 
 Complete guide to the WP Praxis GraphQL schema design and usage patterns.

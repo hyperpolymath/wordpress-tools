@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # 🧵 Glosses: Semantic Footnotes and Conceptual Annotations
 
 This directory houses symbolic footnotes—*glosses*—expressed in structured formats. Glosses are conceptual threads that annotate, clarify, or emotionally inflect entries and constructs across Sinople.

@@ -36,6 +36,7 @@ jobs:
   syntax:
     name: PHP Syntax Check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -61,6 +62,7 @@ jobs:
   code-style:
     name: Code Style (PHP-CS-Fixer)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: syntax
     permissions:
       contents: read
@@ -85,6 +87,7 @@ jobs:
   phpstan:
     name: Static Analysis (PHPStan Level 9)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: syntax
     permissions:
       contents: read
@@ -112,6 +115,7 @@ jobs:
   license-headers:
     name: SPDX License Headers
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -139,6 +143,7 @@ jobs:
   strict-types:
     name: Strict Types Declaration
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -166,6 +171,7 @@ jobs:
   security-patterns:
     name: Security Pattern Check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -267,6 +273,7 @@ jobs:
   composer-audit:
     name: Dependency Audit
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -293,6 +300,7 @@ jobs:
   tests:
     name: Unit Tests (PHPUnit)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: syntax
     permissions:
       contents: read
@@ -345,6 +353,7 @@ jobs:
   php-compat:
     name: PHP ${{ matrix.php }} Compatibility
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [syntax, code-style, phpstan]
     permissions:
       contents: read
@@ -378,6 +387,7 @@ jobs:
   lint-summary:
     name: Lint Summary
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [syntax, code-style, phpstan, tests, license-headers, strict-types, security-patterns, composer-audit, php-compat]
     if: always()
     permissions:

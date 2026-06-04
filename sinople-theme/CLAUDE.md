@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # CLAUDE.md - Sinople WordPress Theme (Modern Stack)
 
 ## Project Overview
@@ -48,7 +52,7 @@ This section clarifies the responsibilities and boundaries between each layer, i
 |-------|--------|--------------|-------|
 | **WordPress** | Production-ready | 85% | Fully functional theme with CPTs, IndieWeb, RDF endpoints |
 | **Rust/WASM** | Production-ready | 100% | Complete semantic processor with Sophia 0.8 |
-| **ReScript** | Bindings complete | 40% | WASM bindings done; components/services not started |
+| **AffineScript** | Bindings complete | 40% | WASM bindings done; components/services not started |
 | **Deno/Fresh** | Scaffolded only | 5% | Config exists; no routes or islands implemented |
 
 ### Layer Responsibilities

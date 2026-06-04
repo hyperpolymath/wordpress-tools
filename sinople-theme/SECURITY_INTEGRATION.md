@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Security Integration Report
 
 Integration of `php-aegis` and `sanctify-php` into `wp-sinople-theme`.

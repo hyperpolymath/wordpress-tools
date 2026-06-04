@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # php-aegis Compatibility Strategy
 
 > **Note**: This document describes the planned compatibility strategy. The `php-aegis-compat` package is not yet implemented. See the [roadmap](ROADMAP_PRIORITY.md) for status.

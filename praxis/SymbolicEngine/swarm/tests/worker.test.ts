@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 import { describe, test, expect, beforeEach, mock } from "bun:test";
 import { Worker } from "../src/worker";
 import { Symbol, SymbolType } from "../src/types";

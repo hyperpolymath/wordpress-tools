@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # WP Praxis PHP Symbolic Engine
 
 Core PHP implementation of the WP Praxis symbolic orchestration engine.

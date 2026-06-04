@@ -24,6 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -67,6 +68,7 @@ jobs:
   rust-tests:
     name: Rust Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -131,6 +133,7 @@ jobs:
   elixir-tests:
     name: Elixir Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -183,6 +186,7 @@ jobs:
   php-tests:
     name: PHP Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       mysql:
@@ -246,6 +250,7 @@ jobs:
   typescript-tests:
     name: TypeScript Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -283,6 +288,7 @@ jobs:
     name: End-to-End Tests
     needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -310,6 +316,7 @@ jobs:
     name: Combined Coverage Report
     needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: always()
 
     steps:
@@ -338,6 +345,7 @@ jobs:
     name: Test Summary
     needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests, e2e-tests]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: always()
 
     steps:

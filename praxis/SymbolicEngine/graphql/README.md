@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # WP Praxis GraphQL API
 
 Comprehensive GraphQL API for WP Praxis symbolic workflow execution and introspection.

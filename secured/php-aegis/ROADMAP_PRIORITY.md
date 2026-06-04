@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # php-aegis Roadmap (Integration-Informed Priority)
 
 This roadmap is prioritized based on real-world integration experience with WordPress themes and plugins, reflecting lessons from wp-sinople-theme and Zotpress integrations.

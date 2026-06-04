@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Maintainers and Contributors
 
 This file lists all people who have contributed to the Sinople WordPress Theme, organized by the **Tri-Perimeter Contribution Framework (TPCF)**.

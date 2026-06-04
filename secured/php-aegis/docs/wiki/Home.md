@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # php-aegis Wiki
 
 **php-aegis** is a comprehensive PHP security and hardening toolkit providing input validation, sanitization, XSS prevention, WordPress integration, IndieWeb protocol security, and rate limiting.

@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # WP Praxis Symbolic Injector
 
 High-performance Rust-based symbolic logic injector for WordPress workflows. This injector reads declarative manifest files and performs semantic-preserving transformations on WordPress installations through database operations.

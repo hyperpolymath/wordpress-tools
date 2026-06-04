@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # 🌐 Portals: External Inspirations
 
 Sinople draws breath from misty edges, poetic archives, and decentralized architectures. These portals are references, influences, and threads beyond the journal.
