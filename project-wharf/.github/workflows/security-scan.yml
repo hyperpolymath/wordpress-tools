@@ -1,40 +1,33 @@
 # SPDX-License-Identifier: MPL-2.0
 # Panic-Attack Security Scan — Universal stress testing + VeriSimDB ingest
 name: Security Scan
-
 on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday
+    - cron: '0 0 * * 0' # Weekly on Sunday
   workflow_dispatch:
-
 permissions: read-all
-
 jobs:
   panic-attack:
     name: Panic-Attack Assail
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
-
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7 # stable
         with:
           toolchain: stable
-
       - name: Cache panic-attack binary
         id: cache-pa
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: ~/.cargo/bin/panic-attack
           key: panic-attack-${{ runner.os }}
-
       - name: Build panic-attack
         if: steps.cache-pa.outputs.cache-hit != 'true'
         run: |
@@ -42,21 +35,18 @@ jobs:
           cd /tmp/panic-attacker
           cargo build --release
           cp target/release/panic-attack ~/.cargo/bin/
-
       - name: Run panic-attack assail
         run: |
           panic-attack assail . --output /tmp/scan-results.json
           echo "## Panic-Attack Scan Results" >> $GITHUB_STEP_SUMMARY
           WEAK_POINTS=$(jq '.weak_points | length' /tmp/scan-results.json 2>/dev/null || echo 0)
           echo "- Weak points found: $WEAK_POINTS" >> $GITHUB_STEP_SUMMARY
-
       - name: Upload scan artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: panic-attack-results
           path: /tmp/scan-results.json
           retention-days: 90
-
       - name: Ingest to VeriSimDB
         if: always()
         env:

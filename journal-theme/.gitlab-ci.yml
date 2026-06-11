@@ -7,14 +7,12 @@ variables:
   WP_VERSION: latest
   PHP_VERSION: "8.3"
   NODE_VERSION: "20"
-
 stages:
   - lint
   - test
   - security
   - build
   - deploy
-
 # Cache configuration
 .cache-composer: &cache-composer
   cache:
@@ -22,26 +20,23 @@ stages:
     paths:
       - vendor/
       - .composer-cache/
-
 .cache-npm: &cache-npm
   cache:
     key: npm-$CI_COMMIT_REF_SLUG
     paths:
       - node_modules/
       - .npm/
-
 .cache-cargo: &cache-cargo
   cache:
     key: cargo-$CI_COMMIT_REF_SLUG
     paths:
       - assets/wasm/target/
       - .cargo/
-
 # PHP Linting
 lint:php:
   stage: lint
   image: php:${PHP_VERSION}-cli
-  <<: *cache-composer
+  !!merge <<: *cache-composer
   before_script:
     - apt-get update && apt-get install -y git zip unzip
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -50,24 +45,22 @@ lint:php:
     - vendor/bin/phpcs --standard=WordPress --report=summary,source *.php inc/ templates/
     - vendor/bin/phpstan analyse --no-progress
   allow_failure: false
-
 # JavaScript Linting
 lint:js:
   stage: lint
   image: node:${NODE_VERSION}
-  <<: *cache-npm
+  !!merge <<: *cache-npm
   before_script:
     - npm ci
   script:
     - npm run lint:js
     - npm run lint:scss
   allow_failure: false
-
 # Rust Linting
 lint:rust:
   stage: lint
   image: rust:latest
-  <<: *cache-cargo
+  !!merge <<: *cache-cargo
   before_script:
     - rustup component add rustfmt clippy
   script:
@@ -75,7 +68,6 @@ lint:rust:
     - cargo fmt -- --check
     - cargo clippy --all-targets --all-features -- -D warnings
   allow_failure: false
-
 # PHP Unit Tests (Matrix)
 .test-php-template: &test-php
   stage: test
@@ -84,7 +76,7 @@ lint:rust:
   variables:
     MYSQL_DATABASE: wordpress_test
     MYSQL_ROOT_PASSWORD: root
-  <<: *cache-composer
+  !!merge <<: *cache-composer
   before_script:
     - apt-get update && apt-get install -y git zip unzip mariadb-client subversion
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -100,30 +92,26 @@ lint:rust:
         path: coverage.xml
     paths:
       - coverage/
-
 test:php:8.1:
-  <<: *test-php
+  !!merge <<: *test-php
   image: php:8.1-cli
   variables:
     PHP_VERSION: "8.1"
-
 test:php:8.2:
-  <<: *test-php
+  !!merge <<: *test-php
   image: php:8.2-cli
   variables:
     PHP_VERSION: "8.2"
-
 test:php:8.3:
-  <<: *test-php
+  !!merge <<: *test-php
   image: php:8.3-cli
   variables:
     PHP_VERSION: "8.3"
-
 # JavaScript Tests
 test:js:
   stage: test
   image: node:${NODE_VERSION}
-  <<: *cache-npm
+  !!merge <<: *cache-npm
   before_script:
     - npm ci
   script:
@@ -136,12 +124,11 @@ test:js:
         path: coverage/cobertura-coverage.xml
     paths:
       - coverage/
-
 # Rust Tests
 test:rust:
   stage: test
   image: rust:latest
-  <<: *cache-cargo
+  !!merge <<: *cache-cargo
   before_script:
     - rustup target add wasm32-unknown-unknown
   script:
@@ -149,39 +136,35 @@ test:rust:
     - cargo test --verbose
     - cargo test --target wasm32-unknown-unknown
   allow_failure: false
-
 # Security Audits (Parallel)
 security:npm:
   stage: security
   image: node:${NODE_VERSION}
-  <<: *cache-npm
+  !!merge <<: *cache-npm
   before_script:
     - npm ci
   script:
     - npm audit --audit-level=moderate
   allow_failure: true
-
 security:composer:
   stage: security
   image: php:${PHP_VERSION}-cli
-  <<: *cache-composer
+  !!merge <<: *cache-composer
   before_script:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
     - composer install --prefer-dist --no-progress
   script:
     - composer audit
   allow_failure: true
-
 security:cargo:
   stage: security
   image: rust:latest
-  <<: *cache-cargo
+  !!merge <<: *cache-cargo
   before_script:
     - cargo install cargo-audit
   script:
     - cd assets/wasm && cargo audit
   allow_failure: true
-
 # Container Security Scan
 security:container:
   stage: security
@@ -192,12 +175,11 @@ security:container:
     - docker build -t sinople-theme:$CI_COMMIT_SHA -f Containerfile .
     - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --severity HIGH,CRITICAL sinople-theme:$CI_COMMIT_SHA
   allow_failure: true
-
 # Build Assets
 build:assets:
   stage: build
   image: node:${NODE_VERSION}
-  <<: *cache-npm
+  !!merge <<: *cache-npm
   before_script:
     - apt-get update && apt-get install -y curl
     - curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -213,7 +195,6 @@ build:assets:
       - assets/js/dist/
       - assets/wasm/pkg/
     expire_in: 1 week
-
 # Build Container
 build:container:
   stage: build
@@ -229,7 +210,6 @@ build:container:
   artifacts:
     reports:
       dotenv: build.env
-
 # Deploy to Development
 deploy:dev:
   stage: deploy
@@ -245,7 +225,6 @@ deploy:dev:
   only:
     - develop
   when: manual
-
 # Deploy to Production
 deploy:prod:
   stage: deploy
@@ -262,7 +241,6 @@ deploy:prod:
     - tags
     - main
   when: manual
-
 # Generate SBOM
 sbom:
   stage: build
@@ -276,3 +254,8 @@ sbom:
     expire_in: 30 days
   only:
     - tags
+trufflehog:
+  stage: security
+  image: trufflesecurity/trufflehog:latest
+  script:
+    - trufflehog git file://. --only-verified --fail

@@ -22,3 +22,6 @@ lint:
 # Format code
 fmt:
     vendor/bin/php-cs-fixer fix
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

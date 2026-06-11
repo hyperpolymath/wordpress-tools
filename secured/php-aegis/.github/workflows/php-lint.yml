@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
 name: PHP Lint & Analysis
-
 on:
   push:
     branches: [main, master]
@@ -23,12 +22,9 @@ on:
       - 'phpunit.xml'
       - '.php-cs-fixer.dist.php'
       - '.github/workflows/php-lint.yml'
-
 permissions: read-all
-
 env:
   PHP_VERSION: '8.3'
-
 jobs:
   # ============================================================
   # Syntax Check - Fast fail on parse errors
@@ -42,20 +38,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ env.PHP_VERSION }}
           tools: none
           coverage: none
-
       - name: Check PHP syntax
         run: |
           echo "Checking PHP syntax..."
           find src -name "*.php" -print0 | xargs -0 -n1 php -l
           echo "✅ All PHP files have valid syntax"
-
   # ============================================================
   # Code Style - PSR-12 compliance via PHP-CS-Fixer
   # ============================================================
@@ -69,18 +62,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ env.PHP_VERSION }}
           tools: php-cs-fixer:3
           coverage: none
-
       - name: Run PHP-CS-Fixer
         run: |
           php-cs-fixer fix --dry-run --diff --verbose --config=.php-cs-fixer.dist.php
-
   # ============================================================
   # Static Analysis - PHPStan at maximum strictness
   # ============================================================
@@ -94,21 +84,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ env.PHP_VERSION }}
           tools: phpstan:1
           coverage: none
-
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
-
       - name: Run PHPStan
         run: |
           phpstan analyse --configuration=phpstan.neon --error-format=github
-
   # ============================================================
   # SPDX License Headers - Ensure all files have headers
   # ============================================================
@@ -121,7 +107,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Check SPDX headers
         run: |
           MISSING=""
@@ -136,7 +121,6 @@ jobs:
             exit 1
           fi
           echo "✅ All PHP files have SPDX license headers"
-
   # ============================================================
   # Strict Types - Ensure all files use strict_types
   # ============================================================
@@ -149,7 +133,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Check strict_types
         run: |
           MISSING=""
@@ -164,7 +147,6 @@ jobs:
             exit 1
           fi
           echo "✅ All PHP files declare strict_types=1"
-
   # ============================================================
   # Security Patterns - Check for dangerous code patterns
   # ============================================================
@@ -177,7 +159,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Check dangerous functions
         run: |
           FOUND=0
@@ -228,7 +209,6 @@ jobs:
           else
             exit 1
           fi
-
       - name: Check weak cryptography
         run: |
           FOUND=0
@@ -255,7 +235,6 @@ jobs:
           fi
 
           echo "✅ Weak cryptography check completed"
-
       - name: Check SQL injection patterns
         run: |
           # Direct variable interpolation in queries
@@ -266,7 +245,6 @@ jobs:
             echo "$SQLI"
           fi
           echo "✅ SQL injection pattern check completed"
-
   # ============================================================
   # Composer Audit - Check for dependency vulnerabilities
   # ============================================================
@@ -279,21 +257,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ env.PHP_VERSION }}
           tools: composer:2
           coverage: none
-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
-
       - name: Run Composer audit
         run: |
           composer audit --format=plain || echo "::warning::Vulnerabilities found in dependencies"
-
   # ============================================================
   # Unit Tests - PHPUnit with coverage
   # ============================================================
@@ -307,7 +281,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
@@ -315,14 +288,11 @@ jobs:
           extensions: xdebug
           coverage: xdebug
           tools: phpunit:10
-
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
-
       - name: Run PHPUnit tests
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage/clover.xml
-
       - name: Check coverage threshold
         run: |
           # Extract coverage percentage from clover.xml
@@ -346,7 +316,6 @@ jobs:
               echo "::warning::Coverage is below 70% threshold"
             fi
           fi
-
   # ============================================================
   # Multi-version PHP Test - Ensure compatibility
   # ============================================================
@@ -364,23 +333,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
-
       - name: Check syntax on PHP ${{ matrix.php }}
         run: find src -name "*.php" -print0 | xargs -0 -n1 php -l
-
       - name: Run PHPStan on PHP ${{ matrix.php }}
         run: vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress
-        continue-on-error: ${{ matrix.php == '8.4' }}  # Allow failures on newest PHP
-
+        continue-on-error: ${{ matrix.php == '8.4' }} # Allow failures on newest PHP
   # ============================================================
   # Summary - Aggregate all check results
   # ============================================================

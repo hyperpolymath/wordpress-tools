@@ -336,3 +336,6 @@ package VERSION:
     rsync -av --exclude=node_modules --exclude=target --exclude=dist --exclude=.git . dist/sinople-{{VERSION}}/
     cd dist && zip -r sinople-{{VERSION}}.zip sinople-{{VERSION}}/
     @echo "✅ Package created: dist/sinople-{{VERSION}}.zip"
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

@@ -5,14 +5,11 @@
 # Runs extended fuzzing on a weekly schedule
 
 name: ClusterFuzzLite batch fuzzing
-
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight UTC
+    - cron: '0 0 * * 0' # Weekly on Sunday at midnight UTC
   workflow_dispatch:
-
 permissions: read-all
-
 jobs:
   BatchFuzzing:
     runs-on: ubuntu-latest
@@ -27,7 +24,6 @@ jobs:
           language: rust
           github-token: ${{ secrets.GITHUB_TOKEN }}
           sanitizer: address
-
       - name: Run Fuzzers
         id: run
         uses: google/clusterfuzzlite/actions/run_fuzzers@884713a6c30a92e5e8544c39945cd7cb630abcd1 # v1

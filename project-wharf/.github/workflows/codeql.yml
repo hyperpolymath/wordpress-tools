@@ -1,18 +1,14 @@
 # SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
 name: "CodeQL Advanced"
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: '17 23 * * 3'
-
-
 permissions: read-all
-
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -23,34 +19,29 @@ jobs:
       packages: read
       actions: read
       contents: read
-
     strategy:
       fail-fast: false
       matrix:
         include:
-        - language: actions
-          build-mode: none
-        - language: rust
-          build-mode: none
-
+          - language: actions
+            build-mode: none
+          - language: rust
+            build-mode: none
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@a4784f2dad6682d68cce8299ef20b1ca931bbdfb # v4
-      with:
-        languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
-
-    - name: Run manual build steps
-      if: matrix.build-mode == 'manual'
-      shell: bash
-      run: |
-        echo 'Manual build not configured'
-        exit 1
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@a4784f2dad6682d68cce8299ef20b1ca931bbdfb # v4
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@a4784f2dad6682d68cce8299ef20b1ca931bbdfb # v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+      - name: Run manual build steps
+        if: matrix.build-mode == 'manual'
+        shell: bash
+        run: |
+          echo 'Manual build not configured'
+          exit 1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@a4784f2dad6682d68cce8299ef20b1ca931bbdfb # v4
+        with:
+          category: "/language:${{matrix.language}}"

@@ -226,3 +226,6 @@ serve:
 watch:
     @echo "Watching for changes..."
     @find . -name "*.php" | entr just test
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

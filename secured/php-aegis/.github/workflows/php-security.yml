@@ -1,10 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 name: PHP Security Check
-
 on: [push, pull_request]
-
 permissions: read-all
-
 jobs:
   security:
     runs-on: ubuntu-latest

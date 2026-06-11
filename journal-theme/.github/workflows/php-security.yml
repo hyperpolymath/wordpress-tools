@@ -7,7 +7,6 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Basic PHP Security Scan
         run: |
           # Check for dangerous functions
@@ -32,19 +31,16 @@ jobs:
           fi
 
           echo "✅ Basic PHP security scan completed"
-
   sanctify-analysis:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    continue-on-error: true  # Don't fail build if sanctify unavailable
+    continue-on-error: true # Don't fail build if sanctify unavailable
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-
       - name: Cache sanctify-php build
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
@@ -52,7 +48,6 @@ jobs:
           key: ${{ runner.os }}-sanctify-${{ hashFiles('**/sanctify-php.cabal') }}
           restore-keys: |
             ${{ runner.os }}-sanctify-
-
       - name: Build sanctify-php
         run: |
           # Clone and build sanctify-php
@@ -66,30 +61,8 @@ jobs:
             echo "Nix build unavailable, trying cabal..."
             nix-shell -p ghc cabal-install --run "cabal update && cabal install --installdir=$HOME/.local/bin" || true
           fi
-
       - name: Run sanctify-php analysis
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          if command -v sanctify &>/dev/null; then
-            echo "🔍 Running sanctify-php analysis..."
-            sanctify analyze . 2>&1 | tee sanctify-report.txt || true
-
-            # Check for critical issues
-            if grep -q '\[High\]' sanctify-report.txt; then
-              echo "::error::High severity security issues found"
-              cat sanctify-report.txt
-              exit 1
-            elif grep -q '\[Medium\]' sanctify-report.txt; then
-              echo "::warning::Medium severity security issues found"
-              cat sanctify-report.txt
-            fi
-
-            echo "✅ sanctify-php analysis completed"
-          else
-            echo "⚠️ sanctify-php not available, skipping AST-based analysis"
-            echo "Install from: https://github.com/hyperpolymath/sanctify-php"
-          fi
-
+        run: "export PATH=\"$HOME/.local/bin:$PATH\"\nif command -v sanctify &>/dev/null; then\n  echo \"\U0001F50D Running sanctify-php analysis...\"\n  sanctify analyze . 2>&1 | tee sanctify-report.txt || true\n\n  # Check for critical issues\n  if grep -q '\\[High\\]' sanctify-report.txt; then\n    echo \"::error::High severity security issues found\"\n    cat sanctify-report.txt\n    exit 1\n  elif grep -q '\\[Medium\\]' sanctify-report.txt; then\n    echo \"::warning::Medium severity security issues found\"\n    cat sanctify-report.txt\n  fi\n\n  echo \"✅ sanctify-php analysis completed\"\nelse\n  echo \"⚠️ sanctify-php not available, skipping AST-based analysis\"\n  echo \"Install from: https://github.com/hyperpolymath/sanctify-php\"\nfi\n"
       - name: Upload sanctify report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
@@ -97,22 +70,18 @@ jobs:
           name: sanctify-report
           path: sanctify-report.txt
           if-no-files-found: ignore
-
   aegis-check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           tools: composer
-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
-
       - name: Verify php-aegis integration
         run: |
           # Check that php-aegis is installed

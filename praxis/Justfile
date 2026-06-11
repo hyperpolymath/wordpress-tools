@@ -542,3 +542,6 @@ fix-spdx:
         fi; \
     done
     @echo "✓ SPDX headers fixed"
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

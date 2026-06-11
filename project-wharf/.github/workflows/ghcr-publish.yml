@@ -1,16 +1,12 @@
 # SPDX-License-Identifier: MPL-2.0
 name: Publish to GHCR
-
 permissions: read-all
-
 on:
   release:
     types: [published]
   workflow_dispatch:
-
 env:
   REGISTRY: ghcr.io
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -20,7 +16,6 @@ jobs:
       packages: write
       id-token: write
       attestations: write
-
     strategy:
       matrix:
         target:
@@ -28,11 +23,9 @@ jobs:
             dockerfile-target: wharf-cli
           - name: yacht-agent
             dockerfile-target: yacht-agent
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
       - name: Install nerdctl and containerd
         run: |
           # Install containerd
@@ -50,21 +43,17 @@ jobs:
           # Start buildkitd daemon
           sudo /usr/local/bin/buildkitd &
           sleep 3
-
       - name: Log in to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | sudo nerdctl login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Build image
         run: |
           sudo nerdctl build -f Containerfile --target ${{ matrix.target.dockerfile-target }} -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.target.name }}:${{ github.sha }} .
           sudo nerdctl tag ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.target.name }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.target.name }}:latest
-
       - name: Push image
         run: |
           sudo nerdctl push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.target.name }}:${{ github.sha }}
           sudo nerdctl push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.target.name }}:latest
-
       - name: Tag release version
         if: github.event_name == 'release'
         run: |

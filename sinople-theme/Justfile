@@ -378,3 +378,6 @@ alias v := validate
 alias h := help
 
 # vim: set ft=make :
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

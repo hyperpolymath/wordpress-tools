@@ -7,18 +7,15 @@ stages:
   - security
   - compliance
   - deploy
-
 variables:
   WP_VERSION: "latest"
   PHP_VERSION: "8.1"
-
 # Cache composer and WordPress
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - vendor/
     - wordpress/
-
 # Lint PHP code
 lint:php:
   stage: lint
@@ -31,7 +28,6 @@ lint:php:
   script:
     - vendor/bin/phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/* .
   allow_failure: false
-
 # Check WordPress coding standards
 lint:wpcs:
   stage: lint
@@ -45,7 +41,6 @@ lint:wpcs:
   script:
     - phpcs --standard=WordPress-Core --extensions=php wp-plugin-conflict-mapper.php includes/ admin/
   allow_failure: true
-
 # Run PHP unit tests
 test:phpunit:
   stage: test
@@ -69,7 +64,6 @@ test:phpunit:
     - vendor/bin/phpunit
   coverage: '/Code Coverage: \d+\.\d+%/'
   allow_failure: false
-
 # Security scanning
 security:phpstan:
   stage: security
@@ -80,7 +74,6 @@ security:phpstan:
   script:
     - vendor/bin/phpstan analyse --level=5 includes/ admin/ wp-plugin-conflict-mapper.php
   allow_failure: true
-
 # Check for security vulnerabilities in dependencies
 security:composer:
   stage: security
@@ -91,7 +84,6 @@ security:composer:
   script:
     - php composer.phar audit
   allow_failure: true
-
 # Verify no dangerous functions
 security:dangerous-functions:
   stage: security
@@ -108,7 +100,6 @@ security:dangerous-functions:
         echo "SUCCESS: No dangerous functions detected"
       fi
   allow_failure: false
-
 # RSR Compliance Check
 compliance:rsr:
   stage: compliance
@@ -151,7 +142,6 @@ compliance:rsr:
       echo ""
       echo "=== RSR Compliance: PASSED ==="
   allow_failure: false
-
 # Verify documentation completeness
 compliance:docs:
   stage: compliance
@@ -178,7 +168,6 @@ compliance:docs:
         fi
       done
   allow_failure: false
-
 # Check WordPress.org plugin guidelines compliance
 compliance:wordpress:
   stage: compliance
@@ -201,7 +190,6 @@ compliance:wordpress:
         echo "✅ No code obfuscation detected"
       fi
   allow_failure: true
-
 # Create release package
 package:zip:
   stage: deploy
@@ -219,7 +207,6 @@ package:zip:
   only:
     - tags
     - main
-
 # Deploy to WordPress.org SVN (manual trigger)
 deploy:wordpress-org:
   stage: deploy
@@ -232,7 +219,6 @@ deploy:wordpress-org:
   when: manual
   only:
     - tags
-
 # Create GitHub release
 deploy:github-release:
   stage: deploy
@@ -243,3 +229,8 @@ deploy:github-release:
   when: manual
   only:
     - tags
+trufflehog:
+  stage: security
+  image: trufflesecurity/trufflehog:latest
+  script:
+    - trufflehog git file://. --only-verified --fail

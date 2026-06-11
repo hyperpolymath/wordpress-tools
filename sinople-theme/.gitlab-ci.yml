@@ -7,23 +7,19 @@ stages:
   - test
   - security
   - release
-
 variables:
   RUST_VERSION: "stable"
   NODE_VERSION: "20"
   DENO_VERSION: "1.40.0"
-
 # Default image
 default:
   image: ubuntu:22.04
   before_script:
     - apt-get update -qq
     - apt-get install -y -qq curl git build-essential
-
 # ============================================================================
 # VALIDATION STAGE
 # ============================================================================
-
 validate:docs:
   stage: validate
   script:
@@ -40,7 +36,6 @@ validate:docs:
     - test -f .well-known/humans.txt || exit 1
     - echo "✅ All documentation present"
   allow_failure: false
-
 validate:build-system:
   stage: validate
   script:
@@ -50,11 +45,9 @@ validate:build-system:
     - test -f flake.nix || exit 1
     - echo "✅ Build system valid"
   allow_failure: false
-
 # ============================================================================
 # BUILD STAGE
 # ============================================================================
-
 build:wasm:
   stage: build
   image: rust:${RUST_VERSION}
@@ -71,7 +64,6 @@ build:wasm:
     key: rust-wasm-${CI_COMMIT_REF_SLUG}
     paths:
       - wasm/semantic_processor/target/
-
 build:rescript:
   stage: build
   image: node:${NODE_VERSION}
@@ -88,7 +80,6 @@ build:rescript:
     key: node-rescript-${CI_COMMIT_REF_SLUG}
     paths:
       - rescript/node_modules/
-
 build:theme:
   stage: build
   dependencies:
@@ -105,11 +96,9 @@ build:theme:
     paths:
       - wordpress/
     expire_in: 1 week
-
 # ============================================================================
 # TEST STAGE
 # ============================================================================
-
 test:rust:
   stage: test
   image: rust:${RUST_VERSION}
@@ -123,8 +112,7 @@ test:rust:
     reports:
       junit: wasm/semantic_processor/target/nextest/junit.xml
     expire_in: 1 week
-  allow_failure: true  # Until tests are fully implemented
-
+  allow_failure: true # Until tests are fully implemented
 test:rescript:
   stage: test
   image: node:${NODE_VERSION}
@@ -133,8 +121,7 @@ test:rescript:
   script:
     - cd rescript
     - npm test || echo "No ReScript tests configured"
-  allow_failure: true  # Until tests are fully implemented
-
+  allow_failure: true # Until tests are fully implemented
 test:integration:
   stage: test
   image: denoland/deno:${DENO_VERSION}
@@ -143,12 +130,10 @@ test:integration:
     - build:rescript
   script:
     - deno test --allow-read tests/ || echo "No integration tests configured"
-  allow_failure: true  # Until tests are fully implemented
-
+  allow_failure: true # Until tests are fully implemented
 # ============================================================================
 # SECURITY STAGE
 # ============================================================================
-
 security:audit-rust:
   stage: security
   image: rust:${RUST_VERSION}
@@ -156,27 +141,23 @@ security:audit-rust:
     - cargo install cargo-audit
     - cd wasm/semantic_processor
     - cargo audit
-  allow_failure: true  # Don't fail build on advisories (warn only)
-
+  allow_failure: true # Don't fail build on advisories (warn only)
 security:audit-npm:
   stage: security
   image: node:${NODE_VERSION}
   script:
     - cd rescript
     - npm audit --production || true
-  allow_failure: true  # Don't fail build on advisories (warn only)
-
+  allow_failure: true # Don't fail build on advisories (warn only)
 security:sast:
   stage: security
   image: returntocorp/semgrep
   script:
     - semgrep --config=auto wordpress/ || true
-  allow_failure: true  # Optional security scanning
-
+  allow_failure: true # Optional security scanning
 # ============================================================================
 # RELEASE STAGE
 # ============================================================================
-
 release:package:
   stage: release
   dependencies:
@@ -192,7 +173,6 @@ release:package:
   only:
     - tags
     - main
-
 release:gitlab:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
@@ -209,11 +189,9 @@ release:gitlab:
     - tags
   dependencies:
     - release:package
-
 # ============================================================================
 # LINT STAGE (optional, runs in parallel with build)
 # ============================================================================
-
 lint:rust:
   stage: validate
   image: rust:${RUST_VERSION}
@@ -222,41 +200,40 @@ lint:rust:
     - rustup component add rustfmt clippy
     - cargo fmt --check
     - cargo clippy -- -D warnings
-  allow_failure: true  # Warn only
-
+  allow_failure: true # Warn only
 lint:php:
   stage: validate
   image: composer:latest
   script:
     - composer global require wp-coding-standards/wpcs
     - phpcs --standard=WordPress wordpress/ || true
-  allow_failure: true  # Optional (phpcs not always installed)
-
+  allow_failure: true # Optional (phpcs not always installed)
 # ============================================================================
 # CACHE CONFIGURATION
 # ============================================================================
-
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .cargo/
     - wasm/semantic_processor/target/
     - rescript/node_modules/
-
 # ============================================================================
 # WORKFLOW RULES
 # ============================================================================
-
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_TAG
-
 # ============================================================================
 # NOTIFICATIONS (optional)
 # ============================================================================
-
 # Uncomment to enable notifications
 # after_script:
 #   - 'curl -X POST -H "Content-Type: application/json" -d "{\"text\":\"Build ${CI_JOB_STATUS}: ${CI_PROJECT_NAME} (${CI_COMMIT_REF_NAME})\"}" ${SLACK_WEBHOOK_URL}'
+
+trufflehog:
+  stage: security
+  image: trufflesecurity/trufflehog:latest
+  script:
+    - trufflehog git file://. --only-verified --fail
