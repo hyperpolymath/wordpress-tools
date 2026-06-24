@@ -1,5 +1,5 @@
 <!--
-SPDX-License-Identifier: MPL-2.0
+SPDX-License-Identifier: CC-BY-SA-4.0
 Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 -->
 # php-aegis Roadmap (Integration-Informed Priority)
@@ -39,7 +39,7 @@ See [POSITIONING.md](POSITIONING.md) for full positioning strategy.
 **Goal**: Address compliance and differentiation issues immediately.
 
 ### 1.1 SPDX License Headers ✅
-- Add `SPDX-License-Identifier: MIT OR MPL-2.0` to all PHP files
+- Add `SPDX-License-Identifier: CC-BY-SA-4.0 OR MPL-2.0` to all PHP files
 - Add `SPDX-FileCopyrightText` with year and author
 
 ### 1.2 Static Methods

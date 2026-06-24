@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // SPDX-FileCopyrightText: 2025 WP Praxis Contributors
 
@@ -9,7 +9,7 @@
 
 **Offline-capable core library for WP Praxis symbolic workflows**
 
-image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 image:https://img.shields.io/badge/rust-1.70+-orange.svg[Rust,link=https://www.rust-lang.org/]
 image:https://img.shields.io/badge/RSR-Gold-gold[RSR Gold]
 image:https://img.shields.io/badge/tests-59-success[Tests]

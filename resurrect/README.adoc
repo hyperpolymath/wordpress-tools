@@ -1,15 +1,15 @@
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = WP-Resurrect: Site Operations Control Plane (SOCP)
 
-image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 :toc:
 :sectnums:
 :icons: font
 
 image:https://img.shields.io/badge/RSR-Infrastructure-cd7f32[RSR Infrastructure]
 image:https://img.shields.io/badge/Phase-Development-yellow[Phase]
-image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 image:https://img.shields.io/badge/Guix-Primary-purple?logo=gnu[Guix]
 
 == Overview
@@ -257,7 +257,7 @@ Per link:.claude/CLAUDE.md[RSR Language Policy]:
 
 == License
 
-SPDX-License-Identifier: MPL-2.0-or-later
+SPDX-License-Identifier: CC-BY-SA-4.0
 
 == Links
 
