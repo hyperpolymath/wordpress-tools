@@ -1,5 +1,5 @@
 <!--
-SPDX-License-Identifier: MPL-2.0
+SPDX-License-Identifier: CC-BY-SA-4.0
 Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 -->
 # Security Integration Report
@@ -179,7 +179,7 @@ public function escape(string $input, EscapeContext $context): string;
 **Fix:** Add to all source files:
 ```php
 <?php
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 ```
 
 ---

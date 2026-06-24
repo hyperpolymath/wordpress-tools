@@ -1,12 +1,12 @@
 <!--
-SPDX-License-Identifier: MPL-2.0
+SPDX-License-Identifier: CC-BY-SA-4.0
 Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 -->
 # WP Praxis Manifest Parser
 
 **LFE-based symbolic manifest parsing and transformation system for WP Praxis**
 
-image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 [![LFE](https://img.shields.io/badge/LFE-2.1.2-purple.svg)](https://lfe.io/)
 [![Erlang/OTP](https://img.shields.io/badge/Erlang%2FOTP-24%2B-red.svg)](https://www.erlang.org/)
 
