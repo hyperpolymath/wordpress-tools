@@ -1,269 +1,97 @@
-// SPDX-License-Identifier: CC-BY-SA-4.0
-// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
-= Sinople WordPress Theme
+= Sinople
+:toc: macro
+:icons: font
 
-image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
-image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]
+[.lead]
+A WordPress theme that does more than style your posts. It helps you connect them.
 
+Sinople is a modern theme for WordPress. It is fast. It is accessible. It respects your privacy. And it has one feature most themes do not: a built-in knowledge graph. You can tag ideas, people, and concepts in your writing, and link them together. Sinople stores those links as data. Your site can then use them, export them, and share them with other sites.
 
-A modern, semantically-aware WordPress theme powered by *ReScript*, *Deno*, and *WASM*. Sinople (from the heraldic term for green) combines traditional WordPress theming with cutting-edge semantic web technologies for character relationships, glosses, and knowledge graphs.
+It is made for everyone. If you can install a WordPress theme, you can use Sinople. The advanced parts stay out of your way until you want them.
 
-== Current Status
+toc::[]
 
-Sinople is currently best understood as an ambitious integration prototype rather than a finished production platform.
+== Why Sinople is different
 
-* The repo contains real WordPress, ReScript, and WASM implementation work.
-* Several headline claims still outrun the automated test surface and the audit record in link:RSR_AUDIT.md[RSR_AUDIT.md].
-* In particular, Micropub/auth, accessibility verification, and standards-compliance claims should be treated as in-progress unless separately evidenced.
+Most themes change how your site *looks*. Sinople also changes what your site *knows*.
 
-== Features
+*It understands your content.* Link a post about "Time" to one about "Space," and that link becomes real data — not just words on a page.
 
-- 🧠 *Semantic Web Processing*: RDF/OWL processing via Rust WASM for construct relationships
-- 🌐 *IndieWeb Integration Work*: Webmention and Micropub-related endpoints exist, but the auth/completeness story is still in progress
-- ♿ *Accessibility-First Direction*: strong accessibility intent, but full AAA-style verification is still pending
-- 🔒 *Type Safety*: ReScript-only architecture (NO TypeScript)
-- ⚡ *Performance*: Rust-powered WASM semantic processor
-- 🎨 *Modern Stack*: Deno + Fresh framework for server-side rendering
-- 🤖 *Theme Transpilation System* (🚧 WIP): Automatically extract and recreate WordPress themes
-  - Web scraper with license detection
-  - Schema-based transformation (Cue/Nix)
-  - Haskell → ReScript transpiler
-  - ML-powered learning (LSM + Julia + Logtalk)
-  - See [THEME_TRANSPILATION_ARCHITECTURE.md](THEME_TRANSPILATION_ARCHITECTURE.md)
+*It is built on safe, fast tech.* The heavy work runs in WebAssembly — code that runs quickly and safely — written in Rust. The rest is written in ReScript, a language designed to rule out whole classes of bugs before they happen.
 
-== Production-Ready Enhancements
+*It is private by default.* No trackers. No bloat. It even removes the two plugins WordPress ships that you never asked for. (You can add them back. Your site, your choice.)
 
-Sinople includes several enhancements to improve user experience, security, and FOSS philosophy compliance. See [THEME-ENHANCEMENTS.md](THEME-ENHANCEMENTS.md) for detailed documentation.
+*It is secure by default.* Modern password hashing. Encrypted storage for sensitive settings. Signed API requests. All on from the start — not sold as add-ons.
 
-=== Visual Identity
-- *Professional Screenshot* (1200x900): Sinople green (#006400) with theme branding
-- *Multi-Size Favicons*: Complete favicon set for all devices and browsers (16px to 512px)
-  - Includes: ICO, PNG variants, Apple Touch Icon
-  - Auto-injected into `<head>` via `wp_head` hook
-  - Design: Sinople green with white "S" monogram
+*It belongs to the open web.* Sinople supports IndieWeb standards, so your site can talk to other sites directly. No platform in the middle.
 
-=== Clean Default Installation
-- *No Bloatware*: Akismet and Hello Dolly automatically removed on theme activation
-- *User Freedom Preserved*: Users can still manually install these plugins if needed
-- *Automatic Translations*: WordPress translations download immediately on first installation
-- *Update Triggers*: Core, plugin, and theme updates checked automatically
-- **Implementation**:
-  - Theme activation hook removes default plugins
-  - Must-use plugin (`mu-plugins/sinople-no-default-plugins.php`) filters installation-time defaults
-  - Translation pack downloads on first admin visit
+== Honest status
 
-=== Libravatar Support (FOSS Gravatar Alternative)
-- *Service*: Libravatar (https://libravatar.org) - free/open-source avatar service
-- *Privacy*: Users can host their own Libravatar instance
-- *Fallback*: Gracefully falls back to Gravatar if image not found
-- *User Control*: Enable/disable via checkbox in Settings > Discussion
-- *Default*: Enabled (aligns with FOSS-first philosophy)
+NOTE: Sinople is a working prototype, not a finished product. Some features are complete. Some are partly done. Some are goals. We tell you exactly which is which. Every claim in this file is backed up in link:EXPLAINME.adoc[EXPLAINME — Show Me The Receipts].
 
-=== Secure Email by Default
-- *Problem Solved*: WordPress defaults to insecure SMTP on port 25
-- *Solution*: Automatic PHPMailer configuration for encrypted connections
-- *Default Protocol*: TLS (STARTTLS) on port 587 (recommended)
-- *Alternative*: SSL (SMTPS) on port 465 (configurable)
-- *User Control*: Encryption type and port customizable in Settings > General
-- *Benefits*:
-  - Prevents email interception and tampering
-  - Improves deliverability (many ISPs block port 25)
-  - Protects SMTP authentication credentials
-- *Compatibility*: Only applies when SMTP is used; can be disabled via `wp-config.php`
+== What you get
 
-=== Cryptographic Security Suite (Phase 1)
-- *Goal*: Post-quantum ready cryptography where feasible in PHP
-- *Based On*: Absolute Max Cryptographic Suite specification
-- **Implementation Status**: ✅ Phase 1 complete (native PHP support)
-- **What's Included**:
-  - *Argon2id Password Hashing*: 512 MiB, 8 iterations, 4 lanes (GPU-resistant)
-  - *XChaCha20-Poly1305*: Authenticated encryption for sensitive options
-  - *SHAKE256*: File integrity hashing (512-bit output)
-  - *Ed25519*: Digital signatures for API authentication
-  - *HKDF-SHAKE256*: Key derivation from master key
-- **Configuration**: Set `SINOPLE_MASTER_KEY` in wp-config.php
-- **Use Cases**:
-  - Automatic password hashing upgrade (all users)
-  - Encrypted API keys and credentials
-  - File upload integrity verification
-  - REST API request signing
-  - Webmention source verification
-- **Performance**: Optimized (except Argon2id, which is intentionally slow)
-- **Future**: Phase 2-3 will add post-quantum signatures (Dilithium5, SPHINCS+) when PHP/OpenSSL support arrives
-- **Documentation**: See [CRYPTOGRAPHIC-INTEGRATION.md](CRYPTOGRAPHIC-INTEGRATION.md) for technical details
+*A clean, readable theme.* Good contrast. Keyboard-friendly. Works with screen readers.
 
-For complete technical details, testing checklists, and implementation notes, see [THEME-ENHANCEMENTS.md](THEME-ENHANCEMENTS.md).
+*Knowledge tools.* Two new content types: *Constructs* (ideas and concepts) and *Entanglements* (the links between them). Plus APIs to query and export the graph.
 
-== Quick Start
+*IndieWeb built in.* Your posts carry machine-readable markup (Microformats2). Webmentions let other sites reply to yours. Micropub support is in progress.
 
-=== Prerequisites
+*Private avatars.* Support for Libravatar, the free and open avatar service, instead of sending your readers' data to a third party.
 
-- WordPress 6.0+
-- PHP 7.4+
-- Rust (for building WASM)
-- Deno 1.40+
-- Node.js 18+ (for ReScript)
+*Safer email.* WordPress sends mail over an unencrypted connection by default. Sinople switches it to encrypted (TLS) automatically.
 
-=== Installation
+*Strong security defaults.* Argon2id password hashing, authenticated encryption for sensitive options, and digital signatures for API requests. Details in link:CRYPTOGRAPHIC-INTEGRATION.md[CRYPTOGRAPHIC-INTEGRATION].
 
-1. *Clone the repository*:
-   ```bash
-   git clone https://github.com/Hyperpolymath/wp-sinople-theme.git
-   cd wp-sinople-theme
-   ```
+== For site owners — no code needed
 
-2. *Build WASM module*:
-   ```bash
-   cd wasm/semantic_processor
-   cargo install wasm-pack
-   ./build.sh
-   cd ../..
-   ```
+. Download the `wordpress/` folder from this repository.
+. Copy it to `wp-content/themes/sinople` on your site.
+. Go to *Appearance → Themes* and activate Sinople.
 
-3. *Compile ReScript*:
-   ```bash
-   cd rescript
-   npm install
-   npm run build
-   cd ..
-   ```
+You need: *WordPress 6.7 or later* and *PHP 8.3 or later* (8.4 recommended). If your host offers older PHP, ask them to upgrade — or move. Old PHP is a security risk.
 
-4. *Set up WordPress*:
-   ```bash
-   # Copy wordpress/ directory to your WordPress themes folder
-   cp -r wordpress /path/to/wordpress/wp-content/themes/sinople
-   ```
+== For developers
 
-5. *Activate theme* in WordPress admin
+[cols="1,1", options="header"]
+|===
+| Tool | Version
+| WordPress | 6.7+ (tested up to 6.8)
+| PHP | 8.3+ (8.4 recommended, CI-tested on 8.5)
+| Deno | 2.x
+| Node.js | 22 LTS
+| Rust | stable, with the `wasm32-unknown-unknown` target
+| ReScript | 11.1
+|===
 
-=== Development
-
-```bash
-= Build everything
-
-./build.sh
-
-= Development mode (watch files)
-
-./dev.sh
-
-= Run tests
-
-cd tests
-deno test integration/
-```
-
-== Project Structure
-
-```
-wp-sinople-theme/
-├── wasm/               # Rust WASM semantic processor
-├── rescript/           # ReScript source code
-├── deno/               # Deno + Fresh application
-├── wordpress/          # WordPress theme files
-├── ontology/           # RDF ontologies (Turtle format)
-├── tests/              # Integration tests
-└── docs/               # Documentation
-```
-
-== Custom Post Types
-
-=== Constructs
-Abstract concepts, entities, or ideas (e.g., "Time", "Consciousness", "Justice")
-
-=== Entanglements
-Relationships between constructs (e.g., "Time → Space", "Consciousness → Free Will")
-
-== IndieWeb Features
-
-- *Webmention*: `/wp-json/sinople/v1/webmention`
-- *Micropub*: `/wp-json/sinople/v1/micropub` (endpoint present; authentication and production posture still need tightening)
-- *Microformats2*: All posts include h-entry markup
-
-== Semantic Web APIs
-
-- *Semantic Graph*: `/wp-json/sinople/v1/semantic-graph`
-- *RDF Export*: `/wp-json/sinople/v1/constructs/{id}/rdf`
-- *Full Ontology*: `/wp-json/sinople/v1/ontology`
+[source,bash]
+----
+git clone https://github.com/hyperpolymath/wordpress-tools.git
+cd wordpress-tools/sinople-theme
+./build.sh    # build everything
+./dev.sh      # watch mode
+----
 
 == Accessibility
 
-Sinople is designed with strong accessibility goals, but full WCAG AAA-style verification is still pending:
-
-- 7:1 contrast ratio for normal text
-- Full keyboard navigation support
-- Screen reader optimized
-- Respects `prefers-reduced-motion`
-- Skip links to main content
-- Semantic HTML5 markup
-
-== Browser Support
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-
-== Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Development guidelines
-- Tri-Perimeter Contribution Framework (TPCF)
-- Code style and commit conventions
-- Pull request process
-
-Please also review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
-
-== Documentation
-
-=== User Documentation
-- *[USAGE.md](USAGE.md)*: Developer usage guide
-- *[ROADMAP.md](ROADMAP.md)*: Development roadmap
-- *[STACK.md](STACK.md)*: Technical stack details
-- *[CHANGELOG.md](CHANGELOG.md)*: Version history and release notes
-
-=== Project Governance
-- *[CONTRIBUTING.md](CONTRIBUTING.md)*: Contribution guidelines and TPCF
-- *[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)*: Community standards
-- *[SECURITY.md](SECURITY.md)*: Security policy and vulnerability reporting
-- *[MAINTAINERS.md](MAINTAINERS.md)*: Project maintainers and governance
-- *[TPCF.md](TPCF.md)*: Tri-Perimeter Contribution Framework details
-
-=== Development
-- *[CLAUDE.md](CLAUDE.md)*: AI assistant guidelines and architecture
-- *[RSR_AUDIT.md](RSR_AUDIT.md)*: Rhodium Standard Repository compliance audit
+We aim for WCAG 2.2 level AA across the theme, and AAA where we can. That means strong contrast, full keyboard access, screen-reader support, and respect for reduced-motion settings. A full independent audit is still to come — current status is in link:EXPLAINME.adoc[the receipts file].
 
 == Security
 
-Security vulnerabilities can be reported via:
-- Email: security@sinople.org
-- Security policy: [SECURITY.md](SECURITY.md)
-- Security.txt: [/.well-known/security.txt](.well-known/security.txt)
+Found a vulnerability? Please see link:SECURITY.md[SECURITY.md]. We use coordinated disclosure.
 
-We follow coordinated disclosure practices with 24-hour acknowledgment and 7-day patch timelines.
+== Documentation
+
+* link:EXPLAINME.adoc[EXPLAINME — Show Me The Receipts] (claims and evidence)
+* link:USAGE.md[Usage guide]
+* link:STACK.md[Technical stack]
+* link:ROADMAP.adoc[Roadmap]
+* link:CONTRIBUTING.adoc[Contributing]
+* link:CODE_OF_CONDUCT.md[Code of conduct]
 
 == License
 
-*Dual Licensed* - Choose either:
+*Code:* Mozilla Public License 2.0 (MPL-2.0). See link:LICENSE[LICENSE].
+*Documentation:* Creative Commons Attribution-ShareAlike 4.0 (CC-BY-SA-4.0).
 
-- *Palimpsest-MPL-1.0 License* (OSI-approved, permissive)
-- *Palimpsest License v0.8* (political autonomy focus)
-
-See [LICENSE.txt](LICENSE.txt) for full terms.
-
-*SPDX-License-Identifier*: `MIT OR Palimpsest-0.8`
-
-== Standards Compliance
-
-- ⚠️ *RSR*: see link:RSR_AUDIT.md[RSR_AUDIT.md] for the real current audit posture
-- ⚠️ *Accessibility*: goals are strong, but full verification is not yet evidenced here
-- ⚠️ *IndieWeb*: endpoints and integration work exist, but production-complete Micropub/auth claims are premature
-- ✅ *Semantic Versioning 2.0.0*: Version management
-- ✅ *Conventional Commits*: Commit message format
-- ✅ *RFC 9116*: security.txt implementation
-
-== Credits
-
-*Development*: Claude Code (Anthropic) + Human collaboration
-*License*: MIT OR Palimpsest-0.8
-*Humans*: See [.well-known/humans.txt](.well-known/humans.txt)
-*AI Policy*: See [.well-known/ai.txt](.well-known/ai.txt)
+SPDX-License-Identifier: CC-BY-SA-4.0
