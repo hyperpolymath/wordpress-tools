@@ -1,0 +1,138 @@
+= Sinople — Show Me The Receipts
+
+The README makes claims. This file backs them up.
+
+A WordPress theme with a built-in knowledge graph, strong security defaults, and IndieWeb support.
+
+— link:README.adoc[README]
+
+== Status key
+
+* ✅ Proven — code exists and is exercised (tests, CI, or both)
+* 🔶 Partial — real code exists, but verification is incomplete
+* 🚧 In progress — actively being built
+* 🎯 Goal — designed, not yet evidenced
+
+== Claims and receipts
+
+[cols="2,1,2", options="header"]
+|===
+| README claim | Status | Where to check
+
+| Rust-powered WebAssembly semantic engine
+| 🔶 Partial
+| `wasm/semantic_processor/` — run `cargo test`, then `./build.sh`
+
+| ReScript-only, type-safe code (no TypeScript)
+| ✅ Proven
+| `rescript/` — no `.ts` files exist in the project
+
+| Deno + Fresh server-side rendering
+| 🔶 Partial
+| `deno/` — run `deno task start`
+
+| Constructs and Entanglements post types
+| ✅ Proven
+| `wordpress/` — registered in theme functions; activate and check the admin menu
+
+| Webmention endpoint
+| 🔶 Partial
+| `wordpress/` REST routes — `POST /wp-json/sinople/v1/webmention`
+
+| Micropub endpoint
+| 🚧 In progress
+| Endpoint exists at `/wp-json/sinople/v1/micropub`; auth hardening is tracked in open issues. Do not rely on it in production yet.
+
+| Microformats2 markup on all posts
+| 🔶 Partial
+| View source on any post; look for `h-entry`. Full parser validation not yet in CI.
+
+| Argon2id hashing, XChaCha20-Poly1305, Ed25519
+| 🔶 Partial
+| link:CRYPTOGRAPHIC-INTEGRATION.md[CRYPTOGRAPHIC-INTEGRATION.md]; all use PHP's built-in `sodium` extension. Note: Argon2id memory cost is configurable — the 512 MiB ceiling will exceed `memory_limit` on shared hosting.
+
+| Post-quantum signatures
+| 🎯 Goal
+| PHP and OpenSSL have no native support yet. Plan: deliver ML-DSA (FIPS 204) via our existing Rust→WASM pipeline rather than waiting on PHP.
+
+| Removes Akismet and Hello Dolly on activation
+| ✅ Proven
+| `wordpress/` activation hook + `mu-plugins/sinople-no-default-plugins.php`
+
+| Libravatar support with Gravatar fallback
+| 🔶 Partial
+| Setting lives under *Settings → Discussion*; manual fallback test not yet automated.
+
+| Encrypted SMTP (TLS 587) by default
+| 🔶 Partial
+| PHPMailer hook in `wordpress/`; only applies when SMTP is configured. Disable in `wp-config.php`.
+
+| WCAG 2.2 AA (AAA where feasible)
+| 🎯 Goal
+| Contrast and keyboard work are in the CSS/templates; a full audit with axe-core + manual testing has not been run or published.
+
+| 7:1 contrast ratio
+| 🔶 Partial
+| Theme stylesheet — verify with any contrast checker against the Sinople palette.
+
+| Browser support: current Chrome, Firefox, Safari, Edge
+| ✅ Proven
+| We target link:https://web.dev/baseline[Baseline, Widely Available]. No legacy shims shipped.
+|===
+
+== File map
+
+[cols="1,2", options="header"]
+|===
+| Path | What's there
+
+| `wordpress/` | The theme itself — PHP templates, styles, hooks
+| `wasm/semantic_processor/` | Rust source for the WebAssembly semantic engine
+| `rescript/` | Type-safe application source (ReScript)
+| `deno/` | Deno + Fresh server-side application
+| `ontology/` | RDF/OWL vocabularies in Turtle format
+| `cli/` | Command-line tooling
+| `ffi/zig/` | Zig FFI bridge
+| `fuzz/` | Fuzz-testing targets
+| `contractiles/` | Executable contract checks
+| `docs/` | Documentation
+| `examples/` | Usage examples
+| `data/` | Seed and reference data
+| `.machine_readable/6a2` | Machine-readable project metadata
+| `.github/` | CI workflows
+|===
+
+== How to verify for yourself
+
+[source,bash]
+----
+# Rust / WASM
+cd wasm/semantic_processor && cargo test
+
+# ReScript
+cd rescript && npm install && npm run build
+
+# Deno
+cd deno && deno task test
+
+# PHP lint (theme)
+find wordpress -name '*.php' -exec php -l {} \;
+----
+
+== Known gaps — the honest list
+
+* No `security.txt` is published yet, so we make no RFC 9116 claim. It will be added with a valid `Expires` field.
+* `.well-known/humans.txt` and `ai.txt` are planned, not present.
+* The full WCAG 2.2 audit has not been run.
+* Static-analysis alerts are being triaged; see the Security tab for current counts.
+* Earlier versions of this README claimed an "OSI-approved" Palimpsest licence and a `LICENSE.txt` file. Both were wrong and have been corrected.
+
+== Questions?
+
+Open an issue or reach out directly — happy to explain anything in more detail.
+
+== License
+
+This document is licensed under Creative Commons Attribution-ShareAlike 4.0. Project code is licensed under the Mozilla Public License, v. 2.0. See the LICENSE file for details.
+
+SPDX-License-Identifier: CC-BY-SA-4.0
