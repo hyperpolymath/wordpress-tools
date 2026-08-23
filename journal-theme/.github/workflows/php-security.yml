@@ -38,7 +38,6 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Install Nix
-        uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Cache sanctify-php build
@@ -54,12 +53,8 @@ jobs:
           git clone --depth 1 https://github.com/hyperpolymath/sanctify-php.git /tmp/sanctify-php
           cd /tmp/sanctify-php
 
-          # Try nix build first, fall back to cabal
-          if nix build 2>/dev/null; then
             cp result/bin/sanctify ~/.local/bin/sanctify || true
           else
-            echo "Nix build unavailable, trying cabal..."
-            nix-shell -p ghc cabal-install --run "cabal update && cabal install --installdir=$HOME/.local/bin" || true
           fi
       - name: Run sanctify-php analysis
         run: "export PATH=\"$HOME/.local/bin:$PATH\"\nif command -v sanctify &>/dev/null; then\n  echo \"\U0001F50D Running sanctify-php analysis...\"\n  sanctify analyze . 2>&1 | tee sanctify-report.txt || true\n\n  # Check for critical issues\n  if grep -q '\\[High\\]' sanctify-report.txt; then\n    echo \"::error::High severity security issues found\"\n    cat sanctify-report.txt\n    exit 1\n  elif grep -q '\\[Medium\\]' sanctify-report.txt; then\n    echo \"::warning::Medium severity security issues found\"\n    cat sanctify-report.txt\n  fi\n\n  echo \"✅ sanctify-php analysis completed\"\nelse\n  echo \"⚠️ sanctify-php not available, skipping AST-based analysis\"\n  echo \"Install from: https://github.com/hyperpolymath/sanctify-php\"\nfi\n"
