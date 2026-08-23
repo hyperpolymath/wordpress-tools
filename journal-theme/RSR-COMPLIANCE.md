@@ -12,7 +12,7 @@ This document tracks compliance with the Rhodium Standard Repository (RSR) frame
 
 | Category | Status | Notes |
 |----------|--------|-------|
-| **Type Safety** | ✅ Bronze | PHP 8.1+, TypeScript strict, Rust, ReScript |
+| **Type Safety** | ✅ Bronze | PHP 8.1+,  strict, Rust,  |
 | **Memory Safety** | ✅ Bronze | Rust ownership model, zero unsafe blocks in WASM |
 | **Offline-First** | ✅ Bronze | No mandatory external dependencies, works air-gapped |
 | **Documentation** | ✅ Bronze | 20+ markdown files, comprehensive coverage |
@@ -34,9 +34,9 @@ This document tracks compliance with the Rhodium Standard Repository (RSR) frame
 
 **Implementation**:
 - ✅ **PHP 8.1+**: Strict types, declare(strict_types=1), type hints, return types
-- ✅ **TypeScript**: Strict mode enabled, no implicit any, all functions typed
+- ✅ ****: Strict mode enabled, no implicit any, all functions typed
 - ✅ **Rust**: Compile-time type checking, no runtime type errors
-- ✅ **ReScript**: Sound type system, type inference, no runtime exceptions
+- ✅ ****: Sound type system, type inference, no runtime exceptions
 - ✅ **Elixir**: Typespecs with Dialyzer for static analysis
 
 **Verification**:
@@ -45,14 +45,14 @@ This document tracks compliance with the Rhodium Standard Repository (RSR) frame
 composer install
 ./vendor/bin/phpcs --standard=WordPress .
 
-# TypeScript
+# 
 npm run lint:js
 
 # Rust
 cd assets/wasm && cargo check
 
-# ReScript
-npm run build:rescript
+# 
+npm run build:
 ```
 
 ### 2. Memory Safety ✅ Bronze
@@ -62,7 +62,7 @@ npm run build:rescript
 **Implementation**:
 - ✅ **Rust**: Ownership model, borrow checker, no unsafe blocks in lib.rs
 - ✅ **PHP**: Memory-managed, no manual memory management
-- ✅ **TypeScript/JavaScript**: Garbage-collected, no manual memory management
+- ✅ **/JavaScript**: Garbage-collected, no manual memory management
 - ✅ **Container**: Read-only filesystem, tmpfs for necessary writes
 
 **Verification**:
@@ -146,7 +146,7 @@ npm run build
   - test-security.php: Security headers, CSP, input sanitization, nonces
   - test-indieweb.php: Microformats, h-card, webmentions, JSON Feed, POSSE
   - test-serialization.php: NDJSON, FlatBuffers, Cap'n Proto, BEAM interop
-- ✅ **Jest**: TypeScript/JavaScript test suite
+- ✅ **Jest**: /JavaScript test suite
   - accessibility.test.ts: Font size controls, theme toggle, contrast mode
   - features.test.ts: View Transitions, WASM, Container Queries, :has()
   - wasm.test.ts: Reading time, HTML sanitization, password hashing
@@ -315,7 +315,7 @@ just build     # Production build
 ### Completed Requirements
 1. ✅ **Testing**: Automated test suite implemented
    - PHPUnit: 6 test classes covering all inc/ modules
-   - Jest: 3 test suites for TypeScript modules
+   - Jest: 3 test suites for  modules
    - Cargo test: Rust WASM testing configured
    - Coverage reporting: HTML, text, clover, LCOV
 2. ✅ **CI/CD**: Complete pipelines operational

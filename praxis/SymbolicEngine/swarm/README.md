@@ -6,7 +6,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 **Distributed Symbolic Execution System for WordPress Workflows**
 
-A high-performance TypeScript-based swarm coordination system that distributes symbolic execution tasks across multiple worker nodes with real-time monitoring, state synchronization, and fault tolerance.
+A high-performance -based swarm coordination system that distributes symbolic execution tasks across multiple worker nodes with real-time monitoring, state synchronization, and fault tolerance.
 
 ## Overview
 
@@ -405,9 +405,9 @@ timeout = 30000
 
 ## Programmatic Usage
 
-You can use the swarm system programmatically in your TypeScript code:
+You can use the swarm system programmatically in your  code:
 
-```typescript
+```
 import { createDispatcher, createWorker } from '@wp-praxis/swarm';
 import { StateManager } from '@wp-praxis/swarm/state-manager';
 import { Logger } from '@wp-praxis/swarm/logger';
@@ -448,7 +448,7 @@ swarm/
 ├── bin/
 │   └── swarm-cli.ts          # CLI interface
 ├── src/
-│   ├── types.ts              # TypeScript type definitions
+│   ├── types.ts              #  type definitions
 │   ├── logger.ts             # Logging system
 │   ├── state-manager.ts      # SQLite state management
 │   ├── executor.ts           # Symbol execution
@@ -457,7 +457,7 @@ swarm/
 │   ├── dispatch.ts           # Main dispatcher
 │   └── websocket-server.ts   # WebSocket server
 ├── package.json              # Dependencies
-├── tsconfig.json             # TypeScript config
+├── onfig.json             #  config
 ├── swarm-config.toml         # Default configuration
 └── README.md                 # This file
 ```
@@ -465,7 +465,7 @@ swarm/
 ### Building
 
 ```bash
-# TypeScript type checking
+#  type checking
 bun run lint
 
 # Build project

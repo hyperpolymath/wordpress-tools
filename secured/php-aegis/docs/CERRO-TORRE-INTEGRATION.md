@@ -21,8 +21,8 @@ This guide explains how to deploy php-aegis WordPress using the **Verified Conta
 ┌──────────────┐        ┌──────────────────┐         ┌─────────────────┐
 │   SVALINN    │        │      VÖRÐR       │         │  CERRO TORRE    │
 │ Edge Gateway │───────▶│ Container Runtime│◀────────│   Builder       │
-│ (Deno/       │delegate│   (Rust/Ada)     │produces │  (Ada/SPARK)    │
-│  ReScript)   │        │                  │         │                 │
+│ (/       │delegate│   (Rust/Ada)     │produces │  (Ada/SPARK)    │
+│  )   │        │                  │         │                 │
 └──────┬───────┘        └────────┬─────────┘         └────────┬────────┘
        │                         │                            │
        │                         │                            │
@@ -82,8 +82,8 @@ alr build
 git clone https://github.com/hyperpolymath/svalinn.git
 cd svalinn
 
-# Install with Deno
-deno install --allow-all svalinn-compose
+# Install with 
+ install --allow-all svalinn-compose
 
 # Verify installation
 svalinn-compose --version

@@ -58,7 +58,7 @@ Verified contributors can:
 | Name / Handle | Focus Area | GitHub | Joined |
 |--------------|------------|--------|--------|
 | _[To be filled]_ | Documentation | @handle | 2025-11 |
-| _[To be filled]_ | ReScript | @handle | 2025-12 |
+| _[To be filled]_ |  | @handle | 2025-12 |
 | _[To be filled]_ | Accessibility | @handle | 2025-12 |
 
 ### How to Become a Verified Contributor
@@ -111,7 +111,7 @@ This project builds on ideas from:
 
 - **WordPress Community** - Theme standards and best practices
 - **Rust Community** - Memory safety and type safety culture
-- **ReScript Community** - Sound type system for web development
+- ** Community** - Sound type system for web development
 - **IndieWeb Movement** - Decentralized web standards
 - **Semantic Web Community** - RDF/OWL ontologies
 - **Accessibility Advocates** - WCAG compliance and inclusive design

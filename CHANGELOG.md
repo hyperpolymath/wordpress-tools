@@ -47,7 +47,7 @@ this project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - docs: record tech-debt audit findings (2026-05-26) (#28)
-- docs(claude): add CLAUDE.md with TypeScript Exemptions table (#17)
+- docs(claude): add CLAUDE.md with  Exemptions table (#17)
 - docs: add TEST-NEEDS.md (CRG C)
 - docs: add EXPLAINME.adoc — prove-it file backing README claims
 - docs: add 0-AI-MANIFEST.a2ml (RSR compliance)
@@ -57,7 +57,7 @@ this project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ci: fix nonexistent actions/upload-artifact SHA pin (#21)
 - ci(antipattern): fix top-level dir matching + benchmarks/lsp/bench filename allowlists (#16)
 - ci(antipattern): TS check reads .claude/CLAUDE.md exemption table (#15)
-- ci(antipattern): broaden TS allowlist (cli/, mod.ts, lsp-server, *vscode*, deno-*) (#14)
+- ci(antipattern): broaden TS allowlist (cli/, mod.ts, lsp-server, *vscode*, -*) (#14)
 - ci(antipattern): allowlist legit TS bridge/adapter paths (#13)
 
 ## Pre-history

@@ -344,7 +344,7 @@ All tests must pass with the following outcomes:
 
 ### Known Limitations
 
-1. **Attestation Coverage**: 25% - Shadow verifier exists but requires patscc
+1. **Attestation Coverage**: 25% - Shadow verifier exists but requires pac
 2. **Plugin Install Failures**: Some plugins may fail to install in test environment
 3. **Theme Rendering**: Visual verification not automated
 4. **Performance Impact**: Rate limiting adds ~1-2ms per request

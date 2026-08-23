@@ -17,7 +17,7 @@ Build a **self-learning theme generation system** that can:
 1. **Analyze** any WordPress theme (or website) and extract its design patterns
 2. **Validate** licensing to ensure legal compliance
 3. **Transform** the design using schema-based transpilation
-4. **Generate** ReScript/WASM-powered themes with Sinople's semantic features
+4. **Generate** /WASM-powered themes with Sinople's semantic features
 5. **Learn** from user feedback to improve extraction/generation over time
 
 ### Ultimate Goal
@@ -35,7 +35,7 @@ Enable users to:
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                      Web Scraper + Analyzer                      │
-│  (Deno-based, respects robots.txt, checks licensing)            │
+│  (-based, respects robots.txt, checks licensing)            │
 └────────────────┬────────────────────────────────────────────────┘
                  │
                  ├─► License Detection (security.txt, LICENSE, meta)
@@ -51,13 +51,13 @@ Enable users to:
                  │
                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│              Haskell Transpiler (Schema → ReScript)              │
+│              Haskell Transpiler (Schema → )              │
 │  (Type-safe transformation with validation)                     │
 └────────────────┬────────────────────────────────────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│           ReScript Theme Generator + WASM Integration            │
+│            Theme Generator + WASM Integration            │
 │  (Produces Sinople-compatible theme with semantic features)     │
 └────────────────┬────────────────────────────────────────────────┘
                  │
@@ -79,15 +79,15 @@ Enable users to:
 ## Component 1: Web Scraper + Analyzer
 
 ### Technology Stack
-- **Deno**: HTTP client with fetch API
-- **TypeScript/ReScript**: Type-safe scraping logic
-- **Deno DOM**: HTML parsing (https://deno.land/x/deno_dom)
+- ****: HTTP client with fetch API
+- **/**: Type-safe scraping logic
+- ** DOM**: HTML parsing (https:///x/deno_dom)
 - **CSS Parser**: PostCSS or similar
 
 ### Responsibilities
 
 #### 1.1 License Detection
-```typescript
+```
 // Checks multiple sources for license information
 interface LicenseInfo {
   detected: boolean;
@@ -124,7 +124,7 @@ async function detectLicense(url: string): Promise<LicenseInfo> {
 
 #### 1.2 DOM Structure Extraction
 
-```typescript
+```
 interface DOMStructure {
   hierarchy: {
     header: ElementNode;
@@ -150,7 +150,7 @@ interface ElementNode {
 
 #### 1.3 CSS Analysis
 
-```typescript
+```
 interface DesignTokens {
   colors: {
     primary: string[];
@@ -190,7 +190,7 @@ async function extractDesignTokens(cssText: string): Promise<DesignTokens>
 
 #### 1.4 Asset Catalog
 
-```typescript
+```
 interface AssetCatalog {
   images: Array<{
     url: string;
@@ -373,7 +373,7 @@ module Transpiler.Main where
 import qualified Data.Aeson as JSON
 import qualified Data.Text as T
 import qualified Transpiler.Schema as Schema
-import qualified Transpiler.ReScript as ReScript
+import qualified Transpiler. as 
 import qualified Transpiler.WordPress as WordPress
 
 -- Main pipeline
@@ -385,8 +385,8 @@ transpileTheme schemaPath = do
   -- 2. Validate schema
   validated <- Schema.validate schema
 
-  -- 3. Generate ReScript components
-  rescriptComponents <- ReScript.generateComponents validated
+  -- 3. Generate  components
+  Components <- .generateComponents validated
 
   -- 4. Generate WordPress PHP templates
   wpTemplates <- WordPress.generateTemplates validated
@@ -396,21 +396,21 @@ transpileTheme schemaPath = do
 
   -- 6. Combine into theme package
   pure $ ThemeOutput {
-    rescript = rescriptComponents,
+     = Components,
     wordpress = wpTemplates,
     css = css,
     metadata = Schema.metadata validated
   }
 
--- Example: Convert design tokens to ReScript
+-- Example: Convert design tokens to 
 data DesignTokens = DesignTokens {
   colors :: ColorPalette,
   typography :: Typography,
   spacing :: SpacingScale
 }
 
-generateReScriptModule :: DesignTokens -> T.Text
-generateReScriptModule tokens =
+generateModule :: DesignTokens -> T.Text
+generateModule tokens =
   T.unlines [
     "// Auto-generated from theme schema",
     "module DesignTokens = {",
@@ -464,13 +464,13 @@ data License = MIT | GPL2 | GPL3 | Apache2 | CCBY4
   deriving (Show, Eq, Generic, FromJSON, ToJSON)
 ```
 
-### ReScript Code Generation
+###  Code Generation
 
 ```haskell
--- src/Transpiler/ReScript.hs
-module Transpiler.ReScript where
+-- src/Transpiler/.hs
+module Transpiler. where
 
-generateComponents :: ThemeSchema -> IO [ReScriptModule]
+generateComponents :: ThemeSchema -> IO [Module]
 generateComponents schema = do
   let tokens = designTokens schema
       struct = structure schema
@@ -482,14 +482,14 @@ generateComponents schema = do
     generateTemplatesModule (templates schema)
   ]
 
-data ReScriptModule = ReScriptModule {
+data Module = Module {
   moduleName :: Text,
   moduleContent :: Text,
   filePath :: FilePath
 }
 
-generateDesignTokensModule :: DesignTokens -> ReScriptModule
-generateDesignTokensModule tokens = ReScriptModule {
+generateDesignTokensModule :: DesignTokens -> Module
+generateDesignTokensModule tokens = Module {
   moduleName = "DesignTokens",
   moduleContent = renderTemplate tokensTemplate tokens,
   filePath = "src/generated/DesignTokens.res"
@@ -502,8 +502,8 @@ generateDesignTokensModule tokens = ReScriptModule {
 
 ### CSS Parser
 
-```typescript
-// deno/lib/css-parser.ts
+```
+// /lib/css-parser.ts
 import { parse } from "https://esm.sh/postcss@8.4.31";
 
 interface CSSRule {
@@ -585,9 +585,9 @@ export function detectDesignSystem(rules: CSSRule[]): DesignTokens {
 
 ### DOM Structure Analyzer
 
-```typescript
-// deno/lib/dom-analyzer.ts
-import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+```
+// /lib/dom-analyzer.ts
+import { DOMParser } from "https:///x/deno_dom/-dom-wasm.ts";
 
 export async function analyzeDOMStructure(html: string): Promise<DOMStructure> {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -632,8 +632,8 @@ function extractElement(el: Element | null): ElementNode | null {
 
 #### 5.1 JSON Feedback API
 
-```typescript
-// deno/routes/api/feedback/theme.ts
+```
+// /routes/api/feedback/theme.ts
 export const handler: Handlers = {
   async POST(req, ctx) {
     const feedback: ThemeFeedback = await req.json();
@@ -641,7 +641,7 @@ export const handler: Handlers = {
     // Validate feedback schema
     const validated = await validateFeedback(feedback);
 
-    // Store in database (Deno KV or PostgreSQL)
+    // Store in database ( KV or PostgreSQL)
     await storeFeedback(validated);
 
     // Enqueue for ML training
@@ -730,8 +730,8 @@ timestamp: "2025-11-23T10:30:00Z"
 
 #### 5.3 Web UI Feedback Form
 
-```typescript
-// deno/islands/FeedbackForm.tsx
+```
+// /islands/FeedbackForm.tsx
 import { useState } from "preact/hooks";
 
 export default function ThemeFeedbackForm({ themeId }: { themeId: string }) {
@@ -957,7 +957,7 @@ end
 
 #### 6.3 Julia AI Supervised Learning
 
-**Use Case**: Train model to predict optimal ReScript code from schema.
+**Use Case**: Train model to predict optimal  code from schema.
 
 ```julia
 # ml/julia/theme_generator.jl
@@ -978,7 +978,7 @@ function create_theme_generator()
         Dense(128, 64, tanh)
     )
 
-    # Decoder: Latent representation -> ReScript code (token sequence)
+    # Decoder: Latent representation ->  code (token sequence)
     decoder = Chain(
         LSTM(64, 128),
         LSTM(128, 256),
@@ -999,11 +999,11 @@ function train_generator!(model::ThemeGeneratorModel, training_data::Vector{Them
             schema_vector = schema_to_vector(example.schema)
             latent = model.encoder(schema_vector)
 
-            # Decode to ReScript token sequence
+            # Decode to  token sequence
             predicted_tokens = model.decoder(latent)
 
-            # Compare with actual ReScript code
-            target_tokens = tokenize_rescript(example.rescript_code)
+            # Compare with actual  code
+            target_tokens = tokenize_(example._code)
             loss = crossentropy(predicted_tokens, target_tokens)
 
             # Backpropagation
@@ -1016,32 +1016,32 @@ function train_generator!(model::ThemeGeneratorModel, training_data::Vector{Them
     end
 end
 
-function generate_rescript(model::ThemeGeneratorModel, schema::ThemeSchema)::String
+function generate_(model::ThemeGeneratorModel, schema::ThemeSchema)::String
     schema_vector = schema_to_vector(schema)
     latent = model.encoder(schema_vector)
     token_sequence = model.decoder(latent)
 
-    # Decode tokens back to ReScript source code
-    detokenize_rescript(token_sequence)
+    # Decode tokens back to  source code
+    detokenize_(token_sequence)
 end
 
 struct ThemeTrainingExample
     schema::ThemeSchema
-    rescript_code::String
+    _code::String
     user_rating::Float64  # From feedback system
 end
 ```
 
 #### 6.4 Training Data Pipeline
 
-```typescript
+```
 // ml/pipeline/training-data-collector.ts
-import { Database } from "https://deno.land/x/denodb/mod.ts";
+import { Database } from "https:///x/denodb/mod.ts";
 
 interface TrainingDataPoint {
   id: string;
   schema: ThemeSchema;
-  generatedReScript: string;
+  generated: string;
   userFeedback: ThemeFeedback;
   rating: number;  // Derived from feedback
   timestamp: string;
@@ -1055,7 +1055,7 @@ export async function collectTrainingData(): Promise<TrainingDataPoint[]> {
     SELECT
       e.id,
       e.schema,
-      e.generated_rescript,
+      e.generated_,
       f.extraction_quality,
       f.correctness,
       f.improvements
@@ -1067,7 +1067,7 @@ export async function collectTrainingData(): Promise<TrainingDataPoint[]> {
   return data.map(row => ({
     id: row.id,
     schema: JSON.parse(row.schema),
-    generatedReScript: row.generated_rescript,
+    generated: row.generated_,
     userFeedback: row,
     rating: calculateRating(row),
     timestamp: row.created_at,
@@ -1096,18 +1096,18 @@ export async function exportForMLTraining(outputDir: string) {
   const data = await collectTrainingData();
 
   // Export as JSON for Julia
-  await Deno.writeTextFile(
+  await .writeTextFile(
     `${outputDir}/training-data.json`,
     JSON.stringify(data, null, 2)
   );
 
   // Export as CSV for easy loading
   const csv = convertToCSV(data);
-  await Deno.writeTextFile(`${outputDir}/training-data.csv`, csv);
+  await .writeTextFile(`${outputDir}/training-data.csv`, csv);
 
   // Export Logtalk facts
   const logTalkFacts = convertToLogTalkFacts(data);
-  await Deno.writeTextFile(`${outputDir}/training-facts.lgt`, logTalkFacts);
+  await .writeTextFile(`${outputDir}/training-facts.lgt`, logTalkFacts);
 }
 ```
 
@@ -1117,7 +1117,7 @@ export async function exportForMLTraining(outputDir: string) {
 
 ### Official WordPress Themes (2003-Present)
 
-```typescript
+```
 // data/wordpress-themes-catalog.ts
 export const WORDPRESS_OFFICIAL_THEMES = [
   // 2003-2010: The early years
@@ -1156,7 +1156,7 @@ export async function downloadOfficialTheme(slug: string): Promise<string> {
 
 ### IndieWeb Themes
 
-```typescript
+```
 // data/indieweb-themes-catalog.ts
 export const INDIEWEB_THEMES = [
   {
@@ -1208,13 +1208,13 @@ export const INDIEWEB_THEMES = [
 
 ### Phase 1: Foundation (Weeks 1-2) ✅ Started
 - [x] Create architecture document (this file)
-- [ ] Set up Deno web scraper with license detection
+- [ ] Set up  web scraper with license detection
 - [ ] Implement basic CSS/DOM extraction
 - [ ] Create Cue schema definitions
 
 ### Phase 2: Transpiler (Weeks 3-4)
 - [ ] Build Haskell transpiler skeleton
-- [ ] Implement schema → ReScript transformation
+- [ ] Implement schema →  transformation
 - [ ] Implement schema → WordPress PHP transformation
 - [ ] Add CSS generation from design tokens
 
@@ -1257,7 +1257,7 @@ export const INDIEWEB_THEMES = [
 
 ```bash
 # Using CLI tool
-deno run --allow-net --allow-write \
+ run --allow-net --allow-write \
   ./cli/extract-theme.ts \
   --url https://wordpress.org/themes/twentytwentyfour/ \
   --output ./extracted/twentytwentyfour.cue
@@ -1270,7 +1270,7 @@ deno run --allow-net --allow-write \
 # ✓ Generated Cue schema: ./extracted/twentytwentyfour.cue
 ```
 
-### Example 2: Transpile Schema to ReScript
+### Example 2: Transpile Schema to 
 
 ```bash
 # Using Haskell transpiler
@@ -1280,7 +1280,7 @@ cabal run transpiler -- \
 
 # Output:
 # ✓ Validated schema
-# ✓ Generated ReScript modules (8 files)
+# ✓ Generated  modules (8 files)
 # ✓ Generated WordPress templates (12 files)
 # ✓ Generated CSS (3,420 lines)
 # ✓ Theme package: ./generated/twentytwentyfour/
@@ -1316,7 +1316,7 @@ curl -X POST https://sinople.org/api/feedback/theme \
 
 ```bash
 # Collect training data
-deno run --allow-net --allow-write \
+ run --allow-net --allow-write \
   ./ml/pipeline/collect-training-data.ts \
   --output ./ml/data/training-2025-11-23.json
 
@@ -1341,7 +1341,7 @@ julia --project=. train.jl --data ../data/training-2025-11-23.json
 - Project vision and roadmap
 
 ### In Progress 🚧
-- Deno web scraper skeleton
+-  web scraper skeleton
 - Cue schema definitions
 - Basic license detection
 
@@ -1361,7 +1361,7 @@ This is an experimental system under active development. Contributions welcome i
 
 1. **Scraper Improvements**: Better CSS/DOM extraction algorithms
 2. **Schema Refinements**: Enhanced Cue/Nix schema definitions
-3. **Transpiler Features**: New ReScript code generation patterns
+3. **Transpiler Features**: New  code generation patterns
 4. **ML Models**: Alternative approaches (transformers, GANs, etc.)
 5. **Theme Catalog**: Adding more themes to the database
 6. **Feedback UI**: Improving user feedback collection
@@ -1384,7 +1384,7 @@ This component of the Sinople WordPress Theme is dual-licensed:
 ## References
 
 ### Web Scraping
-- [Deno DOM](https://deno.land/x/deno_dom)
+- [ DOM](https:///x/deno_dom)
 - [PostCSS](https://postcss.org/)
 - [SPDX License List](https://spdx.org/licenses/)
 

@@ -2,7 +2,7 @@
 #
 # Master Build Script for Sinople Theme
 #
-# Builds all components: WASM, ReScript, Deno, and assembles WordPress theme
+# Builds all components: WASM, , Deno, and assembles WordPress theme
 #
 
 set -e  # Exit on error
@@ -36,25 +36,25 @@ else
     echo -e "${RED}⚠️  WASM directory not found, skipping${NC}"
 fi
 
-# Step 2: Compile ReScript
-echo -e "${BLUE}🔧 Step 2: Compiling ReScript...${NC}"
-if [ -d "rescript" ]; then
-    cd rescript
+# Step 2: Compile 
+echo -e "${BLUE}🔧 Step 2: Compiling ...${NC}"
+if [ -d "" ]; then
+    cd 
 
     # Install dependencies if needed
     if [ ! -d "node_modules" ]; then
-        echo "Installing ReScript dependencies..."
+        echo "Installing  dependencies..."
         npm install
     fi
 
-    # Compile ReScript
-    npx rescript clean
-    npx rescript build
+    # Compile 
+    npx  clean
+    npx  build
 
-    echo -e "${GREEN}✅ ReScript compilation complete${NC}"
+    echo -e "${GREEN}✅  compilation complete${NC}"
     cd ..
 else
-    echo -e "${RED}⚠️  ReScript directory not found, skipping${NC}"
+    echo -e "${RED}⚠️   directory not found, skipping${NC}"
 fi
 
 # Step 3: Bundle Deno application (if applicable)
@@ -91,15 +91,15 @@ if [ -d "wasm/semantic_processor/pkg" ]; then
     cp wasm/semantic_processor/pkg/*.{js,wasm} wordpress/assets/wasm/ 2>/dev/null || true
 fi
 
-# Copy ReScript compiled files
-if [ -d "rescript/src" ]; then
-    echo "Copying ReScript compiled files..."
-    find rescript/src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; 2>/dev/null || true
+# Copy  compiled files
+if [ -d "/src" ]; then
+    echo "Copying  compiled files..."
+    find /src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; 2>/dev/null || true
 fi
 
 # Copy build outputs
-if [ -d "build/rescript" ]; then
-    cp -r build/rescript/* wordpress/assets/js/ 2>/dev/null || true
+if [ -d "build/" ]; then
+    cp -r build//* wordpress/assets/js/ 2>/dev/null || true
 fi
 
 if [ -d "build/deno" ]; then

@@ -457,7 +457,7 @@ Manifest (YAML/TOML)
 - **Elixir CLI**: Orchestration and dispatch
 - **PowerShell Engine**: Symbolic operations
 - **PHP Plugin**: WordPress hook registration
-- **TypeScript Tools**: Manifest validation and transformation
+- ** Tools**: Manifest validation and transformation
 
 ## Success Criteria Met
 

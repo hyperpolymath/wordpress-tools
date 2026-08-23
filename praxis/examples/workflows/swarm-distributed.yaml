@@ -36,7 +36,6 @@ symbols:
   - name: "initialize_swarm"
     type: "swarm"
     description: "Initialize swarm dispatcher and discover workers"
-    dispatch: "typescript"
     context: "swarm"
     parameters:
       operation: "initialize_dispatcher"
@@ -58,7 +57,6 @@ symbols:
   - name: "register_health_monitors"
     type: "swarm"
     description: "Register health monitoring for all workers"
-    dispatch: "typescript"
     context: "swarm"
     depends_on:
       - "initialize_swarm"
@@ -339,7 +337,6 @@ symbols:
   - name: "aggregate_worker_results"
     type: "aggregation"
     description: "Aggregate results from all parallel executions"
-    dispatch: "typescript"
     context: "swarm"
     depends_on:
       - "create_bulk_posts_1"
@@ -371,7 +368,6 @@ symbols:
   - name: "generate_swarm_performance_report"
     type: "reporting"
     description: "Generate performance report for swarm execution"
-    dispatch: "typescript"
     context: "swarm"
     depends_on:
       - "aggregate_worker_results"
@@ -421,7 +417,6 @@ symbols:
   - name: "scale_down_swarm"
     type: "swarm"
     description: "Gracefully scale down swarm workers"
-    dispatch: "typescript"
     context: "swarm"
     depends_on:
       - "verify_distributed_integrity"
@@ -441,7 +436,6 @@ symbols:
   - name: "cleanup_swarm"
     type: "swarm"
     description: "Cleanup swarm dispatcher and resources"
-    dispatch: "typescript"
     context: "swarm"
     depends_on:
       - "scale_down_swarm"

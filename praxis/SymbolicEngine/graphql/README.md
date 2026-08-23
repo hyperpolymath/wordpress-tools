@@ -72,7 +72,7 @@ Visit `http://localhost:4000/graphql` in your browser to access the interactive 
 
 - **Runtime**: Bun (high-performance JavaScript runtime)
 - **GraphQL Server**: Apollo Server 4
-- **TypeScript**: Full type safety
+- ****: Full type safety
 - **Database**: PostgreSQL (via pg driver, connects to Ecto schema)
 - **Swarm State**: SQLite (better-sqlite3)
 - **WebSocket**: graphql-ws for real-time subscriptions
@@ -85,14 +85,14 @@ Visit `http://localhost:4000/graphql` in your browser to access the interactive 
 graphql/
 ├── schema.graphql              # GraphQL schema definition
 ├── package.json                # Dependencies and scripts
-├── tsconfig.json              # TypeScript configuration
+├── onfig.json              #  configuration
 ├── codegen.yml                # GraphQL codegen config
 ├── .env.example               # Environment template
 │
 ├── src/
 │   ├── server.ts              # Main Apollo Server
 │   ├── context.ts             # GraphQL context builder
-│   ├── types.ts               # TypeScript type definitions
+│   ├── types.ts               #  type definitions
 │   │
 │   ├── resolvers/             # GraphQL resolvers
 │   │   ├── index.ts           # Combined resolvers
@@ -127,7 +127,7 @@ graphql/
 │   ├── playground.html        # GraphiQL playground
 │   ├── example-queries.graphql # Example queries
 │   └── js/
-│       └── graphql-client.ts  # TypeScript client
+│       └── graphql-client.ts  #  client
 │
 └── tests/                     # Tests
     ├── schema.test.ts         # Schema validation
@@ -289,11 +289,11 @@ subscription AuditCompletions {
 }
 ```
 
-## TypeScript Client
+##  Client
 
-Use the TypeScript client library for type-safe API access:
+Use the  client library for type-safe API access:
 
-```typescript
+```
 import { createClient } from './client/js/graphql-client';
 
 const client = createClient({
@@ -319,7 +319,7 @@ const unsubscribe = client.subscribeToWorkflow('1', (workflow) => {
 
 All database queries are batched and cached using DataLoader to prevent N+1 query problems:
 
-```typescript
+```
 // These resolve efficiently even in nested queries
 workflow {
   executions {
@@ -413,7 +413,7 @@ Logs are written to:
 
 ### Code Generation
 
-Generate TypeScript types from schema:
+Generate  types from schema:
 
 ```bash
 bun run codegen

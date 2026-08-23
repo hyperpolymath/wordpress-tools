@@ -20,7 +20,7 @@ The WP Praxis Manifest Parser is a powerful, Lisp-based system for parsing, vali
 - **OTP Architecture**: Fault-tolerant concurrent processing with supervision
 - **Introspection**: Deep runtime reflection and analysis
 - **Optimization**: Dead code elimination, constant folding, dependency ordering
-- **Integration**: Seamless interop with Elixir, Rust, TypeScript, and PHP
+- **Integration**: Seamless interop with Elixir, Rust, , and PHP
 
 ## Features
 
@@ -376,7 +376,7 @@ This parser is designed to integrate with:
 - **Rust Injector**: Performance-critical operations
 - **PHP Engine**: WordPress integration
 - **PowerShell Symbolic Engine**: Core symbolic operations
-- **TypeScript Tools**: Manifest validation and transformation
+- ** Tools**: Manifest validation and transformation
 
 See the [main WP Praxis README](../../README.md) for architecture overview.
 

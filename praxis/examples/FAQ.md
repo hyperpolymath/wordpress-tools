@@ -17,7 +17,7 @@ Each language serves a specific purpose:
 - **PowerShell**: Symbolic operations and workflows
 - **PHP**: WordPress-native integration
 - **Elixir**: Orchestration and state management
-- **TypeScript**: Dashboard, swarm coordination
+- ****: Dashboard, swarm coordination
 
 This polyglot approach allows each component to leverage the best tool for its specific job.
 
@@ -60,7 +60,7 @@ For basic usage, you need:
 
 For advanced features:
 - Elixir (database/state management)
-- TypeScript/Bun (swarm/dashboard)
+- /Bun (swarm/dashboard)
 
 ### Can I run WP Praxis on Windows?
 

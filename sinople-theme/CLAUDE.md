@@ -6,13 +6,13 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ## Project Overview
 
-**Sinople** (from the heraldic term for green) is a modern, semantically-aware WordPress theme built with cutting-edge web technologies. It combines traditional WordPress theming with a modern ReScript + Deno + WASM stack for maximum type safety, performance, and semantic web capabilities.
+**Sinople** (from the heraldic term for green) is a modern, semantically-aware WordPress theme built with cutting-edge web technologies. It combines traditional WordPress theming with a modern  +  + WASM stack for maximum type safety, performance, and semantic web capabilities.
 
 ### Core Mission
 - **Semantic Web First**: RDF/OWL processing for character relationships, glosses, and entanglements
 - **IndieWeb Level 4**: Full Webmention and Micropub support
 - **Maximum Accessibility**: WCAG 2.3 AAA compliance mandatory
-- **Type Safety**: ReScript-only (NO TypeScript) with WASM integration
+- **Type Safety**: -only (NO ) with WASM integration
 - **Performance**: Rust-powered WASM for semantic processing
 
 ## Architecture Overview
@@ -25,13 +25,13 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
                  │
                  ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Deno + Fresh Framework                      │
+│               + Fresh Framework                      │
 │  (Server-side rendering, API routes, Islands)           │
 └────────────────┬────────────────────────────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────────────────────────────┐
-│           ReScript Business Logic                        │
+│            Business Logic                        │
 │  (Type-safe bindings, components, utilities)            │
 └────────────────┬────────────────────────────────────────┘
                  │
@@ -53,7 +53,7 @@ This section clarifies the responsibilities and boundaries between each layer, i
 | **WordPress** | Production-ready | 85% | Fully functional theme with CPTs, IndieWeb, RDF endpoints |
 | **Rust/WASM** | Production-ready | 100% | Complete semantic processor with Sophia 0.8 |
 | **AffineScript** | Bindings complete | 40% | WASM bindings done; components/services not started |
-| **Deno/Fresh** | Scaffolded only | 5% | Config exists; no routes or islands implemented |
+| **/Fresh** | Scaffolded only | 5% | Config exists; no routes or islands implemented |
 
 ### Layer Responsibilities
 
@@ -82,7 +82,7 @@ This section clarifies the responsibilities and boundaries between each layer, i
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                      DENO/FRESH LAYER (Future)                              │
-│  Runtime: Deno 1.40+                     Location: deno/                    │
+│  Runtime:  1.40+                     Location: /                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  PLANNED RESPONSIBILITIES:                                                  │
 │  ○ Server-side rendering of enhanced pages                                 │
@@ -92,7 +92,7 @@ This section clarifies the responsibilities and boundaries between each layer, i
 │  ○ Real-time subscriptions (WebSocket)                                     │
 │                                                                              │
 │  CURRENT STATUS:                                                             │
-│  ⚠ Only configuration files exist (deno.json, main.ts, dev.ts)             │
+│  ⚠ Only configuration files exist (.json, main.ts, dev.ts)             │
 │  ⚠ No routes/ or islands/ directories implemented                          │
 │  ⚠ lib/ has type definitions only                                          │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -100,8 +100,8 @@ This section clarifies the responsibilities and boundaries between each layer, i
                                     │ ES6 Imports
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                      RESCRIPT LAYER                                         │
-│  Runtime: Compiled to ES6 JS             Location: rescript/                │
+│                       LAYER                                         │
+│  Runtime: Compiled to ES6 JS             Location: /                │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  IMPLEMENTED:                                                                │
 │  ✓ SemanticProcessor.res - Complete WASM bindings with types               │
@@ -113,14 +113,14 @@ This section clarifies the responsibilities and boundaries between each layer, i
 │  ✗ UI components (Graph.res, Navigation.res, Card.res)                     │
 │  ✗ Domain models (Construct.res, Entanglement.res)                         │
 │  ✗ Service layer (SemanticService.res, WordPressService.res)               │
-│  ✗ WordPress.res and Deno.res bindings                                     │
+│  ✗ WordPress.res and .res bindings                                     │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     │ wasm-bindgen FFI
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                      RUST/WASM LAYER                                        │
-│  Runtime: Browser WASM or Deno           Location: wasm/semantic_processor/ │
+│  Runtime: Browser WASM or            Location: wasm/semantic_processor/ │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  FULLY IMPLEMENTED:                                                          │
 │  ✓ SemanticProcessor struct with FastGraph                                  │
@@ -154,20 +154,20 @@ Browser → WordPress REST API → JSON
    ↓
 Browser → Load WASM Module
    ↓
-Browser → ReScript calls WASM → Semantic Graph Data
+Browser →  calls WASM → Semantic Graph Data
    ↓
 Browser → Render visualization (D3.js/Canvas)
 ```
-Available now: WASM processor + ReScript bindings work.
+Available now: WASM processor +  bindings work.
 Missing: UI components and integration.
 
-#### Pattern 3: Deno Edge Rendering (Planned, Not Implemented)
+#### Pattern 3:  Edge Rendering (Planned, Not Implemented)
 ```
-Browser → Deno/Fresh → WordPress REST API → JSON
+Browser → /Fresh → WordPress REST API → JSON
                     ↳ WASM Processing
                     ↳ SSR HTML Response
 ```
-This pattern is not yet implemented. Deno layer is scaffolded only.
+This pattern is not yet implemented.  layer is scaffolded only.
 
 ### Communication Protocols
 
@@ -179,9 +179,9 @@ This pattern is not yet implemented. Deno layer is scaffolded only.
 | Browser | WordPress | POST | `/wp-json/sinople/v1/webmention` | ✓ Active |
 | Browser | WordPress | POST | `/wp-json/sinople/v1/micropub` | ✓ Active |
 | Browser | WASM | FFI | `wasm-bindgen` calls | ✓ Active |
-| ReScript | WASM | FFI | `@module` bindings | ✓ Active |
-| Deno | WordPress | REST | Proxy `/api/wordpress` | ○ Planned |
-| Deno | Browser | SSR | Fresh routes | ○ Planned |
+|  | WASM | FFI | `@module` bindings | ✓ Active |
+|  | WordPress | REST | Proxy `/api/wordpress` | ○ Planned |
+|  | Browser | SSR | Fresh routes | ○ Planned |
 
 ### Deployment Modes
 
@@ -195,18 +195,18 @@ This pattern is not yet implemented. Deno layer is scaffolded only.
 ```
 - Install `wordpress/` as a standard WP theme
 - WASM optional client-side enhancement
-- No Deno required
+- No  required
 
-#### Mode B: Headless + Deno (Future)
+#### Mode B: Headless +  (Future)
 ```
 ┌─────────────────────────────┐     ┌─────────────────────────┐
-│   WordPress (Headless API)  │────▶│   Deno/Fresh (Edge)     │
+│   WordPress (Headless API)  │────▶│   /Fresh (Edge)     │
 │   Content Management Only   │     │   SSR + Islands         │
 └─────────────────────────────┘     └─────────────────────────┘
 ```
 - WordPress provides content API only
-- Deno handles all user-facing rendering
-- Requires implementing `deno/routes/` and `deno/islands/`
+-  handles all user-facing rendering
+- Requires implementing `/routes/` and `/islands/`
 
 ### File Ownership by Layer
 
@@ -214,12 +214,12 @@ This pattern is not yet implemented. Deno layer is scaffolded only.
 |-------|----------|------------|
 | `wordpress/**/*.php` | WordPress | WordPress only |
 | `wordpress/assets/css/*` | WordPress | WordPress, build scripts |
-| `wordpress/assets/js/*` | WordPress | WordPress, compiled ReScript |
-| `rescript/src/**/*.res` | ReScript | ReScript only |
-| `rescript/src/**/*.res.js` | Build | Generated (do not edit) |
+| `wordpress/assets/js/*` | WordPress | WordPress, compiled  |
+| `/src/**/*.res` |  |  only |
+| `/src/**/*.res.js` | Build | Generated (do not edit) |
 | `wasm/semantic_processor/src/*` | Rust | Rust only |
 | `wasm/semantic_processor/pkg/*` | Build | Generated (do not edit) |
-| `deno/**/*.ts` | Deno | Deno, compiled ReScript |
+| `/**/*.ts` |  | , compiled  |
 | `ontology/*.ttl` | Ontology | Ontology editors |
 
 ### Integration Points
@@ -231,7 +231,7 @@ This pattern is not yet implemented. Deno layer is scaffolded only.
 
 2. **Browser ↔ WASM**
    - JavaScript loads `semantic_processor_bg.wasm`
-   - ReScript-compiled JS calls WASM via bindings
+   - -compiled JS calls WASM via bindings
    - Graph data returned as JS objects (serde_wasm_bindgen)
 
 3. **WordPress ↔ RDF**
@@ -301,14 +301,14 @@ wp-sinople-theme/
 │   └── languages/                 # i18n translation files
 │       └── sinople.pot
 │
-├── deno/                          # Deno + Fresh application
-│   ├── deno.json                  # Deno configuration
+├── /                          #  + Fresh application
+│   ├── .json                  #  configuration
 │   ├── import_map.json            # Import maps
 │   ├── dev.ts                     # Development server
 │   ├── main.ts                    # Production server
 │   ├── fresh.gen.ts               # Auto-generated Fresh manifest
 │   ├── routes/                    # Fresh file-based routing
-│   │   ├── index.tsx              # Home page (ReScript)
+│   │   ├── index.tsx              # Home page ()
 │   │   ├── api/
 │   │   │   ├── webmention.ts      # Webmention endpoint
 │   │   │   ├── micropub.ts        # Micropub endpoint
@@ -319,12 +319,12 @@ wp-sinople-theme/
 │   │   │   └── [slug].tsx         # Dynamic construct pages
 │   │   └── entanglements/
 │   │       └── [slug].tsx         # Dynamic entanglement pages
-│   ├── islands/                   # Interactive islands (ReScript)
+│   ├── islands/                   # Interactive islands ()
 │   │   ├── SemanticGraph.tsx      # RDF graph visualization
 │   │   ├── GlossAnnotation.tsx    # Inline glosses
 │   │   ├── CharacterNetwork.tsx   # Character relationship viewer
 │   │   └── SearchFilter.tsx       # Accessible search/filter
-│   ├── components/                # Shared components (ReScript)
+│   ├── components/                # Shared components ()
 │   │   ├── Layout.res
 │   │   ├── Navigation.res
 │   │   ├── Footer.res
@@ -335,13 +335,13 @@ wp-sinople-theme/
 │       ├── IndieWeb.res           # Webmention/Micropub
 │       └── Cache.ts               # Caching layer
 │
-├── rescript/                      # ReScript source code
-│   ├── bsconfig.json              # ReScript configuration
+├── /                      #  source code
+│   ├── bsconfig.json              #  configuration
 │   ├── src/
 │   │   ├── bindings/              # External bindings
 │   │   │   ├── SemanticProcessor.res  # WASM bindings
 │   │   │   ├── WordPress.res      # WP REST API
-│   │   │   └── Deno.res           # Deno runtime
+│   │   │   └── .res           #  runtime
 │   │   ├── components/            # UI components
 │   │   │   ├── Graph.res          # RDF graph viewer
 │   │   │   ├── Gloss.res          # Annotation components
@@ -387,12 +387,12 @@ wp-sinople-theme/
 │   └── characters.ttl             # Character relationships
 │
 ├── build/                         # Build outputs
-│   ├── rescript/                  # Compiled ReScript
-│   └── deno/                      # Deno bundles
+│   ├── /                  # Compiled 
+│   └── /                      #  bundles
 │
 ├── tests/                         # Test suites
 │   ├── integration/
-│   │   ├── wasm-rescript.test.ts
+│   │   ├── wasm-.test.ts
 │   │   ├── wordpress-api.test.ts
 │   │   └── indieweb.test.ts
 │   └── accessibility/
@@ -408,8 +408,8 @@ wp-sinople-theme/
 ### Core Technologies
 - **WordPress**: 6.0+ (PHP 7.4+)
 - **Rust**: Stable (WASM compilation)
-- **ReScript**: 11+ (NO TypeScript!)
-- **Deno**: 1.40+ with Fresh framework
+- ****: 11+ (NO !)
+- ****: 1.40+ with Fresh framework
 - **Sophia RDF**: 0.8 (Rust RDF library)
 
 ### Key Libraries & Tools
@@ -429,7 +429,7 @@ wasm-opt = false  # Network restrictions
 opt-level = "z"   # Size optimization
 ```
 
-#### ReScript
+#### 
 ```json
 {
   "name": "sinople-theme",
@@ -443,11 +443,11 @@ opt-level = "z"   # Size optimization
 }
 ```
 
-#### Deno
+#### 
 ```json
 {
   "imports": {
-    "$fresh/": "https://deno.land/x/fresh@1.6.0/",
+    "$fresh/": "https:///x/fresh@1.6.0/",
     "preact": "https://esm.sh/preact@10.19.2",
     "preact/": "https://esm.sh/preact@10.19.2/"
   },
@@ -525,9 +525,9 @@ impl SemanticProcessor {
 }
 ```
 
-### ReScript Bindings
+###  Bindings
 
-```rescript
+```
 // SemanticProcessor.res
 type t
 
@@ -567,8 +567,8 @@ sn:hasGloss a owl:DatatypeProperty ;
 
 ### Webmention Endpoint
 
-```typescript
-// deno/routes/api/webmention.ts
+```
+// /routes/api/webmention.ts
 export const handler: Handlers = {
   async POST(req, ctx) {
     const form = await req.formData();
@@ -586,8 +586,8 @@ export const handler: Handlers = {
 
 ### Micropub Endpoint
 
-```typescript
-// deno/routes/api/micropub.ts
+```
+// /routes/api/micropub.ts
 export const handler: Handlers = {
   async POST(req, ctx) {
     // Authenticate request
@@ -693,25 +693,25 @@ cargo install wasm-pack  # Install via cargo (curl blocked)
 wasm-pack build --target web --out-dir pkg
 cd ../..
 
-# 2. Compile ReScript
-echo "🔧 Compiling ReScript..."
-cd rescript
+# 2. Compile 
+echo "🔧 Compiling ..."
+cd 
 npm install  # or yarn
-npx rescript build
+npx  build
 cd ..
 
-# 3. Bundle Deno application
-echo "🦕 Bundling Deno..."
-cd deno
-deno task build
+# 3. Bundle  application
+echo "🦕 Bundling ..."
+cd 
+ task build
 cd ..
 
 # 4. Copy assets to WordPress theme
 echo "📋 Copying assets..."
 mkdir -p wordpress/assets/wasm
 cp wasm/semantic_processor/pkg/* wordpress/assets/wasm/
-cp -r build/rescript/* wordpress/assets/js/
-cp -r build/deno/* wordpress/assets/js/
+cp -r build//* wordpress/assets/js/
+cp -r build//* wordpress/assets/js/
 
 echo "✅ Build complete!"
 ```
@@ -722,11 +722,11 @@ echo "✅ Build complete!"
 #!/bin/bash
 # dev.sh
 
-# Watch ReScript files
-cd rescript && npx rescript build -w &
+# Watch  files
+cd  && npx  build -w &
 
-# Watch Deno Fresh
-cd deno && deno task start &
+# Watch  Fresh
+cd  &&  task start &
 
 # Watch Rust (requires manual rebuild)
 echo "📝 Rust WASM requires manual rebuild: cd wasm/semantic_processor && ./build.sh"
@@ -736,9 +736,9 @@ wait
 
 ## Development Guidelines
 
-### ReScript Coding Standards
+###  Coding Standards
 
-```rescript
+```
 // Use descriptive names
 type construct = {
   id: string,
@@ -814,11 +814,11 @@ pub fn load_turtle(&mut self, ttl: &str) -> Result<(), JsValue> {
 
 ### Integration Tests
 
-```typescript
-// tests/integration/wasm-rescript.test.ts
-Deno.test("WASM semantic processor loads ontology", async () => {
+```
+// tests/integration/wasm-.test.ts
+.test("WASM semantic processor loads ontology", async () => {
   const processor = new SemanticProcessor();
-  const ttl = await Deno.readTextFile("./ontology/sinople.ttl");
+  const ttl = await .readTextFile("./ontology/sinople.ttl");
 
   await processor.load_turtle(ttl);
   const constructs = await processor.query_constructs();
@@ -829,11 +829,11 @@ Deno.test("WASM semantic processor loads ontology", async () => {
 
 ### Accessibility Tests
 
-```typescript
+```
 // tests/accessibility/wcag-aaa.test.ts
-import { assertEquals } from "https://deno.land/std/assert/mod.ts";
+import { assertEquals } from "https:///std/assert/mod.ts";
 
-Deno.test("All text meets AAA contrast ratio", async () => {
+.test("All text meets AAA contrast ratio", async () => {
   // Use axe-core or pa11y
   const violations = await checkContrast();
   assertEquals(violations.length, 0);
@@ -955,13 +955,13 @@ Tests panic without browser `console` object → Always skip with `cargo test --
 - [REST API Handbook](https://developer.wordpress.org/rest-api/)
 - [Coding Standards](https://developer.wordpress.org/coding-standards/)
 
-### ReScript
-- [ReScript Documentation](https://rescript-lang.org/docs/manual/latest/introduction)
-- [ReScript & React](https://rescript-lang.org/docs/react/latest/introduction)
+### 
+- [ Documentation](https://-lang.org/docs/manual/latest/introduction)
+- [ & React](https://-lang.org/docs/react/latest/introduction)
 
-### Deno & Fresh
-- [Deno Manual](https://deno.land/manual)
-- [Fresh Documentation](https://fresh.deno.dev/docs/introduction)
+###  & Fresh
+- [ Manual](https:///manual)
+- [Fresh Documentation](https://fresh..dev/docs/introduction)
 
 ### Semantic Web
 - [Sophia RDF](https://docs.rs/sophia/latest/sophia/)
@@ -979,7 +979,7 @@ Tests panic without browser `console` object → Always skip with `cargo test --
 
 ## Critical Notes for Claude
 
-1. **NO TypeScript**: This project uses ReScript exclusively
+1. **NO **: This project uses  exclusively
 2. **WCAG 2.3 AAA**: Non-negotiable; always verify contrast, keyboard nav, screen readers
 3. **Sophia 0.8**: Use separate crates, not unified package
 4. **WASM Tests**: Always skip in CLI builds (need browser environment)
@@ -987,13 +987,13 @@ Tests panic without browser `console` object → Always skip with `cargo test --
 6. **IndieWeb**: Webmention + Micropub are core features, not optional
 7. **Semantic First**: RDF/OWL processing is central to theme identity
 8. **Build Gotchas**: Document all network restrictions and workarounds
-9. **Type Safety**: Leverage ReScript's type system; use Result for errors
+9. **Type Safety**: Leverage 's type system; use Result for errors
 10. **Performance**: WASM is for semantic processing; keep bundle size reasonable
 
 ## Support & Community
 
 - **Repository**: `Hyperpolymath/wp-sinople-theme`
-- **Issues**: File issues on GitHub with `[WASM]`, `[ReScript]`, `[A11y]`, or `[IndieWeb]` tags
+- **Issues**: File issues on GitHub with `[WASM]`, `[]`, `[A11y]`, or `[IndieWeb]` tags
 - **Discussions**: Use GitHub Discussions for architecture questions
 - **Documentation**: Keep USAGE.md, ROADMAP.md, and STACK.md in sync
 

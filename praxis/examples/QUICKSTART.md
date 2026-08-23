@@ -64,7 +64,7 @@ This script will:
 1. Check prerequisites
 2. Build Rust injector
 3. Setup Elixir CLI
-4. Install TypeScript dependencies
+4. Install  dependencies
 5. Create configuration
 6. Run example workflow
 
@@ -106,7 +106,7 @@ cargo build --release
 cd /home/user/wp-praxis/Core/cli-wrapper
 mix deps.get && mix compile
 
-# TypeScript (Swarm & Dashboard)
+#  (Swarm & Dashboard)
 cd /home/user/wp-praxis/SymbolicEngine/swarm
 bun install
 cd /home/user/wp-praxis/SymbolicEngine/dashboard

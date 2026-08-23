@@ -1,0 +1,4 @@
+0000000000000000000000000000000000000000 0df8626d1a8f51755918e93e65b2a57555594873 Jonathan D.A. Jewell <6759885+hyperpolymath@users.noreply.github.com> 1786606849 +0100	branch: Created from HEAD
+0df8626d1a8f51755918e93e65b2a57555594873 22d082cc0a936e88381bb9fb90d1f8a5a849bdb7 Jonathan D.A. Jewell <6759885+hyperpolymath@users.noreply.github.com> 1786606857 +0100	commit: chore: remove squisher-corpus guix.scm placeholders
+22d082cc0a936e88381bb9fb90d1f8a5a849bdb7 04aff9902c1b74ff15b6fb751dcf0589585ba2cf Jonathan D.A. Jewell <6759885+hyperpolymath@users.noreply.github.com> 1786726459 +0100	commit: chore(ci): bump standards reusable pins to fix Bug A and Bug B (#426)
+04aff9902c1b74ff15b6fb751dcf0589585ba2cf 7fc7e8f7f7cbdef3d074f67861adadf60bf6ef02 Jonathan D.A. Jewell <6759885+hyperpolymath@users.noreply.github.com> 1786727018 +0100	commit: chore(ci): bump standards reusable pins to 5b1d0022 (#426)

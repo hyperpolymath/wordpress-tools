@@ -52,7 +52,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 - "PowerShell handles core symbolic operations"
 - "Elixir manages orchestration and state"
 - "PHP integrates directly with WordPress"
-- "TypeScript powers the dashboard and distributed swarm"
+- " powers the dashboard and distributed swarm"
 
 **[VISUAL: Show data flow diagram]**
 
@@ -331,7 +331,7 @@ query {
 1. "WordPress at scale through symbolic workflows" (15s)
 2. "4x faster with distributed execution" (10s)
 3. "Declarative workflows with automatic rollback" (12s)
-4. "Multi-language execution: Rust, PHP, PowerShell, Elixir, TypeScript" (8s)
+4. "Multi-language execution: Rust, PHP, PowerShell, Elixir, " (8s)
 
 ## Alternative Takes
 

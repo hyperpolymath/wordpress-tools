@@ -16,7 +16,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 The Sinople WordPress theme follows a **defense-in-depth** approach with multiple security layers:
 
 1. **Memory Safety**: Rust WASM module (zero `unsafe` blocks)
-2. **Type Safety**: ReScript bindings (sound type system)
+2. **Type Safety**:  bindings (sound type system)
 3. **Input Sanitization**: All WordPress inputs sanitized
 4. **Output Escaping**: All outputs escaped (XSS prevention)
 5. **CSRF Protection**: Nonces for all form submissions
@@ -45,7 +45,7 @@ Use PGP encryption for sensitive disclosures (key available at `.well-known/secu
 Please provide:
 
 1. **Type of vulnerability** (XSS, CSRF, injection, etc.)
-2. **Affected component** (WASM, PHP, ReScript, JavaScript, etc.)
+2. **Affected component** (WASM, PHP, , JavaScript, etc.)
 3. **Affected versions** (1.0.0, 1.0.1, etc.)
 4. **Steps to reproduce** (detailed, with code samples if possible)
 5. **Proof of concept** (if applicable, responsibly disclosed)

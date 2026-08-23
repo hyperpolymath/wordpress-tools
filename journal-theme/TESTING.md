@@ -10,7 +10,7 @@ This document provides comprehensive guidance for running tests in the Sinople t
 
 Sinople implements a multi-language test suite covering:
 - **PHP** (WordPress theme code) - PHPUnit
-- **JavaScript/TypeScript** - Jest
+- **JavaScript/** - Jest
 - **Rust** (WebAssembly) - cargo test
 
 ## Prerequisites
@@ -162,7 +162,7 @@ tests/js/
 
 #### Test Utilities
 
-```typescript
+```
 // Mock window.sinople global
 window.sinople = {
   features: { viewTransitions: true, wasm: true },
@@ -242,7 +242,7 @@ class Test_My_Feature extends SinopleTestCase {
 
 ### JavaScript Test Example
 
-```typescript
+```
 describe('My Feature', () => {
   beforeEach(() => {
     document.body.innerHTML = `<div id="test"></div>`;

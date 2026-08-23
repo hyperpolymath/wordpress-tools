@@ -163,23 +163,23 @@ Rocket Loader, aggressive caching, respect origin cache headers.
 **Action:** Create `scripts/cloudflare-baseline.sh` that applies these settings
 to any zone via the Cloudflare API.
 
-### P6: Replace innerHTML with rescript-dom-mounter (CRITICAL)
+### P6: Replace innerHTML with -dom-mounter (CRITICAL)
 panic-attack flagged innerHTML usage in graph-viewer.js and navigation.js as
 HIGH severity. The correct fix is NOT to replace innerHTML with createElement
 (that's just a different unsafe API). The correct fix is to use
-**rescript-dom-mounter** (`hyperpolymath/rescript-dom-mounter`) which provides:
+**-dom-mounter** (`hyperpolymath/-dom-mounter`) which provides:
 
 - 4-layer defence-in-depth (validation, DOMPurify, Trusted Types, CSP nonce)
 - `mountStringParsed` — DOMParser-based mounting with NO innerHTML sink
 - Compile-time guarantees via opaque `validSelector` and `validHtml` types
 - Formal verification of mount correctness via Idris2 ABI proofs
 
-**Action:** Add rescript-dom-mounter as a dependency. Rewrite graph-viewer.js
-and navigation.js in ReScript using SafeDOM.mountStringParsed. Remove all raw
+**Action:** Add -dom-mounter as a dependency. Rewrite graph-viewer.js
+and navigation.js in  using SafeDOM.mountStringParsed. Remove all raw
 innerHTML/document.write calls from the theme's JS. This is the whole point of
 the library — eat your own dogfood.
 
-```rescript
+```
 // Before (UNSAFE):
 // element.innerHTML = graphHtml
 

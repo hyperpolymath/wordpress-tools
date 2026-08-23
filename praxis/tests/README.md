@@ -37,7 +37,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # PHP (PHPUnit)
 composer install
 
-# TypeScript/Bun
+# /Bun
 curl -fsSL https://bun.sh/install | bash
 ```
 
@@ -60,8 +60,8 @@ pwsh tests/run-tests.ps1 -Suite rust
 # PHP tests only
 pwsh tests/run-tests.ps1 -Suite php
 
-# TypeScript tests only
-pwsh tests/run-tests.ps1 -Suite typescript
+#  tests only
+pwsh tests/run-tests.ps1 -Suite 
 
 # Integration tests
 pwsh tests/run-tests.ps1 -Suite integration
@@ -132,7 +132,7 @@ tests/
 - **Coverage**: WordPress integration, Symbol class, Symbolic Engine
 - **Scope**: Unit tests, WordPress integration tests
 
-#### TypeScript Tests (`SymbolicEngine/swarm/tests/`)
+####  Tests (`SymbolicEngine/swarm/tests/`)
 - **Framework**: Bun test
 - **Coverage**: Dispatcher, Worker, Coordinator
 - **Scope**: Unit tests, integration tests
@@ -219,7 +219,7 @@ vendor/bin/phpunit --coverage-html tests/coverage/php-html
 vendor/bin/phpunit --filter test_create_symbol
 ```
 
-### TypeScript Tests (Bun)
+###  Tests (Bun)
 
 ```bash
 # Run all tests
@@ -338,9 +338,9 @@ class FeatureTest extends TestCase
 }
 ```
 
-### TypeScript Test Example (Bun)
+###  Test Example (Bun)
 
-```typescript
+```
 import { describe, test, expect } from "bun:test";
 
 describe("Feature", () => {
@@ -386,7 +386,7 @@ open wp_injector/target/tarpaulin/index.html
 # PHP coverage
 open tests/coverage/php-html/index.html
 
-# TypeScript coverage
+#  coverage
 open SymbolicEngine/swarm/coverage/index.html
 ```
 
@@ -405,7 +405,7 @@ open SymbolicEngine/swarm/coverage/index.html
 | Rust Injector | 85% | TBD |
 | Elixir DB Schema | 75% | TBD |
 | PHP WordPress | 80% | TBD |
-| TypeScript Swarm | 75% | TBD |
+|  Swarm | 75% | TBD |
 
 ## CI/CD Integration
 
@@ -422,7 +422,7 @@ Tests run automatically on:
 2. **Rust Tests** (Ubuntu)
 3. **Elixir Tests** (Ubuntu)
 4. **PHP Tests** (Ubuntu with MySQL)
-5. **TypeScript Tests** (Ubuntu)
+5. ** Tests** (Ubuntu)
 6. **E2E Tests** (Ubuntu, requires all previous stages)
 7. **Coverage Report** (Combined coverage)
 
@@ -481,7 +481,7 @@ sudo systemctl status mysql
 # Update phpunit.xml with correct credentials
 ```
 
-#### TypeScript Tests Fail
+####  Tests Fail
 
 ```bash
 cd SymbolicEngine/swarm

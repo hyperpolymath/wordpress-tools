@@ -4,7 +4,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 -->
 # WP Praxis Symbolic Engine Dashboard
 
-Complete real-time monitoring and control interface for the WP Praxis symbolic workflow system. Built with Bun, TypeScript, Elysia, and PostgreSQL.
+Complete real-time monitoring and control interface for the WP Praxis symbolic workflow system. Built with Bun, , Elysia, and PostgreSQL.
 
 ## Features
 
@@ -32,7 +32,7 @@ Complete real-time monitoring and control interface for the WP Praxis symbolic w
 - **Framework**: Elysia (Fast web framework)
 - **Database**: PostgreSQL (Ecto database integration)
 - **WebSockets**: Native Bun WebSocket support
-- **Frontend**: TypeScript, Chart.js
+- **Frontend**: , Chart.js
 - **Styling**: Modern CSS with CSS variables for theming
 
 ## Installation
@@ -396,7 +396,7 @@ dashboard/
 │   ├── websocket/         # WebSocket handlers
 │   │   ├── dashboard-events.ts
 │   │   └── stream-handler.ts
-│   ├── types/             # TypeScript types
+│   ├── types/             #  types
 │   ├── api-server.ts      # Main server
 │   └── config-loader.ts   # Configuration loader
 ├── js/                    # Frontend JavaScript
@@ -411,7 +411,7 @@ dashboard/
 │   └── index.html
 ├── index.html             # Main dashboard HTML
 ├── package.json
-├── tsconfig.json
+├── onfig.json
 └── dashboard-config.toml
 ```
 

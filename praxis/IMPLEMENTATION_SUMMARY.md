@@ -23,7 +23,7 @@ A **complete, production-ready** symbolic workflow system for WordPress across *
 |--------|-------|
 | **Total Files Created** | 3,251 |
 | **Total Lines Added** | 130,332 |
-| **Languages Used** | 8 (PowerShell, Rust, Elixir, LFE, Racket, TypeScript, PHP, SQL) |
+| **Languages Used** | 8 (PowerShell, Rust, Elixir, LFE, Racket, , PHP, SQL) |
 | **Core Components** | 12 |
 | **Test Files** | 26 |
 | **Tests Written** | 245+ |
@@ -116,7 +116,7 @@ A **complete, production-ready** symbolic workflow system for WordPress across *
 
 ---
 
-### 5. **TypeScript Swarm System** ✅
+### 5. ** Swarm System** ✅
 **Location**: `SymbolicEngine/swarm/`
 **Lines of Code**: 4,116
 **Tests**: 40+ test cases
@@ -234,7 +234,7 @@ A **complete, production-ready** symbolic workflow system for WordPress across *
 - Rust: Cargo test (25+ tests)
 - Elixir: ExUnit (20+ tests)
 - PHP: PHPUnit (30+ tests)
-- TypeScript: Bun test (40+ tests)
+- : Bun test (40+ tests)
 - E2E: PowerShell integration tests (30+ tests)
 
 **CI/CD**:
@@ -321,7 +321,7 @@ cd ../Core/db-schema
 mix deps.get
 mix ecto.setup
 
-# 3. Install TypeScript dependencies
+# 3. Install  dependencies
 cd ../SymbolicEngine/swarm
 bun install
 
@@ -406,7 +406,7 @@ cd Core/db-schema && mix test
 # PHP tests
 cd plugin && composer test
 
-# TypeScript tests
+#  tests
 cd SymbolicEngine/swarm && bun test
 ```
 
@@ -522,7 +522,7 @@ Single workflow can dispatch to:
 ### Elixir
 - ecto_sql, postgrex, jason
 
-### TypeScript/Bun
+### /Bun
 - elysia, @apollo/server, chart.js, better-sqlite3, ws, yaml, toml
 
 ### PHP

@@ -37,7 +37,7 @@ WP Praxis implements multiple layers of security:
 ### 3. Memory Safety
 
 - **Rust Components**: Zero `unsafe` blocks in production code, ownership model prevents memory issues
-- **Type Safety**: Strong typing in Rust, TypeScript strict mode, Elixir specs
+- **Type Safety**: Strong typing in Rust,  strict mode, Elixir specs
 
 ### 4. Database Security
 

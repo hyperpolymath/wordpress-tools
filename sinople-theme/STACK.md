@@ -6,13 +6,13 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ## Frontend
 
-### ReScript 11+
-- **Why**: Type safety without TypeScript overhead
+###  11+
+- **Why**: Type safety without  overhead
 - **Use**: UI components, WASM bindings, domain logic
 - **Compiles to**: ES6 JavaScript
 
-### Deno 1.40+ with Fresh
-- **Why**: Modern runtime, no build step, native TypeScript
+###  1.40+ with Fresh
+- **Why**: Modern runtime, no build step, native 
 - **Use**: Server-side rendering, API routes, islands architecture
 - **Security**: Permissions-based, secure by default
 
@@ -69,15 +69,15 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ### wasm-pack
 - **Why**: Rust → WASM compilation
-- **Output**: ES modules + TypeScript definitions
+- **Output**: ES modules +  definitions
 
-### ReScript Compiler
-- **Why**: ReScript → JavaScript
+###  Compiler
+- **Why**:  → JavaScript
 - **Output**: Clean, readable ES6
 
 ## Testing
 
-### Deno Test
+###  Test
 - **Use**: Integration tests, API tests
 - **Features**: Built-in assertions, async support
 
@@ -92,8 +92,8 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 - **Commits**: Conventional commits format
 
 ### Hot Reload
-- ReScript watch mode
-- Deno --watch flag
+-  watch mode
+-  --watch flag
 - WordPress auto-refresh
 
 ## Deployment
@@ -118,5 +118,5 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 - Rust: Memory safety guarantees
 - WordPress: Security best practices
-- Deno: Permissions-based sandbox
+- : Permissions-based sandbox
 - HTTPS: Required for WASM/Service Workers

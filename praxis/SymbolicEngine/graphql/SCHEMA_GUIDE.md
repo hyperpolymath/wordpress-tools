@@ -704,7 +704,7 @@ query {
 
 ### Handling Errors in Client
 
-```typescript
+```
 const { data, errors } = await client.query({ query });
 
 if (errors) {
@@ -806,7 +806,7 @@ query GetSymbol($id: ID!) {
 
 All nullable fields should be handled:
 
-```typescript
+```
 workflow.executions?.forEach(exec => {
   const duration = exec.duration ?? 0;
   const node = exec.node?.name ?? 'unassigned';
@@ -841,7 +841,7 @@ subscription {
 
 Always handle potential errors:
 
-```typescript
+```
 try {
   const { data, errors } = await client.query({ ... });
 

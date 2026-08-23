@@ -84,7 +84,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ---
 
-### 3. SymbolicEngine/swarm (TypeScript/Bun)
+### 3. SymbolicEngine/swarm (/Bun)
 
 **Runtime Dependencies**: 6
 
@@ -98,7 +98,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 | `winston` | 3.11.0 | Logging | Structured logging | ⚠️ | `console.*` (native) | 7/10 |
 
 **Dev Dependencies**:
-- `@types/*`: TypeScript types (dev-only)
+- `@types/*`:  types (dev-only)
 - `bun-types`: Bun runtime types (dev-only)
 
 **Total**: 6 runtime dependencies
@@ -133,7 +133,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ---
 
-### 5. SymbolicEngine/dashboard (TypeScript/Bun)
+### 5. SymbolicEngine/dashboard (/Bun)
 
 **Runtime Dependencies**: 5
 
@@ -147,7 +147,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ---
 
-### 6. SymbolicEngine/graphql (TypeScript/Bun)
+### 6. SymbolicEngine/graphql (/Bun)
 
 **Runtime Dependencies**: 4
 
@@ -169,9 +169,9 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 |----------|-----------|--------------|----------|--------|--------|
 | **Rust** | wp_praxis_core (offline) | **0** | 0 | 0 | ✅ **Perfect** |
 | **Rust** | wp_injector | 13 | 1 | <10 | ⚠️ Over by 3 |
-| **TypeScript** | swarm | 6 | 4 | <10 | ✅ Good |
-| **TypeScript** | dashboard | 5 | 0 | <10 | ✅ Good |
-| **TypeScript** | graphql | 4 | 0 | <10 | ✅ Excellent |
+| **** | swarm | 6 | 4 | <10 | ✅ Good |
+| **** | dashboard | 5 | 0 | <10 | ✅ Good |
+| **** | graphql | 4 | 0 | <10 | ✅ Excellent |
 | **Elixir** | db-schema | 3 | 3 | <10 | ✅ Excellent |
 | **PHP** | plugin | ~5 | 0 | <10 | ✅ Good |
 | **PowerShell** | engine | 0 | 0 | 0 | ✅ Perfect |
@@ -220,7 +220,7 @@ cargo audit
 # Zero high-severity vulnerabilities
 ```
 
-### TypeScript Dependencies
+###  Dependencies
 
 ```bash
 bun audit

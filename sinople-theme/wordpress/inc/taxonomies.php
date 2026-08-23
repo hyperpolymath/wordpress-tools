@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
  * REGISTRATION: Hooks into WordPress `init` to define taxonomies.
- * Enables REST API visibility for use in the ReScript frontend and 
+ * Enables REST API visibility for use in the  frontend and 
  * the Block Editor.
  */
 function sinople_register_taxonomies() {

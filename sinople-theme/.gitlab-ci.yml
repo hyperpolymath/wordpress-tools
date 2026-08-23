@@ -64,33 +64,33 @@ build:wasm:
     key: rust-wasm-${CI_COMMIT_REF_SLUG}
     paths:
       - wasm/semantic_processor/target/
-build:rescript:
+build::
   stage: build
   image: node:${NODE_VERSION}
   script:
-    - cd rescript
+    - cd 
     - npm install
-    - npx rescript clean
-    - npx rescript build
+    - npx  clean
+    - npx  build
   artifacts:
     paths:
-      - rescript/src/**/*.res.js
+      - /src/**/*.res.js
     expire_in: 1 day
   cache:
-    key: node-rescript-${CI_COMMIT_REF_SLUG}
+    key: node--${CI_COMMIT_REF_SLUG}
     paths:
-      - rescript/node_modules/
+      - /node_modules/
 build:theme:
   stage: build
   dependencies:
     - build:wasm
-    - build:rescript
+    - build:
   script:
     - mkdir -p wordpress/assets/wasm
     - mkdir -p wordpress/assets/js
     - cp wasm/semantic_processor/pkg/*.js wordpress/assets/wasm/ || true
     - cp wasm/semantic_processor/pkg/*.wasm wordpress/assets/wasm/ || true
-    - find rescript/src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; || true
+    - find /src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; || true
     - echo "✅ Theme assembled"
   artifacts:
     paths:
@@ -113,23 +113,23 @@ test:rust:
       junit: wasm/semantic_processor/target/nextest/junit.xml
     expire_in: 1 week
   allow_failure: true # Until tests are fully implemented
-test:rescript:
+test::
   stage: test
   image: node:${NODE_VERSION}
   dependencies:
-    - build:rescript
+    - build:
   script:
-    - cd rescript
-    - npm test || echo "No ReScript tests configured"
+    - cd 
+    - npm test || echo "No  tests configured"
   allow_failure: true # Until tests are fully implemented
 test:integration:
   stage: test
-  image: denoland/deno:${DENO_VERSION}
+  image: denoland/:${DENO_VERSION}
   dependencies:
     - build:wasm
-    - build:rescript
+    - build:
   script:
-    - deno test --allow-read tests/ || echo "No integration tests configured"
+    -  test --allow-read tests/ || echo "No integration tests configured"
   allow_failure: true # Until tests are fully implemented
 # ============================================================================
 # SECURITY STAGE
@@ -146,7 +146,7 @@ security:audit-npm:
   stage: security
   image: node:${NODE_VERSION}
   script:
-    - cd rescript
+    - cd 
     - npm audit --production || true
   allow_failure: true # Don't fail build on advisories (warn only)
 security:sast:
@@ -216,7 +216,7 @@ cache:
   paths:
     - .cargo/
     - wasm/semantic_processor/target/
-    - rescript/node_modules/
+    - /node_modules/
 # ============================================================================
 # WORKFLOW RULES
 # ============================================================================

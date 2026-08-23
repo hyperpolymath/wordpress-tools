@@ -10,7 +10,7 @@ Learn how to extend WP Praxis by creating custom symbol types and dispatchers.
 
 **Time Required**: 30 minutes
 **Difficulty**: Advanced
-**Prerequisites**: Knowledge of Rust, PHP, PowerShell, or TypeScript
+**Prerequisites**: Knowledge of Rust, PHP, PowerShell, or 
 
 ## Custom Symbol Types
 
@@ -321,13 +321,13 @@ symbols:
       - space_recovered
 ```
 
-## Example 4: Custom TypeScript Symbol (Swarm)
+## Example 4: Custom  Symbol (Swarm)
 
-### Step 1: Create TypeScript Handler
+### Step 1: Create  Handler
 
 Create `/home/user/wp-praxis/SymbolicEngine/swarm/src/handlers/custom-analytics.ts`:
 
-```typescript
+```
 import { SymbolParameters, SymbolResult } from '../types';
 
 export interface CustomAnalyticsParams extends SymbolParameters {
@@ -398,7 +398,7 @@ function generateRecommendations(metrics: Record<string, number>): string[] {
 
 Edit `/home/user/wp-praxis/SymbolicEngine/swarm/src/worker.ts`:
 
-```typescript
+```
 import { executeCustomAnalytics } from './handlers/custom-analytics';
 
 async function executeSymbol(symbol: Symbol): Promise<SymbolResult> {
@@ -420,7 +420,7 @@ async function executeSymbol(symbol: Symbol): Promise<SymbolResult> {
 symbols:
   - name: "analyze_performance"
     type: "analysis"
-    dispatch: "typescript"
+    dispatch: ""
     context: "swarm"
     execution:
       swarm_enabled: true
@@ -522,6 +522,6 @@ You now know how to:
 ✓ Create custom Rust injector operations
 ✓ Create custom PHP symbols
 ✓ Create custom PowerShell functions
-✓ Create custom TypeScript handlers
+✓ Create custom  handlers
 ✓ Test custom symbols
 ✓ Use custom symbols in workflows

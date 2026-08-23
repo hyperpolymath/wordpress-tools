@@ -57,7 +57,7 @@ The WP Praxis Introspection System is designed as a modular, functional system f
 
 **Layers Traced**:
 1. Manifest (YAML/TOML)
-2. Parser (TypeScript/Elixir)
+2. Parser (/Elixir)
 3. Orchestrator (Elixir)
 4. Symbolic Engine (PowerShell)
 5. Injector (Rust)

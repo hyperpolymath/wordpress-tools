@@ -14,7 +14,7 @@ Recent enhancements to make Sinople a production-ready, user-friendly WordPress 
 
 ### 1. Theme Screenshot (1200x900px)
 - **Design:** Sinople green (#006400) background with theme name and feature highlights
-- **Text:** "Sinople Theme" with taglines "Semantic Web • IndieWeb • WCAG AAA" and "ReScript • Deno • WASM"
+- **Text:** "Sinople Theme" with taglines "Semantic Web • IndieWeb • WCAG AAA" and " •  • WASM"
 - **Purpose:** Professional appearance in WordPress admin Themes page
 - **Location:** `wordpress/screenshot.png`
 - **Commit:** `dbd8607`

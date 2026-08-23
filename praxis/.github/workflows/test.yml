@@ -205,9 +205,6 @@ jobs:
         with:
           name: php-test-results
           path: tests/results/phpunit-results.xml
-  # TypeScript/Bun Tests
-  typescript-tests:
-    name: TypeScript Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -220,24 +217,19 @@ jobs:
       - name: Install dependencies (swarm)
         working-directory: SymbolicEngine/swarm
         run: bun install
-      - name: Run TypeScript tests (swarm)
         working-directory: SymbolicEngine/swarm
         run: bun test --coverage
       - name: Install dependencies (dashboard)
         working-directory: SymbolicEngine/dashboard
         run: bun install || true
-      - name: Run TypeScript tests (dashboard)
         working-directory: SymbolicEngine/dashboard
         run: bun test --coverage || true
-      - name: Upload TypeScript coverage
         uses: codecov/codecov-action@v4
         with:
           files: ./SymbolicEngine/swarm/coverage/coverage-final.json
-          flags: typescript
   # E2E Tests
   e2e-tests:
     name: End-to-End Tests
-    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -260,7 +252,6 @@ jobs:
   # Coverage Report
   coverage-report:
     name: Combined Coverage Report
-    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     if: always()
@@ -284,7 +275,6 @@ jobs:
   # Test Summary
   test-summary:
     name: Test Summary
-    needs: [powershell-tests, rust-tests, elixir-tests, php-tests, typescript-tests, e2e-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     if: always()
@@ -296,7 +286,6 @@ jobs:
           echo "Rust Tests: ${{ needs.rust-tests.result }}"
           echo "Elixir Tests: ${{ needs.elixir-tests.result }}"
           echo "PHP Tests: ${{ needs.php-tests.result }}"
-          echo "TypeScript Tests: ${{ needs.typescript-tests.result }}"
           echo "E2E Tests: ${{ needs.e2e-tests.result }}"
       - name: Fail if any test suite failed
         if: |
@@ -304,6 +293,5 @@ jobs:
           needs.rust-tests.result == 'failure' ||
           needs.elixir-tests.result == 'failure' ||
           needs.php-tests.result == 'failure' ||
-          needs.typescript-tests.result == 'failure' ||
           needs.e2e-tests.result == 'failure'
         run: exit 1

@@ -28,7 +28,7 @@ Currently establishing. Future core team members will have:
 |-----------|-----------|--------|--------|
 | **PowerShell Engine** | *Seeking maintainer* | - | 🔍 Open |
 | **Rust Injector** | *Seeking maintainer* | - | 🔍 Open |
-| **TypeScript Swarm** | *Seeking maintainer* | - | 🔍 Open |
+| ** Swarm** | *Seeking maintainer* | - | 🔍 Open |
 | **Elixir/Ecto Schema** | *Seeking maintainer* | - | 🔍 Open |
 | **LFE Manifest Parser** | *Seeking maintainer* | - | 🔍 Open |
 | **Racket Introspection** | *Seeking maintainer* | - | 🔍 Open |

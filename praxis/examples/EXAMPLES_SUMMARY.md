@@ -237,7 +237,7 @@ Five comprehensive tutorials with complete documentation, example files, and tro
 - Creating custom Rust operations
 - Custom PHP symbols
 - Custom PowerShell functions
-- Custom TypeScript handlers
+- Custom  handlers
 - Testing custom symbols
 - Best practices
 
@@ -313,7 +313,7 @@ Five comprehensive tutorials with complete documentation, example files, and tro
 
 **Script Features**:
 - Dependency checking
-- Automatic building (Rust, Elixir, TypeScript)
+- Automatic building (Rust, Elixir, )
 - Configuration creation
 - Directory setup
 - Optional database setup
@@ -538,7 +538,7 @@ examples/
 - ✅ PowerShell
 - ✅ PHP
 - ✅ Elixir
-- ✅ TypeScript
+- ✅ 
 - ✅ YAML
 - ✅ TOML
 

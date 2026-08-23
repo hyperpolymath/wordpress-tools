@@ -48,17 +48,17 @@ project/
 
 === Web Projects
 
-ReScript web projects in the hyperpolymath ecosystem **MUST** use these formally verified components:
+ web projects in the hyperpolymath ecosystem **MUST** use these formally verified components:
 
 [cols="1,2,1"]
 |===
 |Library |Purpose |Status
 
-|link:https://github.com/hyperpolymath/rescript-dom-mounter[rescript-dom-mounter]
+|link:https://github.com/hyperpolymath/-dom-mounter[-dom-mounter]
 |Formally verified DOM mounting
 |**REQUIRED**
 
-|link:https://github.com/hyperpolymath/rescript-tea[rescript-tea]
+|link:https://github.com/hyperpolymath/-tea[-tea]
 |TEA architecture framework
 |Recommended
 
@@ -84,7 +84,7 @@ el.innerHTML = html  // 💥
 
 SafeDOM provides **compile-time proofs** that DOM operations cannot fail:
 
-[source,rescript]
+[source,]
 ----
 // ✅ PROVEN SAFE: Mathematically guaranteed
 SafeDOM.mountSafe("#app", html,
@@ -97,7 +97,7 @@ SafeDOM.mountSafe("#app", html,
 ✓ No null pointer dereferences (Idris2 proof)
 ✓ No invalid CSS selectors (dependent types)
 ✓ No malformed HTML (balanced tag checking)
-✓ Type-safe operations (ReScript + Idris2)
+✓ Type-safe operations ( + Idris2)
 ✓ Zero runtime overhead (proofs erased)
 
-See link:https://github.com/hyperpolymath/rescript-dom-mounter[rescript-dom-mounter documentation] for full details.
+See link:https://github.com/hyperpolymath/-dom-mounter[-dom-mounter documentation] for full details.
