@@ -22,15 +22,15 @@ WP Praxis achieves **Partial Bronze** compliance with the Rhodium Standard Repos
 **Status**: **Fully Compliant**
 
 - **Rust**: Compile-time type checking, strong type system
-- **TypeScript**: Strict mode enabled throughout (`strict: true` in tsconfig.json)
+- ****: Strict mode enabled throughout (`strict: true` in onfig.json)
 - **Elixir**: Type specs with `@spec` annotations, Dialyzer support
 - **PHP**: Type hints and declarations (PHP 7.4+)
 - **PowerShell**: Type annotations where applicable
 
 **Evidence**:
-- `wp_injector/tsconfig.json`: `"strict": true`
+- `wp_injector/onfig.json`: `"strict": true`
 - `Core/db-schema/`: Elixir `@spec` annotations on all public functions
-- `SymbolicEngine/swarm/src/types.ts`: Comprehensive TypeScript interfaces
+- `SymbolicEngine/swarm/src/types.ts`: Comprehensive  interfaces
 
 **Score**: ✅ **10/10**
 
@@ -42,7 +42,7 @@ WP Praxis achieves **Partial Bronze** compliance with the Rhodium Standard Repos
 
 - **Rust Components**: Zero `unsafe` blocks in production code
 - **Ownership Model**: Rust's borrow checker prevents memory issues
-- **Managed Languages**: Elixir, TypeScript, PHP have automatic memory management
+- **Managed Languages**: Elixir, , PHP have automatic memory management
 
 **Evidence**:
 ```bash
@@ -172,7 +172,7 @@ just test-all              # Run all tests
 - Rust: 24 tests (cargo test)
 - Elixir: 20+ tests (ExUnit)
 - PHP: 30+ tests (PHPUnit)
-- TypeScript: 40+ tests (Bun test)
+- : 40+ tests (Bun test)
 - E2E: 30+ tests (PowerShell integration)
 
 **Coverage**: ~78% overall
@@ -227,7 +227,7 @@ just test-all
 
 **Dependency Count**:
 - **Rust**: 50+ crates (clap, serde, sqlx, tokio, anyhow, etc.)
-- **TypeScript**: 30+ npm packages (Apollo, Elysia, Chart.js, etc.)
+- ****: 30+ npm packages (Apollo, Elysia, Chart.js, etc.)
 - **Elixir**: 5+ hex packages (ecto, postgrex, jason)
 - **PHP**: 5+ composer packages (symfony/yaml, WordPress functions)
 
@@ -281,7 +281,7 @@ diff hash1.txt hash2.txt  # Should be identical
 
 **Status**: **Fully Compliant**
 
-**Language Count**: **8** (Rust, Elixir, TypeScript, PHP, PowerShell, LFE, Racket, SQL)
+**Language Count**: **8** (Rust, Elixir, , PHP, PowerShell, LFE, Racket, SQL)
 
 **Compositional Correctness**:
 - ✅ **Type-safe boundaries**: JSON/TOML schemas enforced across languages

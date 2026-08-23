@@ -25,10 +25,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/ws": "^8.5.10",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
     "bun-types": "latest",
     "eslint": "^8.56.0",
     "prettier": "^3.2.4"

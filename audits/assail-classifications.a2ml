@@ -1,0 +1,108 @@
+;; SPDX-License-Identifier: MPL-2.0
+;; assail-classifications.a2ml — audited panic-attack findings for wordpress-tools.
+;;
+;; Read by panic-attack >= 2.5.5 (load_user_classifications): findings
+;; matching (file, category) flip to suppressed = true after the kanren
+;; structural pass. Entries are AUDITED-SOUND residuals with rationale.
+
+(assail-classifications
+  ;; ── CommandInjection ─────────────────────────────────────────────
+  (classification
+    (file "praxis/Core/introspection/src/viz/graph-generator.rkt")
+    (category "CommandInjection")
+    (audit "Viz generation tool using local system calls to generate graphs")
+    (rationale "Tooling script; does not execute untrusted user input"))
+
+  ;; ── DynamicCodeExecution ─────────────────────────────────────────
+  (classification
+    (file "praxis/SymbolicEngine/dashboard/js/dashboard.ts")
+    (category "DynamicCodeExecution")
+    (audit "Local admin dashboard DOM manipulation")
+    (rationale "Intentional DOM updates for trusted local dashboard UI"))
+  (classification
+    (file "praxis/SymbolicEngine/dashboard/js/symbol-inspector.ts")
+    (category "DynamicCodeExecution")
+    (audit "Local admin dashboard DOM manipulation")
+    (rationale "Intentional DOM updates for trusted local dashboard UI"))
+  (classification
+    (file "praxis/SymbolicEngine/dashboard/injector/js/injector.ts")
+    (category "DynamicCodeExecution")
+    (audit "Local admin dashboard DOM manipulation")
+    (rationale "Intentional DOM updates for trusted local dashboard UI"))
+  (classification
+    (file "resurrect/state/lib/state-utils.scm")
+    (category "DynamicCodeExecution")
+    (audit "Scheme utility library using eval by design")
+    (rationale "Internal state management utility operating on trusted scheme expressions"))
+  (classification
+    (file "journal-theme/tests/accessibility_test.js")
+    (category "DynamicCodeExecution")
+    (audit "Test fixture injecting DOM for testing")
+    (rationale "Test file manipulating DOM for accessibility checks"))
+
+  ;; ── HardcodedSecret ──────────────────────────────────────────────
+  (classification
+    (file "praxis/Core/db-schema/config/test.exs")
+    (category "HardcodedSecret")
+    (audit "Test environment dummy database password")
+    (rationale "Local development test fixture, not a real credential"))
+  (classification
+    (file "praxis/Core/db-schema/config/dev.exs")
+    (category "HardcodedSecret")
+    (audit "Dev environment dummy database password")
+    (rationale "Local development fixture, not a real credential"))
+  (classification
+    (file "secured/php-aegis/validation/run-validation.sh")
+    (category "HardcodedSecret")
+    (audit "Bash variables storing DB credentials")
+    (rationale "Variables for script arguments, not hardcoded credentials"))
+  (classification
+    (file "plugin-conflict-mapper/bin/install-wp-tests.sh")
+    (category "HardcodedSecret")
+    (audit "Placeholders like yourpasswordhere in script")
+    (rationale "Test installation script placeholders, not real credentials"))
+
+  ;; ── SupplyChain ──────────────────────────────────────────────────
+  (classification
+    (file "flake.nix")
+    (category "SupplyChain")
+    (audit "Nix flake utilizing flake.lock for pinning")
+    (rationale "Revisions are pinned via flake.lock, narHash inline not strictly required"))
+
+  ;; ── UnboundedAllocation ──────────────────────────────────────────
+  (classification
+    (file "praxis/wp_injector/src/main.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading wp-config.php and local JSON state files")
+    (rationale "Reads trusted, bounded local configuration and state files; OOM risk is negligible"))
+  (classification
+    (file "resurrect/src/socp-tui/src/config.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading local TUI configuration")
+    (rationale "Reads trusted, bounded local configuration file"))
+  (classification
+    (file "project-wharf/crates/wharf-core/src/config.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading local wharf configuration")
+    (rationale "Reads trusted, bounded local configuration file"))
+  (classification
+    (file "project-wharf/crates/wharf-core/src/integrity.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading local manifest files")
+    (rationale "Reads trusted, bounded local manifests"))
+  (classification
+    (file "project-wharf/crates/wharf-core/src/nebula.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading local nebula configs")
+    (rationale "Reads trusted, bounded local configuration file"))
+  (classification
+    (file "project-wharf/crates/wharf-core/src/fleet.rs")
+    (category "UnboundedAllocation")
+    (audit "Reading local fleet state files")
+    (rationale "Reads trusted, bounded local state files"))
+  (classification
+    (file "project-wharf/bin/yacht-agent/src/ebpf.rs")
+    (category "UnboundedAllocation")
+    (audit "Loading local eBPF programs")
+    (rationale "Reads trusted local eBPF object files bounded by OS limits"))
+)

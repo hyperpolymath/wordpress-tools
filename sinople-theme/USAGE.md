@@ -75,7 +75,7 @@ https://yoursite.com/wp-json/sinople/v1/micropub
 
 ## Development Workflow
 
-1. Edit ReScript files in `rescript/src/`
+1. Edit  files in `/src/`
 2. Run `npm run watch` to compile
 3. Edit Rust in `wasm/semantic_processor/src/`
 4. Run `./build.sh` to recompile WASM

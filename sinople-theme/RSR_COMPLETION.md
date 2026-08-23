@@ -49,7 +49,7 @@ Successfully implemented comprehensive Rhodium Standard Repository (RSR) complia
 
 **Added**:
 - ✅ **justfile**: 20+ build automation recipes
-  - Build: `just build`, `just build-wasm`, `just build-rescript`
+  - Build: `just build`, `just build-wasm`, `just build-`
   - Test: `just test`, `just test-integration`, `just test-a11y`
   - Lint: `just lint`, `just lint-rust`, `just lint-php`
   - Security: `just security`, `just audit-rust`, `just audit-npm`
@@ -58,7 +58,7 @@ Successfully implemented comprehensive Rhodium Standard Repository (RSR) complia
 
 - ✅ **flake.nix**: Nix reproducible builds
   - Development shell with all dependencies
-  - Build outputs for WASM, ReScript, WordPress theme
+  - Build outputs for WASM, , WordPress theme
   - Cross-platform reproducibility
 
 - ✅ **.gitlab-ci.yml**: Complete CI/CD pipeline
@@ -152,7 +152,7 @@ Successfully implemented comprehensive Rhodium Standard Repository (RSR) complia
 
 **Current**:
 - ✅ Rust for WASM (100% type safe)
-- ✅ ReScript for business logic (100% type safe)
+- ✅  for business logic (100% type safe)
 - ⚠️ PHP for WordPress (no static typing)
 - ⚠️ JavaScript for navigation (no types)
 
@@ -176,7 +176,7 @@ Successfully implemented comprehensive Rhodium Standard Repository (RSR) complia
 
 **Added**:
 - ✅ Test stage in GitLab CI
-- ✅ Test jobs for Rust, ReScript, integration
+- ✅ Test jobs for Rust, , integration
 - ✅ `just test` recipes
 - ⚠️ Actual test implementation still pending
 
@@ -272,8 +272,8 @@ The `justfile` provides 20+ recipes for common tasks:
 ### Build
 - `just build` - Build all components
 - `just build-wasm` - Build Rust WASM module
-- `just build-rescript` - Compile ReScript
-- `just build-deno` - Bundle Deno application
+- `just build-` - Compile 
+- `just build-` - Bundle  application
 
 ### Test
 - `just test` - Run all tests
@@ -314,14 +314,14 @@ The `justfile` provides 20+ recipes for common tasks:
 
 2. **Build**:
    - Rust WASM compilation
-   - ReScript compilation
+   -  compilation
    - WordPress theme assembly
    - Artifact caching
 
 3. **Test**:
    - Rust unit tests
-   - ReScript tests
-   - Integration tests (Deno)
+   -  tests
+   - Integration tests ()
 
 4. **Security**:
    - Cargo audit (Rust dependencies)
@@ -349,13 +349,13 @@ The `flake.nix` provides:
 ### Development Shell
 ```bash
 nix develop
-# Includes: Rust, wasm-pack, Node.js, Deno, just, PHP
+# Includes: Rust, wasm-pack, Node.js, , just, PHP
 ```
 
 ### Build Outputs
 ```bash
 nix build .#wasm-semantic-processor  # Rust WASM
-nix build .#rescript                 # ReScript output
+nix build .#                 #  output
 nix build .#sinople-theme            # Complete theme
 ```
 
@@ -373,8 +373,8 @@ nix build .#sinople-theme            # Complete theme
 
 1. **Testing (40% → 80%)**:
    - Implement Rust unit tests for WASM module
-   - Add ReScript component tests
-   - Create integration test suite (Deno)
+   - Add  component tests
+   - Create integration test suite ()
    - Add accessibility test automation (axe-core)
    - Target: 70%+ code coverage
 
@@ -387,7 +387,7 @@ nix build .#sinople-theme            # Complete theme
 
 3. **Type Safety (50% → 60%)**:
    - Add JSDoc types to navigation.js
-   - Consider TypeScript for graph-viewer.js (if user approves)
+   - Consider  for graph-viewer.js (if user approves)
    - Add PHPStan for WordPress code
 
 **Estimated Time**: 12-16 hours
@@ -441,7 +441,7 @@ nix build .#sinople-theme            # Complete theme
 
 **Commit 1**: Initial CLAUDE.md and project structure
 **Commit 2**: Comprehensive WordPress theme implementation (50+ files, 5,800+ lines)
-**Commit 3**: Complete templates, CSS/JS assets, Deno integration
+**Commit 3**: Complete templates, CSS/JS assets,  integration
 **Commit 4**: Project summary and completion report
 **Commit 5**: **RSR compliance framework (this commit)** (14 files, 3,197+ lines)
 

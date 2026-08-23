@@ -6,7 +6,7 @@
 
 This repo is a broad prototype and integration surface, not a finished platform.
 
-* The theme contains real implementation across WordPress, Rust/WASM, and ReScript.
+* The theme contains real implementation across WordPress, Rust/WASM, and .
 * Public-facing claims currently outrun the evidence in `RSR_AUDIT.md` and the small test surface.
 * The most useful role for this repo right now is to act as the application proving ground for the rest of the stack.
 
@@ -26,7 +26,7 @@ This repo is a broad prototype and integration surface, not a finished platform.
 
 == P2 Platform Growth
 
-* [ ] Expand tests across WASM, ReScript, and WordPress integration paths.
+* [ ] Expand tests across WASM, , and WordPress integration paths.
 * [ ] Decide which advanced features are real near-term scope and which belong in design documents only.
 * [ ] Add one authoritative current-status document and demote stale or aspirational summaries.
 

@@ -36,12 +36,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Turtle format parser
   - Construct/Entanglement/Character queries
   - Network graph generation for visualization
-- ReScript type-safe bindings (450+ lines)
+-  type-safe bindings (450+ lines)
   - WASM integration layer
   - Domain models (Construct, Entanglement, Character, Gloss)
   - Error handling with Result types
   - Example usage patterns
-- Deno + Fresh framework integration
+-  + Fresh framework integration
   - Server-side rendering setup
   - API route structure
   - Island architecture
@@ -123,8 +123,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ==== Build System
 - Master build.sh script
 - WASM-specific build.sh for Rust compilation
-- ReScript compilation configuration
-- Deno task definitions
+-  compilation configuration
+-  task definitions
 - .gitignore for build artifacts
 
 ==== Documentation

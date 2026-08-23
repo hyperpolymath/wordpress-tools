@@ -93,7 +93,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 ### Build Automation
 
 1. **justfile** (400+ lines, 30+ tasks)
-   - Build tasks (all, rust, elixir, typescript, php, lfe)
+   - Build tasks (all, rust, elixir, , php, lfe)
    - Test tasks (all, per-language, integration, e2e)
    - Lint and format tasks
    - Database tasks (setup, migrate, seed, reset)
@@ -123,7 +123,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 | Category | Score | Notes |
 |----------|-------|-------|
-| Type Safety | 10/10 | Rust, TypeScript strict, Elixir specs |
+| Type Safety | 10/10 | Rust,  strict, Elixir specs |
 | Memory Safety | 10/10 | Zero unsafe Rust, ownership model |
 | Documentation | 10/10 | All required files + 20+ guides |
 | .well-known/ | 10/10 | RFC 9116 + ai.txt + humans.txt |
@@ -174,7 +174,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 **Reality**: Production system with 50+ dependencies:
 - **Rust**: sqlx, tokio, serde, clap, anyhow, chrono, etc.
-- **TypeScript**: Apollo, Elysia, Chart.js, WebSocket libraries
+- ****: Apollo, Elysia, Chart.js, WebSocket libraries
 - **Elixir**: Ecto, Postgrex, Jason
 - **PHP**: Symfony YAML, WordPress functions
 

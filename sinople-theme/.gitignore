@@ -37,13 +37,13 @@ erl_crash.dump
 *.jl.mem
 /Manifest.toml
 
-# ReScript
+# 
 /lib/bs/
 /.bsb.lock
 *.res.js
-rescript/lib/
-rescript/node_modules/
-rescript/package-lock.json
+/lib/
+/node_modules/
+/package-lock.json
 
 # Python (SaltStack only)
 __pycache__/

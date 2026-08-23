@@ -57,7 +57,7 @@ function createFeatureDetectionMocks(features) {
   globalThis.RTCPeerConnection = features.webRTC ? class {} : undefined;
 }
 
-// Feature detection function (mirrors ReScript implementation)
+// Feature detection function (mirrors  implementation)
 function detectFeatures() {
   const features = {};
 

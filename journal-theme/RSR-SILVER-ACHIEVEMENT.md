@@ -71,7 +71,7 @@ Files created:
 - `tests/php/test-serialization.php` - Serialization tests
 - `bin/install-wp-tests.sh` - WordPress test suite installer
 
-#### Jest (JavaScript/TypeScript Testing)
+#### Jest (JavaScript/ Testing)
 - **3 comprehensive test suites** for browser features
 - **Mocked environment** (localStorage, matchMedia, observers)
 - **80% coverage target** with threshold enforcement
@@ -100,7 +100,7 @@ Created `.github/workflows/ci.yml` with **10 parallel jobs**:
 3. **JavaScript Lint**: ESLint + Stylelint
 4. **JavaScript Tests**: Jest with coverage upload to Codecov
 5. **Rust Tests**: cargo test + clippy + rustfmt
-6. **Build**: Compile all assets (SCSS, TypeScript, WASM, ReScript)
+6. **Build**: Compile all assets (SCSS, , WASM, )
 7. **Security Audit**: npm audit + composer audit + cargo audit
 8. **Container**: Docker build + Trivy vulnerability scan
 9. **Accessibility**: Playwright tests (placeholder)

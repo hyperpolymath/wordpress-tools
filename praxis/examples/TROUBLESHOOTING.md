@@ -21,7 +21,7 @@ pwsh -Command "Test-Path SymbolicEngine/core/symbolic.ps1"
 # 3. Elixir CLI
 cd Core/cli-wrapper && mix --version
 
-# 4. TypeScript (Bun)
+# 4.  (Bun)
 bun --version
 
 # 5. WordPress connection (if configured)
@@ -117,7 +117,7 @@ mix deps.clean --all
 mix deps.get
 ```
 
-### TypeScript Build Fails: "Cannot find module"
+###  Build Fails: "Cannot find module"
 
 **Problem**: Dependencies not installed
 

@@ -10,7 +10,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 #### Type Safety (Partial - 50%)
 - ✅ Rust: Full compile-time type safety in WASM module
-- ✅ ReScript: Sound type system with no `any` types
+- ✅ : Sound type system with no `any` types
 - ⚠️ PHP: No static typing (WordPress requirement)
 - ⚠️ JavaScript: Untyped (vanilla JS for compatibility)
 
@@ -18,7 +18,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 - ✅ Rust: Ownership model, zero `unsafe` blocks
 - ❌ PHP: Manual memory management
 - ❌ JavaScript: Garbage collected but no safety guarantees
-- ❌ ReScript: Compiles to JS (inherits JS memory model)
+- ❌ : Compiles to JS (inherits JS memory model)
 
 #### Documentation (60%)
 - ✅ README.md
@@ -101,7 +101,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 | Category | Score | Status | Notes |
 |----------|-------|--------|-------|
-| 1. Type Safety | 50% | 🟡 Partial | Rust + ReScript only |
+| 1. Type Safety | 50% | 🟡 Partial | Rust +  only |
 | 2. Memory Safety | 25% | 🔴 Low | Rust only |
 | 3. Documentation | 60% | 🟡 Partial | Missing 6 key docs |
 | 4. Build System | 30% | 🔴 Low | No justfile/Nix |
@@ -149,7 +149,7 @@ Bronze Level requires: 70% minimum across all categories
 
 ### Phase 6: Testing (2 hours)
 1. Add Rust tests for WASM
-2. Add ReScript tests
+2. Add  tests
 3. Add integration tests
 4. RSR self-verification script
 
@@ -175,7 +175,7 @@ Bronze Level requires: 70% minimum across all categories
 
 ### Long-term Considerations
 - **Offline-First**: Consider static site generation alternative to WordPress
-- **Type Safety**: Explore TypeScript or typed PHP alternatives
+- **Type Safety**: Explore  or typed PHP alternatives
 - **CRDTs**: Add for distributed state management
 - **Formal Verification**: Consider Ada + SPARK for critical components
 

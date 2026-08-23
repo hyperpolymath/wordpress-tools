@@ -77,10 +77,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type-safe parsing from PHP arrays
 
 ==== Modern Web Technologies
-- TypeScript with strict mode and ESBuild bundling
+-  with strict mode and ESBuild bundling
 - SCSS architecture with CSS custom properties
 - WebAssembly modules (Rust source included)
-- ReScript functional programming support
+-  functional programming support
 - Service Worker for offline support
 - View Transitions API integration
 - Scroll-driven Animations support
@@ -134,9 +134,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ==== Build System
 - npm scripts for all operations (dev, build, lint, test)
 - SCSS compilation with Sass
-- TypeScript/ESBuild bundling (ESM modules)
+- /ESBuild bundling (ESM modules)
 - WASM compilation (Rust + Cargo)
-- ReScript compilation
+-  compilation
 - Image optimization (imagemin with pngquant, mozjpeg, svgo)
 - Minification and optimization (cssnano, terser)
 - Development watch modes
@@ -162,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - .well-known/humans.txt (attribution)
 - Tri-Perimeter Contribution Framework (TPCF) implemented
 - Offline-first architecture (no mandatory external dependencies)
-- Type safety (PHP 8.1+, TypeScript strict mode, Rust, ReScript)
+- Type safety (PHP 8.1+,  strict mode, Rust, )
 - Memory safety (Rust ownership model, no unsafe blocks in WASM)
 
 === Changed

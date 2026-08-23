@@ -100,7 +100,7 @@ async function main() {
     console.log("\n🚀 Next steps:");
     console.log("  1. Review the extracted schema");
     console.log("  2. Run transpiler: cabal run transpiler -- --schema " + args.output);
-    console.log("  3. Generate ReScript theme components");
+    console.log("  3. Generate  theme components");
     console.log("  4. Provide feedback to improve extraction\n");
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}\n`);

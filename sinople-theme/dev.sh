@@ -2,12 +2,12 @@
 #
 # Development Mode Script for Sinople Theme
 #
-# Starts watch processes for ReScript and optional Deno Fresh server.
+# Starts watch processes for  and optional Deno Fresh server.
 # WASM requires manual rebuild (no watch mode in wasm-pack).
 #
 # Usage:
 #   ./dev.sh              - Start all watchers
-#   ./dev.sh rescript     - Watch ReScript only
+#   ./dev.sh      - Watch  only
 #   ./dev.sh deno         - Watch Deno only
 #   ./dev.sh wasm         - Rebuild WASM once
 #
@@ -32,18 +32,18 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM
 
-# Function: Watch ReScript
-watch_rescript() {
-    echo -e "${BLUE}🔧 Starting ReScript watch mode...${NC}"
-    if [ -d "${ROOT_DIR}/rescript" ]; then
-        cd "${ROOT_DIR}/rescript"
+# Function: Watch 
+watch_() {
+    echo -e "${BLUE}🔧 Starting  watch mode...${NC}"
+    if [ -d "${ROOT_DIR}/" ]; then
+        cd "${ROOT_DIR}/"
         if [ ! -d "node_modules" ]; then
-            echo "Installing ReScript dependencies..."
+            echo "Installing  dependencies..."
             npm install --silent
         fi
-        npx rescript build -w
+        npx  build -w
     else
-        echo -e "${YELLOW}⚠️  ReScript directory not found${NC}"
+        echo -e "${YELLOW}⚠️   directory not found${NC}"
     fi
 }
 
@@ -83,10 +83,10 @@ build_wasm() {
 sync_assets() {
     echo -e "${BLUE}📋 Syncing assets to WordPress...${NC}"
 
-    # Copy ReScript compiled files
-    if [ -d "${ROOT_DIR}/rescript/src" ]; then
+    # Copy  compiled files
+    if [ -d "${ROOT_DIR}//src" ]; then
         mkdir -p "${ROOT_DIR}/wordpress/assets/js"
-        find "${ROOT_DIR}/rescript/src" -name "*.res.js" -exec cp {} "${ROOT_DIR}/wordpress/assets/js/" \; 2>/dev/null || true
+        find "${ROOT_DIR}//src" -name "*.res.js" -exec cp {} "${ROOT_DIR}/wordpress/assets/js/" \; 2>/dev/null || true
     fi
 
     echo -e "${GREEN}✅ Assets synced${NC}"
@@ -98,8 +98,8 @@ echo "======================================"
 echo ""
 
 case "${1:-all}" in
-    rescript)
-        watch_rescript
+    )
+        watch_
         ;;
     deno)
         watch_deno
@@ -117,11 +117,11 @@ case "${1:-all}" in
         echo "   Run: ./dev.sh wasm"
         echo ""
 
-        # Start ReScript watcher in background
-        watch_rescript &
-        RESCRIPT_PID=$!
+        # Start  watcher in background
+        watch_ &
+        _PID=$!
 
-        # Give ReScript a moment to start
+        # Give  a moment to start
         sleep 2
 
         # Start Deno if available
@@ -134,7 +134,7 @@ case "${1:-all}" in
         echo -e "${GREEN}✨ Development mode active${NC}"
         echo ""
         echo "Processes running:"
-        echo "  - ReScript watcher (PID: ${RESCRIPT_PID:-N/A})"
+        echo "  -  watcher (PID: ${_PID:-N/A})"
         [ -n "${DENO_PID}" ] && echo "  - Deno Fresh (PID: ${DENO_PID})"
         echo ""
         echo "Press Ctrl+C to stop all processes"
@@ -144,10 +144,10 @@ case "${1:-all}" in
         wait
         ;;
     *)
-        echo "Usage: ./dev.sh [rescript|deno|wasm|sync|all]"
+        echo "Usage: ./dev.sh [|deno|wasm|sync|all]"
         echo ""
         echo "Commands:"
-        echo "  rescript  - Watch ReScript files only"
+        echo "    - Watch  files only"
         echo "  deno      - Start Deno Fresh dev server only"
         echo "  wasm      - Rebuild WASM module once"
         echo "  sync      - Sync compiled assets to WordPress"

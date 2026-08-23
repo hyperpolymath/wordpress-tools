@@ -53,5 +53,5 @@ fi
 echo ""
 echo "🎯 Next steps:"
 echo "   1. Test WASM: open examples/test.html in browser"
-echo "   2. Integrate with ReScript: use bindings in rescript/src/bindings/SemanticProcessor.res"
+echo "   2. Integrate with : use bindings in /src/bindings/SemanticProcessor.res"
 echo "   3. Deploy to WordPress: copy pkg/* to wordpress/assets/wasm/"

@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 56 pre-built query functions across 3 modules
   - Full OTP application structure with supervision
 
-- **TypeScript Swarm System** (4,116 lines)
+- ** Swarm System** (4,116 lines)
   - Distributed symbolic execution coordinator
   - Worker nodes with load balancing and health monitoring
   - WebSocket real-time communication (ws protocol)
@@ -108,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Rust: Cargo test (25+ tests)
   - Elixir: ExUnit (20+ tests)
   - PHP: PHPUnit (30+ tests)
-  - TypeScript: Bun test (40+ tests)
+  - : Bun test (40+ tests)
   - E2E: PowerShell integration tests (30+ tests)
   - GitHub Actions CI/CD pipeline configured
 

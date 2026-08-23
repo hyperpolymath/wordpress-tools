@@ -189,7 +189,7 @@ query {
     summary {
       totalChanges
       optionsChanged
-      postsChanged
+      poshanged
     }
   }
 }

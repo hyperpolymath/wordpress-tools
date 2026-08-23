@@ -81,7 +81,6 @@ jobs:
           flags: php-${{ matrix.php }}-wp-${{ matrix.wordpress }}
           name: php-${{ matrix.php }}-wp-${{ matrix.wordpress }}
   lint-js:
-    name: JavaScript/TypeScript Lint
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

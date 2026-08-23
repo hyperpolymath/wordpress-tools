@@ -27,13 +27,9 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "@types/ws": "^8.5.10",
-    "@types/better-sqlite3": "^7.6.8",
-    "@types/uuid": "^9.0.7",
     "bun-types": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
   },
   "keywords": [
     "wp-praxis",

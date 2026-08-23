@@ -466,7 +466,7 @@ t!("errors.manifest_invalid", error = e.to_string())
 ### 4.7 Community Governance
 
 **Establish**:
-- [ ] Technical Steering Committee (TSC)
+- [ ] Technical Steering Committee ()
 - [ ] Regular community meetings
 - [ ] Roadmap voting process
 - [ ] RFC (Request for Comments) process

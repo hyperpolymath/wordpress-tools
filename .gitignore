@@ -36,7 +36,7 @@ build/
 **/zig-out/
 **/.zig-cache/
 
-# ReScript
+# 
 /lib/bs/
 **/lib/bs/
 /.bsb.lock
@@ -70,7 +70,7 @@ htmlcov/
 # Crash recovery artifacts
 ai-cli-crash-capture/
 
-# ReScript/OCaml compiler artifacts
+# /OCaml compiler artifacts
 *.cmt
 *.cmti
 *.cmi

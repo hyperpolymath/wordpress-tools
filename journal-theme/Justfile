@@ -174,7 +174,7 @@ audit-composer:
 validate:
     @echo "📊 Validating RSR compliance..."
     @echo ""
-    @echo "✅ Type Safety: PHP 8.1+ strict, TypeScript strict, Rust, ReScript"
+    @echo "✅ Type Safety: PHP 8.1+ strict, TypeScript strict, Rust, "
     @echo "✅ Memory Safety: Rust ownership, zero unsafe blocks"
     @echo "✅ Offline-First: No mandatory external deps, Service Worker"
     @echo "✅ Documentation: 18+ markdown files"

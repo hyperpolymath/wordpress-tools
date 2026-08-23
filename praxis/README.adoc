@@ -18,7 +18,7 @@ WP Praxis transforms WordPress development by allowing you to define complex wor
 === Key Features
 
 - *🎯 Declarative Workflows* - Define WordPress operations in YAML/TOML, not code
-- *🌐 True Polyglot* - 8 languages working together (Rust, Elixir, TypeScript, PHP, PowerShell, LFE, Racket, SQL)
+- *🌐 True Polyglot* - 8 languages working together (Rust, Elixir, , PHP, PowerShell, LFE, Racket, SQL)
 - *🔄 Symbolic Dispatch* - Route operations based on semantic tags and context
 - *🛡️ Safe Execution* - Rollback support, transaction-like behavior, audit trails
 - *📊 Real-Time Monitoring* - WebSocket dashboards, GraphQL API, live statistics
@@ -81,7 +81,7 @@ cd ../Core/db-schema
 mix deps.get
 mix ecto.setup
 
-= 3. Install TypeScript dependencies
+= 3. Install  dependencies
 
 image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 cd ../SymbolicEngine/swarm && bun install
@@ -187,12 +187,12 @@ WP Praxis uses a layered polyglot architecture where each language serves a spec
 |-----------|----------|---------|
 | *Symbolic Engine* | PowerShell | Core workflow orchestration and dispatch |
 | *Injector* | Rust | High-performance WordPress database operations |
-| *Swarm System* | TypeScript/Bun | Distributed execution coordinator |
+| *Swarm System* | /Bun | Distributed execution coordinator |
 | *Manifest Parser* | LFE (Lisp) | YAML/TOML parsing with macro expansion |
 | *Introspection* | Racket | Recursive semantic analysis and feedback |
 | *Database Schema* | Elixir/Ecto | State management and persistence |
-| *GraphQL API* | TypeScript | Unified API layer with subscriptions |
-| *Dashboard* | TypeScript/HTML | Real-time monitoring and control |
+| *GraphQL API* |  | Unified API layer with subscriptions |
+| *Dashboard* | /HTML | Real-time monitoring and control |
 | *WordPress Plugin* | PHP | WordPress integration and admin UI |
 
 == Documentation
@@ -282,7 +282,7 @@ pwsh tests/run-tests.ps1 -Suite powershell  # PowerShell tests
 cd wp_injector && cargo test                # Rust tests
 cd Core/db-schema && mix test               # Elixir tests
 cd plugin && composer test                  # PHP tests
-cd SymbolicEngine/swarm && bun test         # TypeScript tests
+cd SymbolicEngine/swarm && bun test         #  tests
 ```
 
 *Test Coverage*: 245+ tests across all layers (~78% coverage)
@@ -291,7 +291,7 @@ cd SymbolicEngine/swarm && bun test         # TypeScript tests
 
 WP Praxis aims for *Bronze-level* [Rhodium Standard Repository (RSR)](https://example.com/rsr) compliance:
 
-- ✅ Type safety (Rust, TypeScript strict mode, Elixir specs)
+- ✅ Type safety (Rust,  strict mode, Elixir specs)
 - ✅ Memory safety (Rust ownership, no unsafe blocks in critical paths)
 - ⚠️ Offline-first (Partial - some components require network/database)
 - ✅ Complete documentation (20+ docs, tutorials, examples)
@@ -343,7 +343,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 == Acknowledgments
 
 Built with:
-- Rust, Elixir, TypeScript/Bun, PHP, PowerShell, LFE, Racket
+- Rust, Elixir, /Bun, PHP, PowerShell, LFE, Racket
 - PostgreSQL, SQLite, MySQL
 - Apollo Server, Elysia, Chart.js
 - WordPress, Ecto, Pester, PHPUnit

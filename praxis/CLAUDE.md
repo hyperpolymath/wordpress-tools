@@ -28,10 +28,10 @@ This is a **deliberately polyglot** project. Each language serves a specific pur
 | Macro Layer | LFE (Lisp Flavored Erlang) | Symbolic macro expansion, introspection | `rebar3` |
 | Execution Core | Rust | High-performance symbolic logic injection | `cargo` |
 | Introspection | Racket | Recursive feedback and semantic tracing | `racket` |
-| Tooling | TypeScript + Bun | Manifest hygiene, validation, transformation | `bun` |
+| Tooling |  + Bun | Manifest hygiene, validation, transformation | `bun` |
 | WordPress Integration | PHP | Plugin wrapper and engine integration | N/A |
 | Symbolic Engine | PowerShell | Core symbolic operations and workflows | N/A |
-| Web UI | HTML/TypeScript | Dashboard, visualizer, notebook interfaces | `bun` |
+| Web UI | HTML/ | Dashboard, visualizer, notebook interfaces | `bun` |
 
 ## Directory Structure
 
@@ -157,9 +157,9 @@ wp-praxis/
 - Sanitize and validate all inputs
 - Use WordPress nonce verification for security
 
-**TypeScript** (`SymbolicEngine/dashboard/`, `SymbolicEngine/swarm/`):
+**** (`SymbolicEngine/dashboard/`, `SymbolicEngine/swarm/`):
 - Use Bun for runtime and tooling
-- Follow TypeScript strict mode conventions
+- Follow  strict mode conventions
 - Prefer explicit types over `any`
 - Use modern ES modules
 
@@ -178,7 +178,7 @@ mix deps.get
 mix compile
 mix test
 
-# Build TypeScript components
+# Build  components
 cd SymbolicEngine/swarm
 bun install
 bun build
@@ -328,7 +328,7 @@ The system:
 ```
 Manifest (YAML/TOML)
     ↓
-Parser (TypeScript/Elixir)
+Parser (/Elixir)
     ↓
 CLI Orchestrator (Elixir)
     ↓
@@ -375,7 +375,7 @@ Introspection (Racket)
 1. **Unit Tests**
    - Rust: `cargo test`
    - Elixir: `mix test`
-   - TypeScript: `bun test`
+   - : `bun test`
 
 2. **Integration Tests**
    - Use `tests/run-tests.ps1`
