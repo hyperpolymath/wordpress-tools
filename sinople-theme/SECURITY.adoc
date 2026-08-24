@@ -1,0 +1,202 @@
+== Security Policy
+
+=== Supported Versions
+
+[cols=",",options="header",]
+|===
+|Version |Supported
+|1.0.x |:white_check_mark:
+|< 1.0 |:x:
+|===
+
+=== Security Philosophy
+
+The Sinople WordPress theme follows a *defense-in-depth* approach with
+multiple security layers:
+
+[arabic]
+. *Memory Safety*: Rust WASM module (zero `+unsafe+` blocks)
+. *Type Safety*: bindings (sound type system)
+. *Input Sanitization*: All WordPress inputs sanitized
+. *Output Escaping*: All outputs escaped (XSS prevention)
+. *CSRF Protection*: Nonces for all form submissions
+. *Capability Checks*: WordPress role-based access control
+. *SQL Injection Prevention*: WordPress prepared statements
+. *Content Security Policy*: Recommended CSP headers
+. *Offline-First*: Minimal attack surface (local WordPress)
+. *Dependency Auditing*: Minimal dependencies, vetted sources
+
+=== Reporting a Vulnerability
+
+*DO NOT* open a public GitHub issue for security vulnerabilities.
+
+==== Preferred Method: Security Advisory
+
+Use GitHub’s
+https://github.com/Hyperpolymath/wp-sinople-theme/security/advisories/new[Security
+Advisories] to privately report vulnerabilities.
+
+==== Alternative Method: Email
+
+Email security reports to: *security@sinople.org* (or maintainer email
+if unavailable)
+
+Use PGP encryption for sensitive disclosures (key available at
+`+.well-known/security.txt+`).
+
+==== What to Include
+
+Please provide:
+
+[arabic]
+. *Type of vulnerability* (XSS, CSRF, injection, etc.)
+. *Affected component* (WASM, PHP, , JavaScript, etc.)
+. *Affected versions* (1.0.0, 1.0.1, etc.)
+. *Steps to reproduce* (detailed, with code samples if possible)
+. *Proof of concept* (if applicable, responsibly disclosed)
+. *Suggested fix* (optional, but appreciated)
+. *Impact assessment* (low, medium, high, critical)
+
+==== Response Timeline
+
+* *24 hours*: Acknowledgment of report
+* *72 hours*: Initial assessment and severity classification
+* *7 days*: Patch development (for high/critical issues)
+* *14 days*: Coordinated disclosure and release
+* *30 days*: Public disclosure (if fix is available)
+
+==== Disclosure Policy
+
+We follow *coordinated disclosure*:
+
+[arabic]
+. You report vulnerability privately
+. We acknowledge and investigate
+. We develop and test a patch
+. We coordinate release timing with you
+. We release patch and credit you (if desired)
+. Public disclosure after users have time to update
+
+==== Security Advisories
+
+All security issues will be documented in:
+
+* GitHub Security Advisories
+* CHANGELOG.md (with CVE if applicable)
+* Release notes
+
+==== Bug Bounty
+
+We currently *do not* have a bug bounty program, but we:
+
+* Credit all security researchers (with permission)
+* List contributors in SECURITY.md
+* Provide attribution in release notes
+* Recommend researchers for recognition in wider community
+
+=== Security Best Practices for Users
+
+==== WordPress Configuration
+
+[arabic]
+. *Keep WordPress updated* (6.0+ required)
+. *Use HTTPS* (required for WASM/Service Workers)
+. *Enable automatic updates* for security patches
+. *Use strong passwords* (16+ characters, unique)
+. *Enable two-factor authentication* (2FA)
+. *Limit login attempts* (use fail2ban or similar)
+. *Disable XML-RPC* (if not needed)
+. *Use security headers*:
++
+....
+Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+....
+
+==== Theme Configuration
+
+[arabic]
+. *Validate RDF input* (malicious Turtle files)
+. *Sanitize construct/entanglement data*
+. *Limit file uploads* (if accepting ontologies)
+. *Use Content Security Policy* (restrict inline scripts)
+. *Enable WASM sandboxing* (browser default)
+
+==== Server Configuration
+
+[arabic]
+. *Disable directory listing*
+. *Protect wp-config.php* (move outside web root)
+. *Use Web Application Firewall* (ModSecurity, Cloudflare)
+. *Enable fail2ban* (brute force protection)
+. *Regular backups* (automated, off-site)
+. *Monitor logs* (access, error, security logs)
+
+=== Known Security Considerations
+
+==== WASM Module
+
+* *Sandboxed*: Runs in browser sandbox (no file system access)
+* *Memory-safe*: Rust ownership model prevents buffer overflows
+* *No network*: WASM module makes no network calls
+* *Deterministic*: Same input always produces same output
+
+==== WordPress Integration
+
+* *REST API exposure*: Semantic graph API is public (read-only)
+* *Custom post types*: Respect WordPress capability checks
+* *Meta data*: Sanitized on input, escaped on output
+* *Nonces*: All forms use WordPress nonces (CSRF protection)
+
+==== IndieWeb Endpoints
+
+* *Webmention*: Validates source/target before processing
+* *Micropub*: Requires IndieAuth token (OAuth 2.0)
+* *Microformats*: No JavaScript execution risk (passive markup)
+
+==== JavaScript
+
+* *No `+eval()+`*: No dynamic code execution
+* *No `+innerHTML+`*: Use `+textContent+` or DOM APIs
+* *CSP-compliant*: No inline scripts (all external files)
+* *XSS prevention*: All user input escaped before display
+
+=== Security Checklist for Contributions
+
+Before submitting code:
+
+* [ ] All user input is sanitized (`+sanitize_text_field()+`,
+`+sanitize_email()+`, etc.)
+* [ ] All output is escaped (`+esc_html()+`, `+esc_attr()+`,
+`+esc_url()+`, etc.)
+* [ ] SQL queries use prepared statements (WordPress
+`+$wpdb->prepare()+`)
+* [ ] Forms include nonces (`+wp_nonce_field()+`, `+wp_verify_nonce()+`)
+* [ ] Capability checks before privileged operations
+(`+current_user_can()+`)
+* [ ] No hardcoded credentials or secrets
+* [ ] No `+eval()+` or dynamic code execution
+* [ ] No `+unsafe+` blocks in Rust code
+* [ ] Dependencies are from trusted sources
+* [ ] Code has been tested for XSS, CSRF, SQL injection
+
+=== Security Hall of Fame
+
+We thank the following security researchers for responsibly disclosing
+vulnerabilities:
+
+_(None yet - be the first!)_
+
+=== Contact
+
+* *Security Email*: security@sinople.org
+* *PGP Key*: See `+.well-known/security.txt+`
+* *Security Advisories*:
+https://github.com/Hyperpolymath/wp-sinople-theme/security/advisories
+
+'''''
+
+*Last Updated*: 2025-11-22 *Policy Version*: 1.0.0

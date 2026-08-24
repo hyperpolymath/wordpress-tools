@@ -1,0 +1,272 @@
+== WP Praxis Database Schema - Quick Start Guide
+
+=== Installation & Setup
+
+[source,bash]
+----
+cd /home/user/wp-praxis/Core/db-schema
+
+# Install dependencies
+mix deps.get
+
+# Create and setup database
+mix ecto.setup
+
+# This runs:
+#   - mix ecto.create (creates database)
+#   - mix ecto.migrate (runs migrations)
+#   - mix run priv/repo/seeds.exs (loads sample data)
+----
+
+=== Interactive Console
+
+[source,bash]
+----
+# Start interactive Elixir shell with database access
+iex -S mix
+
+# Try these commands:
+iex> SymbolQueries.active_symbols()
+iex> WorkflowQueries.workflow_stats()
+iex> AuditQueries.recent_audits(24)
+----
+
+=== Common Operations
+
+==== Create a Symbol
+
+[source,elixir]
+----
+Symbol.create(%{
+  name: "my_operation",
+  type: "action",
+  context: "wordpress",
+  dispatch_target: "php",
+  description: "My custom operation"
+})
+----
+
+==== Create a Workflow
+
+[source,elixir]
+----
+Workflow.create(%{
+  name: "my_workflow",
+  manifest_path: "/path/to/manifest.yml"
+})
+----
+
+==== Run a Workflow
+
+[source,elixir]
+----
+# Get workflow
+{:ok, workflow} = Workflow.create(%{...})
+
+# Start it
+{:ok, workflow} = Workflow.start(workflow)
+
+# Log events
+Workflow.log_event(workflow, %{type: "started", message: "Beginning execution"})
+
+# Complete it
+Workflow.complete(workflow, "completed")
+----
+
+==== Create an Execution
+
+[source,elixir]
+----
+# Create execution for a symbol in a workflow
+{:ok, execution} = Execution.create(%{
+  workflow_id: workflow.id,
+  symbol_id: symbol.id
+})
+
+# Start execution
+{:ok, execution} = Execution.start(execution)
+
+# Complete with output
+{:ok, execution} = Execution.complete(execution, %{result: "success"})
+----
+
+==== Create and Run Audit
+
+[source,elixir]
+----
+# Create baseline
+{:ok, baseline} = Baseline.create(%{
+  name: "prod_baseline",
+  symbolic_state: %{plugins: ["woocommerce"], theme: "storefront"}
+})
+
+# Run audit
+{:ok, audit} = Audit.create(%{baseline_id: baseline.id})
+{:ok, audit} = Audit.start(audit)
+
+# Complete with deviations
+deviations = [
+  %{type: "plugin_missing", severity: "warning", expected: "woocommerce", actual: nil}
+]
+{:ok, audit} = Audit.complete(audit, deviations)
+----
+
+=== Query Examples
+
+[source,elixir]
+----
+# Get active symbols
+SymbolQueries.active_symbols()
+
+# Search symbols
+SymbolQueries.search_by_name("wordpress")
+
+# Get workflows by status
+WorkflowQueries.by_status("running")
+
+# Get recent audits
+AuditQueries.recent_audits(48)  # last 48 hours
+
+# Get critical audits
+AuditQueries.critical_audits()
+
+# Get workflow statistics
+WorkflowQueries.workflow_stats()
+# => %{total: 10, pending: 2, running: 1, completed: 6, failed: 1, paused: 0}
+----
+
+=== Testing
+
+[source,bash]
+----
+# Run all tests
+mix test
+
+# Run specific test file
+mix test test/schema/symbol_test.exs
+
+# Run with coverage
+mix test --cover
+----
+
+=== Code Formatting
+
+[source,bash]
+----
+# Format all code
+mix format
+
+# Check if code is formatted
+mix format --check-formatted
+----
+
+=== Database Commands
+
+[source,bash]
+----
+# Create database
+mix ecto.create
+
+# Run migrations
+mix ecto.migrate
+
+# Rollback last migration
+mix ecto.rollback
+
+# Reset database (drop, create, migrate)
+mix ecto.reset
+
+# Run seeds
+mix run priv/repo/seeds.exs
+
+# Generate new migration
+mix ecto.gen.migration add_custom_field
+----
+
+=== Project Structure
+
+....
+Core/db-schema/
+├── lib/
+│   └── wp_praxis/
+│       ├── schema/          # Database schemas (5 files)
+│       │   ├── symbol.ex
+│       │   ├── workflow.ex
+│       │   ├── execution.ex
+│       │   ├── baseline.ex
+│       │   └── audit.ex
+│       ├── queries/         # Query modules (3 files)
+│       │   ├── symbol_queries.ex
+│       │   ├── workflow_queries.ex
+│       │   └── audit_queries.ex
+│       ├── application.ex   # Application supervisor
+│       └── repo.ex          # Ecto repository
+├── priv/repo/
+│   ├── migrations/          # Database migrations (5 files)
+│   └── seeds.exs           # Sample data
+├── test/                    # Test suite
+├── config/                  # Configuration files
+└── mix.exs                 # Project definition
+....
+
+=== Integration with WP Praxis
+
+This database schema is used by:
+
+[arabic]
+. *CLI Wrapper* (`+Core/cli-wrapper/+`) - Command-line interface
+. *Runtime* (`+Core/runtime/+`) - Execution orchestration
+. *Symbolic Engine* (`+SymbolicEngine/core/+`) - PowerShell operations
+
+=== Next Steps
+
+[arabic]
+. Review the comprehensive README.md for detailed documentation
+. Explore the schema files in `+lib/wp_praxis/schema/+`
+. Check out query modules in `+lib/wp_praxis/queries/+`
+. Run `+iex -S mix+` to explore the database interactively
+. Read migrations in `+priv/repo/migrations/+` to understand the schema
+
+=== Troubleshooting
+
+*Database connection issues:*
+
+[source,bash]
+----
+# Check PostgreSQL is running
+sudo systemctl status postgresql
+
+# Verify config in config/dev.exs
+----
+
+*Migration errors:*
+
+[source,bash]
+----
+# Check migration status
+mix ecto.migrations
+
+# Rollback and retry
+mix ecto.rollback
+mix ecto.migrate
+----
+
+*Test failures:*
+
+[source,bash]
+----
+# Ensure test database exists
+MIX_ENV=test mix ecto.create
+MIX_ENV=test mix ecto.migrate
+----
+
+=== Documentation
+
+* Full documentation: README.md
+* Schema docs: lib/wp_praxis/schema/
+* Query docs: lib/wp_praxis/queries/
+* CLAUDE.md: Project-wide AI assistant guide
+
+=== Version
+
+0.1.0 (Early development)

@@ -1,0 +1,16 @@
+'''''
+
+== 📚 Further Reading
+
+* link:./docs/ethos.md[`+docs/ethos.md+`] — Sinople’s philosophical
+grounding +
+* link:./docs/spans.md[`+docs/spans.md+`] — Narrative content types and
+structure +
+* link:./docs/style-guide.md[`+docs/style-guide.md+`] — Semantic naming
+and formatting guidance +
+* link:./docs/taxonomy.md[`+docs/taxonomy.md+`] — Symbolic threads and
+motif registry +
+* link:./docs/contributing-philosophy.md[`+docs/contributing-philosophy.md+`]
+— Narrative-oriented collaboration guide +
+* link:./PORTALS.md[`+PORTALS.md+`] — External inspirations and cultural
+references

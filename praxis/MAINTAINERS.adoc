@@ -1,48 +1,213 @@
-// SPDX-License-Identifier: CC-BY-SA-4.0
-// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
-= Maintainers
-:toc: preamble
+== Maintainers
 
-This document lists the maintainers of this project and their responsibilities.
+This document lists the maintainers of the WP Praxis project.
 
-== Current Maintainers
+=== Current Maintainers
 
-[cols="2,3,2",options="header"]
+==== Core Team (Perimeter 1)
+
+Currently establishing. Future core team members will have: - Merge
+access to master branch - Release management authority - Security
+incident response - Governance participation
+
+==== Lead Maintainers
+
+[cols=",,,",options="header",]
 |===
-| Name | Role | Contact
-
-| Jonathan D.A. Jewell
-| Lead Maintainer
-| https://github.com/hyperpolymath[@hyperpolymath]
+|Name |GitHub |Focus Areas |Joined
+|_To be determined_ |- |Overall project direction |-
 |===
 
-== Responsibilities
+=== Component Maintainers
 
-Maintainers are responsible for:
+[cols=",,,",options="header",]
+|===
+|Component |Maintainer |GitHub |Status
+|*PowerShell Engine* |_Seeking maintainer_ |- |🔍 Open
+|*Rust Injector* |_Seeking maintainer_ |- |🔍 Open
+|** Swarm** |_Seeking maintainer_ |- |🔍 Open
+|*Elixir/Ecto Schema* |_Seeking maintainer_ |- |🔍 Open
+|*LFE Manifest Parser* |_Seeking maintainer_ |- |🔍 Open
+|*Racket Introspection* |_Seeking maintainer_ |- |🔍 Open
+|*WordPress Plugin* |_Seeking maintainer_ |- |🔍 Open
+|*GraphQL API* |_Seeking maintainer_ |- |🔍 Open
+|*Dashboard* |_Seeking maintainer_ |- |🔍 Open
+|*Documentation* |_Seeking maintainer_ |- |🔍 Open
+|*Testing Infrastructure* |_Seeking maintainer_ |- |🔍 Open
+|*Build & CI/CD* |_Seeking maintainer_ |- |🔍 Open
+|===
 
-* Reviewing and merging pull requests
-* Triaging issues and feature requests
-* Ensuring code quality and security standards
-* Managing releases and versioning
-* Upholding the project's code of conduct
+=== Becoming a Maintainer
 
-== Becoming a Maintainer
+WP Praxis uses the *Tri-Perimeter Contribution Framework (TPCF)* for
+graduated access.
 
-Contributors who demonstrate:
+==== Path to Component Maintainer (Perimeter 2)
 
-* Consistent, high-quality contributions
-* Understanding of the project's goals and standards
-* Constructive participation in discussions
-* Commitment to the project's long-term health
+*Criteria*: 1. *Expertise*: Demonstrated deep knowledge of the component
+2. *Contributions*: 10+ merged PRs in the component area 3.
+*Consistency*: 6+ months of regular contribution 4. *Review
+Participation*: Actively reviews others’ PRs 5. *Community*: Helps
+others in discussions and issues 6. *Alignment*: Shows alignment with
+project values
 
-May be invited to become maintainers at the discretion of existing maintainers.
+*Responsibilities*: - Review and approve PRs for your component -
+Maintain component documentation - Triage issues for your component -
+Mentor new contributors - Coordinate with other component maintainers -
+Participate in architectural discussions
 
-== Decision Making
+*Benefits*: - Direct commit access to development branches - Listed on
+MAINTAINERS.md - Vote on component-specific decisions - Invitation to
+maintainer meetings (when established)
 
-* Routine decisions (bug fixes, minor improvements) can be made by any maintainer
-* Significant changes require discussion and consensus among maintainers
-* Breaking changes or major features should be discussed in issues before implementation
+==== Path to Core Maintainer (Perimeter 1)
 
-== Contact
+*Criteria* (tentative, not yet established): 1. *Component Maintainer*
+for 12+ months 2. *Cross-Component Knowledge*: Understanding of multiple
+components 3. *Leadership*: Mentored other contributors 4. *Governance*:
+Participated in major decisions 5. *Trust*: Demonstrated judgment and
+responsibility 6. *Availability*: Committed to long-term project health
 
-For questions about project governance, open an issue or contact the maintainers listed above.
+*Additional Responsibilities*: - Release management - Security incident
+response - Roadmap planning - Conflict resolution - Budget decisions (if
+applicable)
+
+=== Maintainer Responsibilities
+
+==== All Maintainers
+
+* ✅ Follow the link:CODE_OF_CONDUCT.md[Code of Conduct]
+* ✅ Review PRs promptly (within 1 week)
+* ✅ Be responsive to issues and discussions
+* ✅ Maintain component documentation
+* ✅ Write clear commit messages
+* ✅ Test changes before merging
+* ✅ Coordinate with other maintainers
+* ✅ Mentor new contributors
+
+==== Code Review Standards
+
+When reviewing PRs, check for:
+
+[arabic]
+. *Functionality*: Does it work as intended?
+. *Tests*: Are there tests? Do they pass?
+. *Documentation*: Are docs updated?
+. *Code Quality*: Follows language standards?
+. *Security*: No security vulnerabilities?
+. *Breaking Changes*: Are they justified and documented?
+. *Performance*: No significant regressions?
+. *Accessibility*: UIs are accessible?
+
+==== Merge Criteria
+
+PRs should only be merged when:
+
+* ✅ All CI checks pass
+* ✅ At least one approving review
+* ✅ No unresolved conversations
+* ✅ Tests cover new functionality
+* ✅ Documentation is updated
+* ✅ CHANGELOG.md is updated
+* ✅ Follows contributing guidelines
+
+==== Communication
+
+Maintainers are expected to:
+
+* *Be Responsive*: Reply to mentions within 48 hours
+* *Be Transparent*: Explain decisions publicly
+* *Be Respectful*: Follow Code of Conduct
+* *Be Patient*: Help beginners learn
+* *Be Collaborative*: Seek consensus on major decisions
+
+=== Maintainer Meetings
+
+*Status*: Not yet established
+
+When the project grows, we may hold regular maintainer meetings:
+
+* *Frequency*: Monthly (tentative)
+* *Format*: Video call + notes
+* *Agenda*: Roadmap, issues, PRs, governance
+* *Minutes*: Published publicly
+
+=== Stepping Down
+
+Maintainers can step down at any time:
+
+[arabic]
+. *Notify*: Email other maintainers or open an issue
+. *Transition*: Help find/train a replacement (if possible)
+. *Remove Access*: Maintainer permissions will be revoked
+. *Alumni Status*: Listed as "`Emeritus Maintainer`" if desired
+
+==== Emeritus Maintainers
+
+Former maintainers who made significant contributions:
+
+[cols=",,,",options="header",]
+|===
+|Name |GitHub |Focus Areas |Tenure
+|_None yet_ |- |- |-
+|===
+
+=== Inactive Maintainers
+
+If a maintainer becomes inactive (no activity for 6+ months):
+
+[arabic]
+. *Reach Out*: Email to check status
+. *Grace Period*: 30 days to respond
+. *No Response*: Move to emeritus status
+. *Return*: Welcome to rejoin anytime
+
+=== Emergency Contacts
+
+For urgent security or operational issues:
+
+* *Security*: security@wp-praxis.dev
+* *Code of Conduct*: conduct@wp-praxis.dev
+* *General*: https://github.com/hyperpolymath/wp-praxis/discussions
+
+=== Governance
+
+*Current Model*: Benevolent Dictatorship (early stage)
+
+*Future Model* (tentative): - Maintainer consensus for major decisions -
+Technical Steering Committee for direction - Community vote for
+governance changes
+
+=== Recognition
+
+Maintainers are recognized through:
+
+* Listing on this page
+* Mention in CHANGELOG.md
+* GitHub organization membership (when created)
+* `+.well-known/humans.txt+` attribution
+* Conference speaking opportunities (if applicable)
+
+=== Want to Help?
+
+We’re actively seeking maintainers for all components!
+
+*Steps to get involved*:
+
+[arabic]
+. *Start Contributing*: Pick an issue and submit a PR
+. *Be Consistent*: Contribute regularly over time
+. *Help Others*: Review PRs, answer questions
+. *Express Interest*: Open a discussion about becoming a maintainer
+. *Demonstrate Expertise*: Show deep knowledge of your component
+
+See CONTRIBUTING.md for more details.
+
+'''''
+
+*Last Updated*: 2025-11-22 *Project Stage*: Early Development (v0.1.0)
+*Status*: Seeking initial maintainers across all components
+
+*Questions?* Contact via
+https://github.com/hyperpolymath/wp-praxis/discussions[Discussions] or
+open an issue.
