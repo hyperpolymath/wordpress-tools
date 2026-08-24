@@ -1,0 +1,75 @@
+== Changelog
+
+All notable changes to `+wordpress-tools+` will be documented in this
+file.
+
+This file is generated from conventional commits by the
+https://github.com/hyperpolymath/standards/blob/main/.github/workflows/changelog-reusable.yml[`+changelog-reusable.yml+`]
+workflow (`+hyperpolymath/standards#206+`). Adopt the workflow in this
+repo’s CI to keep this file in sync automatically — see
+https://github.com/hyperpolymath/standards/blob/main/templates/cliff.toml[`+templates/cliff.toml+`]
+for the canonical config.
+
+The format follows https://keepachangelog.com/en/1.1.0/[Keep a
+Changelog]; this project aims to follow
+https://semver.org/spec/v2.0.0.html[Semantic Versioning].
+
+=== [Unreleased]
+
+==== Added
+
+* feat(crg): add crg-grade and crg-badge justfile recipes
+* feat: add stapeln.toml container definition
+* feat: add UX Justfile with doctor, tour, help-me, assail recipes
+* feat: deploy UX Manifesto infrastructure
+* feat: add CLADE.a2ml — clade taxonomy declaration
+* feat: add mirror.yml workflow for GitLab/Bitbucket mirroring
+* feat: consolidate 5 WordPress repos into wordpress-tools monorepo
+
+==== Fixed
+
+* fix(ci): sync hypatia-scan.yml to canonical (413:
+env.HOME+Phase-2+SARIF) (#22)
+* fix(ci): build Hypatia escript from repo root (estate dogfood drift)
+* fix(ci): rsr-antipattern.yml duplicate heredoc (#19)
+* fix: set correct Groove capability type (was: custom)
+* fix(scorecard): enforce granular permissions and add fuzzing
+placeholder
+* fix(ci): Resolve workflow-linter self-matching and metadata issues
+* fix: resolve panic-attack security findings in sinople theme
+* fix: correct email jonathan.jewell → j.d.a.jewell
+* fix: global AGPL-3.0-or-later → PMPL-1.0-or-later replacement
+* fix: SPDX headers (AGPL→PMPL), email, author name
+
+==== Changed
+
+* refactor: migrate 6SCM → 6A2 (.scm → .a2ml format)
+
+==== Documentation
+
+* docs: record tech-debt audit findings (2026-05-26) (#28)
+* docs(claude): add CLAUDE.md with Exemptions table (#17)
+* docs: add TEST-NEEDS.md (CRG C)
+* docs: add EXPLAINME.adoc — prove-it file backing README claims
+* docs: add 0-AI-MANIFEST.a2ml (RSR compliance)
+
+==== CI
+
+* ci: fix nonexistent actions/upload-artifact SHA pin (#21)
+* ci(antipattern): fix top-level dir matching + benchmarks/lsp/bench
+filename allowlists (#16)
+* ci(antipattern): TS check reads .claude/CLAUDE.md exemption table
+(#15)
+* ci(antipattern): broaden TS allowlist (cli/, mod.ts, lsp-server,
+_vscode_, -*) (#14)
+* ci(antipattern): allowlist legit TS bridge/adapter paths (#13)
+
+=== Pre-history
+
+Prior commits to this file’s introduction are recorded in git history
+but not formally classified into Keep-a-Changelog sections. To backfill,
+run `+git cliff -o CHANGELOG.md+` locally using the canonical
+https://github.com/hyperpolymath/standards/blob/main/templates/cliff.toml[`+cliff.toml+`]
+— this is one-shot mechanical work.
+
+'''''

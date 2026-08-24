@@ -1,0 +1,46 @@
+== 🌐 Portals: External Inspirations
+
+Sinople draws breath from misty edges, poetic archives, and
+decentralized architectures. These portals are references, influences,
+and threads beyond the journal.
+
+'''''
+
+=== 🪞 Semantic & IndieWeb
+
+* https://indieweb.org[IndieWeb.org] — A community for decentralized
+publishing and human-scale web architecture.
+* https://microformats.org[Microformats.org] — Semantic HTML patterns
+for marking up people, entries, and relationships.
+* http://xmlns.com/foaf/0.1/[FOAF Vocabulary] — Friend of a Friend
+ontology for describing people and social graphs.
+* https://www.w3.org/2004/02/skos/[SKOS] — Simple Knowledge Organization
+System, perfect for gloss and thread vocabularies.
+
+'''''
+
+=== 🧵 Poetic Archives
+
+* https://archive.org[The Internet Archive] — A global memory machine of
+forgotten pages and fog-bound texts.
+* https://en.wikipedia.org/wiki/Haunani-Kay_Trask[Haunani-Kay Trask] —
+Voice of indigenous resistance and stitched history.
+* https://www.poetryfoundation.org/poets/maria-sabina[María Sabina’s
+Mushroom Poetry] — The living syllables of veiled agency.
+
+'''''
+
+=== 🐚 Web Folk & Signal Flares
+
+* https://melanierichard.github.io/thread/[Melanie Richard’s `+thread+`]
+— A minimal theme with emotional texture.
+* https://zylstra.org/blog/[Ton Zijlstra] — IndieWeb praxis and semantic
+curiosity.
+* https://maggieappleton.com[Maggie Appleton] — Digital gardens and
+conceptual cartography.
+
+'''''
+
+Want to add your own portal? Submit a glossed link with intent,
+symbolism, or resonance. +
+Portals are not backlinks—they are *threads into other worlds*.

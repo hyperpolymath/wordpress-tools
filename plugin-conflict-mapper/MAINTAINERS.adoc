@@ -1,48 +1,235 @@
-// SPDX-License-Identifier: CC-BY-SA-4.0
-// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
-= Maintainers
-:toc: preamble
+== Maintainers
 
-This document lists the maintainers of this project and their responsibilities.
+This document lists the maintainers of the WP Plugin Conflict Mapper
+project.
 
-== Current Maintainers
+=== Core Maintainers
 
-[cols="2,3,2",options="header"]
+Core maintainers have full commit access and are responsible for project
+direction, releases, and maintenance.
+
+==== Jonathan (Hyperpolymath)
+
+* *GitHub*: https://github.com/Hyperpolymath[@Hyperpolymath]
+* *Role*: Creator, Lead Maintainer
+* *Areas*: Architecture, Security, Performance
+* *Timezone*: UTC
+* *Languages*: English
+
+=== Maintainer Responsibilities
+
+==== All Maintainers
+
+* Review and merge pull requests
+* Triage and respond to issues
+* Ensure code quality and security standards
+* Guide community contributions
+* Maintain documentation
+* Release new versions
+* Enforce Code of Conduct
+
+==== Lead Maintainer Specific
+
+* Set project direction and roadmap
+* Make final decisions on controversial issues
+* Manage security vulnerabilities
+* Coordinate releases
+* Add/remove maintainers
+
+=== Becoming a Maintainer
+
+Maintainers are added through the following process:
+
+==== Criteria
+
+* *Sustained Contribution*: Regular, high-quality contributions over 6+
+months
+* *Community Engagement*: Helpful in issues, PRs, and discussions
+* *Technical Expertise*: Demonstrated deep understanding of the codebase
+* *Reliability*: Consistent, timely responses to project needs
+* *Values Alignment*: Commitment to Code of Conduct and project values
+
+==== Process
+
+[arabic]
+. *Nomination*: Current maintainer nominates candidate
+. *Discussion*: Maintainers discuss candidate’s qualifications
+. *Approval*: Unanimous approval from existing maintainers
+. *Invitation*: Lead maintainer extends invitation
+. *Onboarding*: New maintainer gets access and onboarding
+
+==== New Maintainer Onboarding
+
+* Repository commit access
+* Access to communication channels
+* Introduction to maintainer workflows
+* Mentorship from existing maintainer
+
+=== Maintainer Expectations
+
+==== Time Commitment
+
+* *Minimum*: 2-4 hours per week
+* *Reviews*: Respond to PRs within 72 hours
+* *Issues*: Triage new issues within 48 hours
+* *Security*: Respond to security issues within 24 hours
+
+==== Communication
+
+* Check project channels at least weekly
+* Communicate availability and time off
+* Participate in maintainer discussions
+* Be respectful and professional
+
+==== Decision Making
+
+* *Consensus*: Prefer consensus on major decisions
+* *Disagreement*: Respectful discussion, then vote if needed
+* *Veto*: Lead maintainer has final veto on security/legal issues
+* *Documentation*: Document major decisions in issues/discussions
+
+=== Stepping Down
+
+Maintainers who wish to step down should:
+
+[arabic]
+. Notify other maintainers
+. Recommend a successor (optional)
+. Complete handoff of responsibilities
+. Retain emeritus status (optional)
+
+==== Emeritus Maintainers
+
+Former maintainers who have made significant contributions may be listed
+as emeritus:
+
+_None yet_
+
+=== Inactive Maintainers
+
+Maintainers inactive for 6+ months may be:
+
+[arabic]
+. Contacted to check status
+. Moved to inactive list
+. Have permissions reduced
+
+They can be reinstated upon return.
+
+=== Removing Maintainers
+
+In rare cases, maintainers may be removed for:
+
+* *Code of Conduct violations*
+* *Security breaches*
+* *Sustained inactivity* (12+ months without communication)
+* *Loss of trust* (requires unanimous vote)
+
+Process: 1. Private discussion among other maintainers 2. Attempt to
+resolve issues 3. If unresolved, unanimous vote to remove 4. Private
+notification with reasoning
+
+=== Contributor Ladder
+
+We recognize contribution at multiple levels:
+
+==== 1. Contributor
+
+* Anyone who submits a pull request
+* Listed in GitHub contributors
+
+==== 2. Regular Contributor
+
+* 3+ merged PRs
+* Acknowledged in CHANGELOG
+
+==== 3. Trusted Contributor
+
+* 10+ merged PRs
+* Can be assigned issues
+* Input valued in discussions
+
+==== 4. Committer
+
+* 25+ merged PRs
+* Commit access to feature branches
+* Can approve PRs
+
+==== 5. Maintainer
+
+* Meets maintainer criteria
+* Full commit access
+* Listed in MAINTAINERS.md
+
+=== Contact
+
+* *Public*: Create GitHub issue or discussion
+* *Private*: Email maintainers@hyperpolymath.com
+* *Security*: security@hyperpolymath.com
+* *Code of Conduct*: conduct@hyperpolymath.com
+
+=== Project Governance
+
+==== Governance Model
+
+This project uses a *Benevolent Dictator* model:
+
+* *Lead Maintainer* makes final decisions
+* *Consensus preferred* among all maintainers
+* *Community input* valued and considered
+* *Transparency* in decision-making process
+
+==== Decision Authority
+
+[cols=",,",options="header",]
 |===
-| Name | Role | Contact
-
-| Jonathan D.A. Jewell
-| Lead Maintainer
-| https://github.com/hyperpolymath[@hyperpolymath]
+|Decision Type |Authority |Process
+|Bug fixes |Any maintainer |Review + merge
+|New features |Maintainer consensus |Discussion + vote
+|Breaking changes |Lead + consensus |RFC + community input
+|Security issues |Lead maintainer |Immediate action
+|Maintainer addition |Unanimous vote |Nomination + approval
+|Maintainer removal |Unanimous vote |Discussion + vote
 |===
 
-== Responsibilities
+==== Conflict Resolution
 
-Maintainers are responsible for:
+[arabic]
+. *Discussion*: Talk through disagreement
+. *Mediation*: Another maintainer mediates
+. *Vote*: If unresolved, vote (simple majority)
+. *Final Decision*: Lead maintainer if vote ties
 
-* Reviewing and merging pull requests
-* Triaging issues and feature requests
-* Ensuring code quality and security standards
-* Managing releases and versioning
-* Upholding the project's code of conduct
+=== Tri-Perimeter Contribution Framework (TPCF)
 
-== Becoming a Maintainer
+This project operates under TPCF governance:
 
-Contributors who demonstrate:
+==== Perimeter 1: Core (Trusted)
 
-* Consistent, high-quality contributions
-* Understanding of the project's goals and standards
-* Constructive participation in discussions
-* Commitment to the project's long-term health
+* *Members*: Core maintainers
+* *Access*: Full repository access
+* *Trust*: High - extensive vetting
+* *Permissions*: Merge, release, admin
 
-May be invited to become maintainers at the discretion of existing maintainers.
+==== Perimeter 2: Contributor (Verified)
 
-== Decision Making
+* *Members*: Regular contributors
+* *Access*: Fork and PR workflow
+* *Trust*: Medium - proven track record
+* *Permissions*: Create PRs, review code
 
-* Routine decisions (bug fixes, minor improvements) can be made by any maintainer
-* Significant changes require discussion and consensus among maintainers
-* Breaking changes or major features should be discussed in issues before implementation
+==== Perimeter 3: Community (Sandbox)
 
-== Contact
+* *Members*: Anyone
+* *Access*: Public issues and discussions
+* *Trust*: Low - unvetted
+* *Permissions*: Report issues, participate in discussions
 
-For questions about project governance, open an issue or contact the maintainers listed above.
+Contributors move between perimeters based on demonstrated trust and
+contribution history.
+
+'''''
+
+*Last Updated*: 2025-07-31 *Next Review*: 2026-01-31
+
+For questions about maintainership, email: maintainers@hyperpolymath.com

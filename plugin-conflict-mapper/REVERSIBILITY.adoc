@@ -1,0 +1,514 @@
+== Reversibility Framework
+
+*Project*: WP Plugin Conflict Mapper *Version*: 1.0.0 *Last Updated*:
+2025-07-31 *Principle*: _Every operation can be undone_
+
+'''''
+
+=== Philosophy
+
+Reversibility is a core principle of this project. Users should never
+fear experimentation because mistakes can always be corrected. Every
+significant operation provides a clear path to undo or rollback.
+
+____
+*"`The ability to experiment safely is the foundation of innovation.`"*
+____
+
+This document outlines how reversibility is implemented across all
+aspects of the WP Plugin Conflict Mapper.
+
+'''''
+
+=== Core Reversibility Guarantees
+
+==== 1. Data Operations
+
+All data operations are reversible through:
+
+===== Database Operations
+
+* *Scans*: All scan data is preserved in the database with timestamps
+** _Undo_: Delete scan via admin interface or WP-CLI:
+`+wp conflict-mapper delete-scan <id>+`
+** _Retention_: Scans are retained according to settings (default: 30
+days)
+** _Export_: Export scan data before deletion for archival
+* *Settings Changes*: All settings are stored in WordPress options
+** _Undo_: Revert to previous values in Settings page
+** _Rollback_: Settings are cached; original values shown before save
+** _Reset_: "`Reset to Defaults`" button available on settings page
+
+===== Data Retention
+
+[source,php]
+----
+// Example: Delete old scans programmatically
+do_action('wpcm_cleanup_old_scans', 30); // Delete scans older than 30 days
+----
+
+==== 2. Plugin Operations
+
+WP Plugin Conflict Mapper is *read-only* by design:
+
+* *No Plugin Modification*: We never modify other plugins
+* *No Plugin Deactivation*: We only analyze and report
+* *No Database Changes to Other Plugins*: We use our own tables only
+
+*Reversibility*: Since we don’t make changes to other plugins, there’s
+nothing to reverse. Our impact is purely informational.
+
+==== 3. Configuration Changes
+
+All configuration changes are immediately reversible:
+
+[cols=",,",options="header",]
+|===
+|Setting |Reversal Method |Recovery Time
+|Automatic Scanning |Toggle off in Settings |Immediate
+|Scan Frequency |Change frequency setting |Immediate
+|Email Notifications |Toggle off in Settings |Immediate
+|Alert Threshold |Adjust threshold |Immediate
+|Data Retention |Modify retention period |Immediate
+|===
+
+==== 4. Export Operations
+
+Exports are non-destructive:
+
+* *JSON Export*: Creates file, does not modify database
+* *CSV Export*: Creates file, does not modify database
+* *Reversibility*: Delete exported file; source data unchanged
+
+'''''
+
+=== Installation & Uninstallation
+
+==== Installation Reversibility
+
+*Installation* creates: - Database tables: `+wp_wpcm_scans+`,
+`+wp_wpcm_conflicts+` - WordPress options: Various plugin settings -
+Scheduled tasks: Cron jobs for automatic scans
+
+*Complete Removal*:
+
+[source,bash]
+----
+# 1. Deactivate plugin
+wp plugin deactivate wp-plugin-conflict-mapper
+
+# 2. Delete plugin (with data removal)
+wp plugin delete wp-plugin-conflict-mapper
+
+# Or via WordPress Admin:
+# Plugins → Deactivate → Delete
+----
+
+*Data Cleanup* (on deletion): - Database tables dropped automatically -
+WordPress options removed - Scheduled tasks cleared - Transients deleted
+
+*Partial Removal* (keep data): - Deactivate plugin without deletion -
+Data preserved for future reactivation - Reactivating restores
+functionality with existing data
+
+==== Manual Data Cleanup
+
+If you need to manually remove all plugin data:
+
+[source,sql]
+----
+-- Remove database tables
+DROP TABLE IF EXISTS wp_wpcm_scans;
+DROP TABLE IF EXISTS wp_wpcm_conflicts;
+
+-- Remove options
+DELETE FROM wp_options WHERE option_name LIKE 'wpcm_%';
+
+-- Remove transients
+DELETE FROM wp_options WHERE option_name LIKE '_transient_wpcm_%';
+DELETE FROM wp_options WHERE option_name LIKE '_transient_timeout_wpcm_%';
+
+-- Clear scheduled tasks
+DELETE FROM wp_options WHERE option_name = 'cron' AND option_value LIKE '%wpcm%';
+----
+
+'''''
+
+=== Code-Level Reversibility
+
+==== Git Workflow
+
+All code changes follow reversible workflows:
+
+[arabic]
+. *Feature Branches*: All development on branches, not `+main+`
+* _Undo_: Delete branch before merge
+. *Commits*: Atomic, reversible commits
+* _Undo_: `+git revert <commit>+`
+* _Rollback_: `+git reset --hard <commit>+`
+. *Merge Requests*: Reviewed before merge
+* _Undo_: Close MR before merge
+* _Rollback_: Revert merge commit after merge
+. *Releases*: Tagged, immutable versions
+* _Rollback_: Reinstall previous version
+* _Recovery_: All versions permanently available
+
+==== Database Migrations
+
+All schema changes are versioned and reversible:
+
+[source,php]
+----
+// Example migration pattern
+class WPCM_Migration_001 {
+    public function up() {
+        // Apply changes
+    }
+
+    public function down() {
+        // Revert changes
+    }
+}
+----
+
+'''''
+
+=== User Interface Reversibility
+
+==== Admin Actions
+
+All UI actions are reversible:
+
+[width="100%",cols="19%,34%,47%",options="header",]
+|===
+|Action |Reversal Method |Confirmation Required
+|Run Scan |Delete scan results |No (read-only operation)
+|Delete Scan |Cannot be undone (data loss) |Yes (confirmation dialog)
+|Export Report |Delete exported file |No
+|Change Settings |Revert in Settings page |Yes (save required)
+|Clear Cache |Re-run scan to regenerate |No
+|===
+
+==== Destructive Operations
+
+Only *one destructive operation* exists: *Delete Scan*
+
+* *Confirmation Required*: Yes
+* *Warning Shown*: "`This action cannot be undone`"
+* *Alternative*: Export scan before deletion
+* *Recovery*: None (permanent deletion)
+
+*Best Practice*: Export scans before deletion for archival.
+
+'''''
+
+=== Experimentation Safety
+
+==== Sandbox Environment
+
+Recommended for experimentation:
+
+[arabic]
+. *Staging Site*: Test on non-production WordPress
+. *Local Development*: Use Local by Flywheel, Docker, or similar
+. *Backup*: Always backup before major changes
+
+==== Safe Experiments
+
+These operations are *always safe*:
+
+* Running scans (read-only)
+* Viewing reports (read-only)
+* Exporting data (non-destructive)
+* Changing settings (reversible)
+* Testing WP-CLI commands (with `+--dry-run+` where available)
+
+==== Risk Levels
+
+[cols=",,",options="header",]
+|===
+|Operation |Risk Level |Reversal Difficulty
+|Run Scan |None |N/A (read-only)
+|View Reports |None |N/A (read-only)
+|Export Data |None |Immediate (delete file)
+|Change Settings |Low |Immediate (revert)
+|Delete Scan |Medium |Impossible (permanent)
+|Uninstall Plugin |High |Difficult (restore from backup)
+|===
+
+'''''
+
+=== API & CLI Reversibility
+
+==== REST API
+
+All API endpoints are read-only except:
+
+* `+POST /wpcm/v1/scan+` - Creates scan (reversible: delete scan)
+* `+DELETE /wpcm/v1/scan/{id}+` - Deletes scan (*irreversible*)
+
+==== WP-CLI
+
+CLI commands follow reversible patterns:
+
+[source,bash]
+----
+# Run scan (reversible: delete results)
+wp conflict-mapper scan
+
+# List plugins (read-only)
+wp conflict-mapper list-plugins
+
+# Get report (read-only)
+wp conflict-mapper report <plugin>
+
+# Delete scan (irreversible)
+wp conflict-mapper delete-scan <id>  # Requires --yes flag
+
+# Clear cache (reversible: regenerate)
+wp conflict-mapper clear-cache
+----
+
+*Dry-Run Mode* (future enhancement):
+
+[source,bash]
+----
+wp conflict-mapper <command> --dry-run  # Preview without changes
+----
+
+'''''
+
+=== Emergency Recovery
+
+==== Plugin Causes Issues
+
+If the plugin causes problems:
+
+[arabic]
+. *Disable via WordPress Admin*
++
+....
+Plugins → WP Plugin Conflict Mapper → Deactivate
+....
+. *Disable via WP-CLI*
++
+[source,bash]
+----
+wp plugin deactivate wp-plugin-conflict-mapper
+----
+. *Disable via File System*
++
+[source,bash]
+----
+mv wp-content/plugins/wp-plugin-conflict-mapper wp-content/plugins/wp-plugin-conflict-mapper.disabled
+----
+. *Disable via Database*
++
+[source,sql]
+----
+UPDATE wp_options
+SET option_value = ''
+WHERE option_name = 'active_plugins';
+----
+
+==== Data Corruption
+
+If scan data appears corrupt:
+
+[arabic]
+. *Delete Corrupted Scans*
+* Via Admin: Dashboard → Delete Scan
+* Via WP-CLI: `+wp conflict-mapper delete-scan <id>+`
+. *Clear All Cache*
++
+[source,bash]
+----
+wp conflict-mapper clear-cache
+----
+. *Re-run Scan*
+* Fresh scan will regenerate clean data
+. *Nuclear Option*: Truncate tables
++
+[source,sql]
+----
+TRUNCATE TABLE wp_wpcm_scans;
+TRUNCATE TABLE wp_wpcm_conflicts;
+----
+
+==== Database Recovery
+
+If database tables are damaged:
+
+[arabic]
+. *Deactivate Plugin*
+. *Drop Tables Manually* (SQL above)
+. *Reactivate Plugin* (tables recreated)
+
+'''''
+
+=== Version Reversibility
+
+==== Downgrade Procedure
+
+If a new version causes issues:
+
+[arabic]
+. *Export all scan data* (for preservation)
++
+[source,bash]
+----
+wp conflict-mapper export-all --format=json
+----
+. *Deactivate current version*
++
+[source,bash]
+----
+wp plugin deactivate wp-plugin-conflict-mapper
+----
+. *Delete current version*
++
+[source,bash]
+----
+wp plugin delete wp-plugin-conflict-mapper
+----
+. *Install previous version*
+* Download from GitLab releases
+* Upload via WordPress Admin or WP-CLI
+. *Reactivate*
++
+[source,bash]
+----
+wp plugin activate wp-plugin-conflict-mapper
+----
+. *Import data* (if schema compatible)
+
+==== Version Compatibility
+
+* *Forward Compatibility*: New versions preserve old data
+* *Backward Compatibility*: Old versions may not read new schema
+* *Migration Path*: Migrations are always forward-only
+* *Downgrade Risk*: Data loss possible if schema changed
+
+*Best Practice*: Test new versions on staging before production.
+
+'''''
+
+=== Data Export for Archival
+
+Before any major operation, export your data:
+
+==== Via Admin Interface
+
+[arabic]
+. Go to *Conflict Mapper → Reports*
+. Select scan
+. Click *Export JSON* or *Export CSV*
+. Save file securely
+
+==== Via WP-CLI
+
+[source,bash]
+----
+# Export specific scan
+wp conflict-mapper export-scan <id> --format=json > scan-backup.json
+
+# Export all scans
+wp conflict-mapper export-all --format=json > all-scans-backup.json
+----
+
+==== Via Database Backup
+
+[source,bash]
+----
+# Backup plugin tables only
+wp db export - --tables=wp_wpcm_scans,wp_wpcm_conflicts > wpcm-backup.sql
+
+# Full WordPress backup (includes plugin data)
+wp db export full-backup.sql
+----
+
+'''''
+
+=== Audit Trail
+
+All operations are logged for accountability:
+
+* *WordPress Debug Log*: Errors and warnings
+* *Scan History*: All scans preserved with timestamps
+* *Settings Changes*: Not logged (future enhancement)
+
+==== Viewing Audit Trail
+
+[source,bash]
+----
+# View recent scans
+wp conflict-mapper list-scans --fields=id,date,plugin_count,conflicts
+
+# View specific scan details
+wp conflict-mapper get-scan <id>
+----
+
+'''''
+
+=== Reversibility Checklist
+
+Before making changes, verify:
+
+* [ ] Change is necessary and understood
+* [ ] Backup/export performed (if applicable)
+* [ ] Reversal method known
+* [ ] Tested on staging (for major changes)
+* [ ] Confirmation dialog read carefully
+* [ ] Recovery plan in place
+
+'''''
+
+=== Future Enhancements
+
+Planned reversibility improvements:
+
+* [ ] Settings change history (undo/redo)
+* [ ] Scan comparison over time
+* [ ] Automatic backups before destructive operations
+* [ ] Dry-run mode for all CLI commands
+* [ ] Soft-delete with trash/restore functionality
+* [ ] Change log for all operations
+* [ ] Point-in-time recovery
+
+'''''
+
+=== Philosophy Recap
+
+____
+*"`Reversibility enables fearless innovation.`"*
+____
+
+Principles:
+
+[arabic]
+. *No Destructive Defaults*: Safe by default
+. *Clear Warnings*: Destructive operations clearly marked
+. *Easy Rollback*: Simple reversal procedures
+. *Data Preservation*: Export options for all data
+. *Experimentation Encouraged*: Safe sandbox for learning
+
+'''''
+
+=== Contact
+
+Questions about reversibility or recovery?
+
+* *Documentation*: See README.adoc
+* *Issues*:
+https://gitlab.com/Hyperpolymath/wp-plugin-conflict-mapper/-/issues
+* *Emergency Support*: Open issue with `+emergency+` label
+
+'''''
+
+*Remember*: You can always undo, revert, or start over. Experiment
+confidently!
+
+'''''
+
+_Document Version_: 1.0.0 _Last Updated_: 2025-07-31 _Review Period_:
+Quarterly
