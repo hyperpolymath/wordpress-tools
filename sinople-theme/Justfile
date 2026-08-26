@@ -13,11 +13,10 @@ default:
 # BUILD RECIPES
 # ============================================================================
 
-# Build all components (WASM +  + Deno)
+# Build all components (WASM + Deno)
 build:
     @echo "🏗️  Building all components..."
     just build-wasm
-    just build-
     just build-deno
     just assemble
     @echo "✅ Build complete!"
@@ -29,14 +28,6 @@ build-wasm:
     wasm-pack build --target web --out-dir pkg
     @echo "✅ WASM build complete"
 
-# Build  only
-build-:
-    @echo "🔧 Compiling ..."
-    cd  && \
-    npm install && \
-    npx  clean && \
-    npx  build
-    @echo "✅  compilation complete"
 
 # Build Deno application
 build-deno:
@@ -52,7 +43,6 @@ assemble:
     mkdir -p wordpress/assets/js
     cp wasm/semantic_processor/pkg/*.js wordpress/assets/wasm/ || true
     cp wasm/semantic_processor/pkg/*.wasm wordpress/assets/wasm/ || true
-    find /src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; || true
     @echo "✅ Assets assembled"
 
 # Clean all build artifacts
@@ -60,11 +50,8 @@ clean:
     @echo "🧹 Cleaning build artifacts..."
     rm -rf wasm/semantic_processor/target
     rm -rf wasm/semantic_processor/pkg
-    rm -rf /lib
-    rm -rf /node_modules
     rm -rf build
     rm -rf wordpress/assets/wasm/*
-    find wordpress/assets/js -name "*.res.js" -delete || true
     @echo "✅ Clean complete"
 
 # ============================================================================
@@ -74,16 +61,11 @@ clean:
 # Start development mode (watch files)
 dev:
     @echo "🔥 Starting development mode..."
-    @echo "Starting  watch..."
-    cd  && npx  build -w &
     @echo "Starting Deno watch..."
     cd deno && deno task dev &
     @echo "Press Ctrl+C to stop"
     wait
 
-# Watch  files only
-watch-:
-    cd  && npx  build -w
 
 # Watch Deno files only
 watch-deno:
@@ -111,10 +93,6 @@ test-rust:
     @echo "Testing Rust code..."
     cd wasm/semantic_processor && cargo test --lib
 
-# Test  code
-test-:
-    @echo "Testing  code..."
-    cd  && npm test || echo "No  tests configured"
 
 # Test Deno code
 test-deno:
@@ -147,10 +125,6 @@ fmt-rust:
     @echo "Formatting Rust code..."
     cd wasm/semantic_processor && cargo fmt
 
-# Lint  code
-lint-:
-    @echo "Linting  code..."
-    cd  && npx  build || echo " type-checks on build"
 
 # Lint PHP code (requires phpcs)
 lint-php:
@@ -180,7 +154,6 @@ audit-rust:
 # Audit NPM dependencies
 audit-npm:
     @echo "Auditing NPM dependencies..."
-    cd  && npm audit || echo "Run 'npm audit fix' if needed"
 
 # Check for known vulnerabilities
 check-vulns:
@@ -265,8 +238,6 @@ stats:
     @echo "====================="
     @echo "Rust:"
     @find wasm -name "*.rs" | xargs wc -l | tail -1
-    @echo ":"
-    @find /src -name "*.res" | xargs wc -l | tail -1 || echo "  0 lines"
     @echo "PHP:"
     @find wordpress -name "*.php" | xargs wc -l | tail -1
     @echo "JavaScript:"
@@ -289,7 +260,6 @@ check-deps:
 install-deps:
     @echo "Installing dependencies..."
     cargo install wasm-pack
-    cd  && npm install
     @echo "✅ Dependencies installed"
 
 # Show help (alias for default)
@@ -317,10 +287,6 @@ ci-build-test: build test
 # EXAMPLE RECIPES
 # ============================================================================
 
-# Run example (loads sample ontology)
-example:
-    @echo "Running example..."
-    cd  && node src/examples/example.res.js || echo "Build  first: just build-"
 
 # Serve WordPress locally (requires local WordPress)
 serve:
@@ -336,14 +302,12 @@ serve:
 update:
     @echo "Updating dependencies..."
     cd wasm/semantic_processor && cargo update
-    cd  && npm update
     @echo "✅ Dependencies updated"
 
 # Check for outdated dependencies
 outdated:
     @echo "Checking for outdated dependencies..."
     cd wasm/semantic_processor && cargo outdated || cargo install cargo-outdated && cargo outdated
-    cd  && npm outdated || true
 
 # ============================================================================
 # ADVANCED RECIPES
