@@ -120,10 +120,9 @@ case "${1:-all}" in
         wait
         ;;
     *)
-        echo "Usage: ./dev.sh [deno|wasm|sync|all]"
+        echo "Usage: ./dev.sh [deno|wasm|all]"
         echo ""
         echo "Commands:"
-        echo "    - Watch  files only"
         echo "  deno      - Start Deno Fresh dev server only"
         echo "  wasm      - Rebuild WASM module once"
         echo "  sync      - Sync compiled assets to WordPress"
