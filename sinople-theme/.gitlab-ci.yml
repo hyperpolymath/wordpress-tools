@@ -64,33 +64,15 @@ build:wasm:
     key: rust-wasm-${CI_COMMIT_REF_SLUG}
     paths:
       - wasm/semantic_processor/target/
-build::
-  stage: build
-  image: node:${NODE_VERSION}
-  script:
-    - cd 
-    - npm install
-    - npx  clean
-    - npx  build
-  artifacts:
-    paths:
-      - /src/**/*.res.js
-    expire_in: 1 day
-  cache:
-    key: node--${CI_COMMIT_REF_SLUG}
-    paths:
-      - /node_modules/
 build:theme:
   stage: build
   dependencies:
     - build:wasm
-    - build:
   script:
     - mkdir -p wordpress/assets/wasm
     - mkdir -p wordpress/assets/js
     - cp wasm/semantic_processor/pkg/*.js wordpress/assets/wasm/ || true
     - cp wasm/semantic_processor/pkg/*.wasm wordpress/assets/wasm/ || true
-    - find /src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; || true
     - echo "✅ Theme assembled"
   artifacts:
     paths:
@@ -216,7 +198,6 @@ cache:
   paths:
     - .cargo/
     - wasm/semantic_processor/target/
-    - /node_modules/
 # ============================================================================
 # WORKFLOW RULES
 # ============================================================================
