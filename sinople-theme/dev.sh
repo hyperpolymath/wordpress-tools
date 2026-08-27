@@ -32,20 +32,6 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM
 
-# Function: Watch 
-watch_() {
-    echo -e "${BLUE}🔧 Starting  watch mode...${NC}"
-    if [ -d "${ROOT_DIR}/" ]; then
-        cd "${ROOT_DIR}/"
-        if [ ! -d "node_modules" ]; then
-            echo "Installing  dependencies..."
-            npm install --silent
-        fi
-        npx  build -w
-    else
-        echo -e "${YELLOW}⚠️   directory not found${NC}"
-    fi
-}
 
 # Function: Watch Deno/Fresh
 watch_deno() {
@@ -98,9 +84,6 @@ echo "======================================"
 echo ""
 
 case "${1:-all}" in
-    )
-        watch_
-        ;;
     deno)
         watch_deno
         ;;
@@ -117,12 +100,6 @@ case "${1:-all}" in
         echo "   Run: ./dev.sh wasm"
         echo ""
 
-        # Start  watcher in background
-        watch_ &
-        _PID=$!
-
-        # Give  a moment to start
-        sleep 2
 
         # Start Deno if available
         if command -v deno &> /dev/null && [ -d "${ROOT_DIR}/deno" ]; then
@@ -134,7 +111,6 @@ case "${1:-all}" in
         echo -e "${GREEN}✨ Development mode active${NC}"
         echo ""
         echo "Processes running:"
-        echo "  -  watcher (PID: ${_PID:-N/A})"
         [ -n "${DENO_PID}" ] && echo "  - Deno Fresh (PID: ${DENO_PID})"
         echo ""
         echo "Press Ctrl+C to stop all processes"
@@ -144,10 +120,9 @@ case "${1:-all}" in
         wait
         ;;
     *)
-        echo "Usage: ./dev.sh [|deno|wasm|sync|all]"
+        echo "Usage: ./dev.sh [deno|wasm|all]"
         echo ""
         echo "Commands:"
-        echo "    - Watch  files only"
         echo "  deno      - Start Deno Fresh dev server only"
         echo "  wasm      - Rebuild WASM module once"
         echo "  sync      - Sync compiled assets to WordPress"

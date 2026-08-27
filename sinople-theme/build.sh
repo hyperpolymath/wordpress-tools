@@ -36,26 +36,6 @@ else
     echo -e "${RED}⚠️  WASM directory not found, skipping${NC}"
 fi
 
-# Step 2: Compile 
-echo -e "${BLUE}🔧 Step 2: Compiling ...${NC}"
-if [ -d "" ]; then
-    cd 
-
-    # Install dependencies if needed
-    if [ ! -d "node_modules" ]; then
-        echo "Installing  dependencies..."
-        npm install
-    fi
-
-    # Compile 
-    npx  clean
-    npx  build
-
-    echo -e "${GREEN}✅  compilation complete${NC}"
-    cd ..
-else
-    echo -e "${RED}⚠️   directory not found, skipping${NC}"
-fi
 
 # Step 3: Bundle Deno application (if applicable)
 echo -e "${BLUE}🦕 Step 3: Bundling Deno application...${NC}"
@@ -91,11 +71,6 @@ if [ -d "wasm/semantic_processor/pkg" ]; then
     cp wasm/semantic_processor/pkg/*.{js,wasm} wordpress/assets/wasm/ 2>/dev/null || true
 fi
 
-# Copy  compiled files
-if [ -d "/src" ]; then
-    echo "Copying  compiled files..."
-    find /src -name "*.res.js" -exec cp {} wordpress/assets/js/ \; 2>/dev/null || true
-fi
 
 # Copy build outputs
 if [ -d "build/" ]; then
