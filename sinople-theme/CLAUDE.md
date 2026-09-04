@@ -447,7 +447,7 @@ opt-level = "z"   # Size optimization
 ```json
 {
   "imports": {
-    "$fresh/": "https:///x/fresh@1.6.0/",
+    "$fresh/": "https://deno.land/x/fresh@1.6.0/",
     "preact": "https://esm.sh/preact@10.19.2",
     "preact/": "https://esm.sh/preact@10.19.2/"
   },
@@ -831,7 +831,7 @@ pub fn load_turtle(&mut self, ttl: &str) -> Result<(), JsValue> {
 
 ```
 // tests/accessibility/wcag-aaa.test.ts
-import { assertEquals } from "https:///std/assert/mod.ts";
+import { assertEquals } from "https://deno.land/std/assert/mod.ts";
 
 .test("All text meets AAA contrast ratio", async () => {
   // Use axe-core or pa11y
@@ -960,7 +960,7 @@ Tests panic without browser `console` object → Always skip with `cargo test --
 - [ & React](https://-lang.org/docs/react/latest/introduction)
 
 ###  & Fresh
-- [ Manual](https:///manual)
+- [Deno Manual](https://deno.land/manual)
 - [Fresh Documentation](https://fresh..dev/docs/introduction)
 
 ### Semantic Web
