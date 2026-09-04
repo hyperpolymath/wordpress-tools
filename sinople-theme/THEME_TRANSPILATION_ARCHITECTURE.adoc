@@ -79,7 +79,7 @@ automatically generate themes from descriptions or screenshots
 
 * ****: HTTP client with fetch API
 * */*: Type-safe scraping logic
-* ** DOM**: HTML parsing (https:///x/deno_dom)
+* **Deno DOM**: HTML parsing (https://deno.land/x/deno_dom)
 * *CSS Parser*: PostCSS or similar
 
 ==== Responsibilities
@@ -582,7 +582,7 @@ export function detectDesignSystem(rules: CSSRule[]): DesignTokens {
 
 ....
 // /lib/dom-analyzer.ts
-import { DOMParser } from "https:///x/deno_dom/-dom-wasm.ts";
+import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
 export async function analyzeDOMStructure(html: string): Promise<DOMStructure> {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -1037,7 +1037,7 @@ end
 
 ....
 // ml/pipeline/training-data-collector.ts
-import { Database } from "https:///x/denodb/mod.ts";
+import { Database } from "https://deno.land/x/denodb/mod.ts";
 
 interface TrainingDataPoint {
   id: string;
@@ -1402,7 +1402,7 @@ This component of the Sinople WordPress Theme is dual-licensed:
 
 ==== Web Scraping
 
-* https:///x/deno_dom[DOM]
+* https://deno.land/x/deno_dom[Deno DOM]
 * https://postcss.org/[PostCSS]
 * https://spdx.org/licenses/[SPDX License List]
 
