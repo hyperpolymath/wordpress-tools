@@ -8,6 +8,7 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
+    open-pull-requests-limit: 0
   - package-ecosystem: "composer"
     directory: "/"
     schedule:
@@ -20,10 +21,12 @@ updates:
       actions:
         patterns:
           - "*"
+    open-pull-requests-limit: 2
   - package-ecosystem: "mix"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 3
   - package-ecosystem: "nix"
     directory: "/"
     schedule:
@@ -32,3 +35,4 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 3
