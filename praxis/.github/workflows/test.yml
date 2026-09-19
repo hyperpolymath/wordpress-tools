@@ -62,7 +62,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup Rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af  # v1
         with:
           toolchain: ${{ env.RUST_VERSION }}
           override: true
@@ -78,27 +78,27 @@ jobs:
             wp_injector/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Check Rust formatting
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505  # v1
         with:
           command: fmt
           args: --manifest-path wp_injector/Cargo.toml --all -- --check
       - name: Run Clippy
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505  # v1
         with:
           command: clippy
           args: --manifest-path wp_injector/Cargo.toml --all-targets --all-features -- -D warnings
       - name: Run Rust tests
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505  # v1
         with:
           command: test
           args: --manifest-path wp_injector/Cargo.toml --all-features --verbose
       - name: Generate coverage report
-        uses: actions-rs/tarpaulin@v0.1
+        uses: actions-rs/tarpaulin@044a1e5bdace8dd2f727b1af63c1d9a1d3572068  # v0.1
         with:
           version: '0.22.0'
           args: '--manifest-path wp_injector/Cargo.toml --out Xml --output-dir tests/coverage'
       - name: Upload Rust coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
         with:
           files: ./tests/coverage/cobertura.xml
           flags: rust
@@ -117,7 +117,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup Elixir
-        uses: erlef/setup-beam@v1
+        uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124  # v1
         with:
           elixir-version: ${{ env.ELIXIR_VERSION }}
           otp-version: ${{ env.OTP_VERSION }}
@@ -148,7 +148,7 @@ jobs:
         working-directory: Core/cli-wrapper
         run: mix test --cover
       - name: Upload Elixir coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
         with:
           files: ./Core/db-schema/cover/excoveralls.json
           flags: elixir
@@ -170,7 +170,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
         with:
           php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, xml, mysql, mysqli
@@ -195,7 +195,7 @@ jobs:
         run: |
           if [ -f phpunit.xml ]; then vendor/bin/phpunit --configuration phpunit.xml; fi
       - name: Upload PHP coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
         with:
           files: ./tests/coverage/php-clover.xml
           flags: php
@@ -211,7 +211,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@f4d14e03ff726c06358e5557344e1da148b56cf7  # v1
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Install dependencies (swarm)
@@ -224,7 +224,7 @@ jobs:
         run: bun install || true
         working-directory: SymbolicEngine/dashboard
         run: bun test --coverage || true
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
         with:
           files: ./SymbolicEngine/swarm/coverage/coverage-final.json
   # E2E Tests
@@ -267,7 +267,7 @@ jobs:
           echo "Coverage artifacts downloaded"
           ls -R coverage-artifacts/
       - name: Upload combined coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
         with:
           directory: ./coverage-artifacts
           flags: combined
