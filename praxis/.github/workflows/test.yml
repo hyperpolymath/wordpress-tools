@@ -97,11 +97,6 @@ jobs:
         with:
           version: '0.22.0'
           args: '--manifest-path wp_injector/Cargo.toml --out Xml --output-dir tests/coverage'
-      - name: Upload Rust coverage
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
-        with:
-          files: ./tests/coverage/cobertura.xml
-          flags: rust
       - name: Upload Rust test results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
@@ -147,11 +142,6 @@ jobs:
       - name: Run Elixir tests (cli-wrapper)
         working-directory: Core/cli-wrapper
         run: mix test --cover
-      - name: Upload Elixir coverage
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
-        with:
-          files: ./Core/db-schema/cover/excoveralls.json
-          flags: elixir
   # PHP Tests
   php-tests:
     name: PHP Tests
@@ -194,11 +184,6 @@ jobs:
       - name: Run PHP unit tests
         run: |
           if [ -f phpunit.xml ]; then vendor/bin/phpunit --configuration phpunit.xml; fi
-      - name: Upload PHP coverage
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
-        with:
-          files: ./tests/coverage/php-clover.xml
-          flags: php
       - name: Upload PHP test results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
@@ -219,14 +204,6 @@ jobs:
         run: bun install
         working-directory: SymbolicEngine/swarm
         run: bun test --coverage
-      - name: Install dependencies (dashboard)
-        working-directory: SymbolicEngine/dashboard
-        run: bun install || true
-        working-directory: SymbolicEngine/dashboard
-        run: bun test --coverage || true
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
-        with:
-          files: ./SymbolicEngine/swarm/coverage/coverage-final.json
   # E2E Tests
   e2e-tests:
     name: End-to-End Tests
@@ -266,12 +243,6 @@ jobs:
         run: |
           echo "Coverage artifacts downloaded"
           ls -R coverage-artifacts/
-      - name: Upload combined coverage
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4
-        with:
-          directory: ./coverage-artifacts
-          flags: combined
-          fail_ci_if_error: false
   # Test Summary
   test-summary:
     name: Test Summary
