@@ -3,16 +3,8 @@
   "version": "0.1.0",
   "description": "WP Praxis Symbolic Engine Dashboard - Real-time monitoring and control interface",
   "type": "module",
-  "main": "src/api-server.ts",
   "scripts": {
-    "dev": "bun run --watch src/api-server.ts",
-    "start": "bun run src/api-server.ts",
-    "build": "bun build src/api-server.ts --outdir=dist --target=bun",
-    "build:frontend": "bun build js/dashboard.ts js/workflow-visualizer.ts js/symbol-inspector.ts --outdir=dist/public/js --target=browser",
-    "build:injector": "bun build injector/js/injector.ts --outdir=dist/public/injector/js --target=browser",
-    "build:all": "bun run build && bun run build:frontend && bun run build:injector",
     "test": "bun test",
-    "lint": "eslint src/**/*.ts js/**/*.ts injector/**/*.ts",
     "format": "prettier --write \"**/*.{ts,js,json,css,html}\""
   },
   "dependencies": {
