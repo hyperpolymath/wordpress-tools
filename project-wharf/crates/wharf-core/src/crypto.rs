@@ -825,7 +825,8 @@ mod tests {
     fn test_keypair_encrypted_roundtrip() {
         let keypair = generate_hybrid_keypair().unwrap();
         let pubkey_before = hybrid_public_key(&keypair);
-        let password = b"test-password-wharf";
+        // Not a credential: fixed test fixture for password-based keypair encryption.
+        let password = b"test-password-wharf"; // scanner-allow: rust-secrets
 
         let encrypted = serialize_keypair(&keypair, password).unwrap();
         let restored = deserialize_keypair(&encrypted, password).unwrap();
