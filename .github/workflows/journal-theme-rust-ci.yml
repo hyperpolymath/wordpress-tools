@@ -14,7 +14,8 @@ on:
       - 'journal-theme/**'
       - '.github/workflows/journal-theme-rust-ci.yml'
 
-permissions: contents: read
+permissions:
+  contents: read
 
 env:
   CARGO_TERM_COLOR: always
