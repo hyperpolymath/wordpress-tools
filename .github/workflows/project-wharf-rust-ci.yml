@@ -1,11 +1,30 @@
 # SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
-name: Rust CI
-on: [push, pull_request]
+#
+# Promoted from project-wharf/.github/workflows/rust-ci.yml (only root
+# workflows run in this repo; the vendored copy is upstream history).
+name: Project Wharf Rust CI
+
+on:
+  push:
+    paths:
+      - 'project-wharf/**'
+      - '.github/workflows/project-wharf-rust-ci.yml'
+  pull_request:
+    paths:
+      - 'project-wharf/**'
+      - '.github/workflows/project-wharf-rust-ci.yml'
+
 permissions: read-all
+
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -Dwarnings
+
+defaults:
+  run:
+    working-directory: project-wharf
+
 jobs:
   test:
     runs-on: ubuntu-latest

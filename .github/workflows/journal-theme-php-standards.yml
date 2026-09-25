@@ -1,26 +1,28 @@
 # SPDX-License-Identifier: MPL-2.0
-name: PHP/WordPress Standards
+#
+# Promoted from journal-theme/.github/workflows/php-standards.yml (only root
+# workflows run in this repo; the vendored copy is upstream history).
+name: Journal Theme PHP/WordPress Standards
+
 on:
   push:
     branches: [main, develop]
     paths:
-      - '**.php'
-      - 'phpcs.xml.dist'
-      - 'phpstan.neon'
-      - 'composer.json'
-      - 'composer.lock'
-      - '.github/workflows/php-standards.yml'
+      - 'journal-theme/**'
+      - '.github/workflows/journal-theme-php-standards.yml'
   pull_request:
     branches: [main, develop]
     paths:
-      - '**.php'
-      - 'phpcs.xml.dist'
-      - 'phpstan.neon'
-      - 'composer.json'
-      - 'composer.lock'
-      - '.github/workflows/php-standards.yml'
+      - 'journal-theme/**'
+      - '.github/workflows/journal-theme-php-standards.yml'
+
 permissions:
   contents: read
+
+defaults:
+  run:
+    working-directory: journal-theme
+
 jobs:
   phpcs:
     name: WordPress Coding Standards
@@ -53,10 +55,10 @@ jobs:
         run: cs2pr ./phpcs-report.xml
       - name: Upload PHPCS report
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6db9a8b71b5c2d1a090c0daf9c8bb # v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0 (repinned: vendored ea165f8d does not resolve)
         with:
           name: phpcs-report
-          path: phpcs-report.xml
+          path: journal-theme/phpcs-report.xml
   phpstan:
     name: PHPStan Static Analysis
     runs-on: ubuntu-latest
