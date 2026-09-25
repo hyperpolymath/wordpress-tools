@@ -62,7 +62,7 @@
       ],
       "matchPackagePatterns": [
         "^eslint-",
-        "^stylelint-",
+        "^stylelint-"
       ]
     },
     {
