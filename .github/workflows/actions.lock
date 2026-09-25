@@ -16,6 +16,15 @@ workflows:
     '.github/workflows/hypatia-scan.yml': []
     '.github/workflows/instant-sync.yml':
         - 'peter-evans/repository-dispatch@v4.0.1'
+    '.github/workflows/journal-theme-php-standards.yml':
+        - 'actions/cache@5a3ec84eff668545956fd18022155c47e93e2684'
+        - 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd'
+        - 'actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f'
+        - 'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240'
+    '.github/workflows/journal-theme-rust-ci.yml':
+        - 'Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5'
+        - 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd'
+        - 'dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87'
     '.github/workflows/label-triage.yml': []
     '.github/workflows/labels.yml': []
     '.github/workflows/mirror.yml': []
@@ -23,6 +32,13 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/deploy-pages@v5.0.1'
         - 'actions/upload-pages-artifact@v5.0.0'
+    '.github/workflows/plugin-conflict-mapper-php.yml':
+        - 'actions/cache@5a3ec84eff668545956fd18022155c47e93e2684'
+        - 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+    '.github/workflows/project-wharf-rust-ci.yml':
+        - 'Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6'
+        - 'actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11'
+        - 'dtolnay/rust-toolchain@d0592fe69e35bc8f12e3dbaf9ad2694d976cb8e3'
     '.github/workflows/push-email-notify.yml':
         - 'hyperpolymath/smtp-notify-action@v0.3.0'
     '.github/workflows/scorecard.yml': []
@@ -120,3 +136,48 @@ dependencies:
         commit: 'sha1-e83874834305fe9a4a2997156cb26c5de65a8555'
         owner_id: 135788
         repo_id: 208510314
+    'actions/cache@5a3ec84eff668545956fd18022155c47e93e2684':
+        ref: 'v4'
+        commit: 'sha1-5a3ec84eff668545956fd18022155c47e93e2684'
+        owner_id: 44036562
+        repo_id: 215566462
+    'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683':
+        ref: 'v4'
+        commit: 'sha1-11bd71901bbe5b1630ceea73d27597364c9af683'
+        owner_id: 44036562
+        repo_id: 197814629
+    'actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11':
+        ref: 'v4'
+        commit: 'sha1-b4ffde65f46336ab88eb53be808477a3936bae11'
+        owner_id: 44036562
+        repo_id: 197814629
+    'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd':
+        ref: 'v6'
+        commit: 'sha1-de0fac2e4500dabe0009e67214ff5f5447ce83dd'
+        owner_id: 44036562
+        repo_id: 197814629
+    'dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87':
+        ref: 'stable'
+        commit: 'sha1-6bed0761d98439e5a578e2877258200ad565ba87'
+        owner_id: 1940490
+        repo_id: 260749683
+    'dtolnay/rust-toolchain@d0592fe69e35bc8f12e3dbaf9ad2694d976cb8e3':
+        ref: 'stable'
+        commit: 'sha1-d0592fe69e35bc8f12e3dbaf9ad2694d976cb8e3'
+        owner_id: 1940490
+        repo_id: 260749683
+    'Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5':
+        ref: 'v2'
+        commit: 'sha1-779680da715d629ac1d338a641029a2f4372abb5'
+        owner_id: 580492
+        repo_id: 298565987
+    'Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6':
+        ref: 'v2'
+        commit: 'sha1-9d47c6ad4b02e050fd481d890b2ea34778fd09d6'
+        owner_id: 580492
+        repo_id: 298565987
+    'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240':
+        ref: 'v2'
+        commit: 'sha1-f3e473d116dcccaddc5834248c87452386958240'
+        owner_id: 1571086
+        repo_id: 206578964

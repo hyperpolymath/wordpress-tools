@@ -1,12 +1,28 @@
 # SPDX-License-Identifier: MPL-2.0
-name: PHP Composer
+#
+# Promoted from plugin-conflict-mapper/.github/workflows/php.yml (only root
+# workflows run in this repo; the vendored copy is upstream history).
+name: Plugin Conflict Mapper PHP Composer
+
 on:
   push:
     branches: ["main"]
+    paths:
+      - 'plugin-conflict-mapper/**'
+      - '.github/workflows/plugin-conflict-mapper-php.yml'
   pull_request:
     branches: ["main"]
+    paths:
+      - 'plugin-conflict-mapper/**'
+      - '.github/workflows/plugin-conflict-mapper-php.yml'
+
 permissions:
   contents: read
+
+defaults:
+  run:
+    working-directory: plugin-conflict-mapper
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +35,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
-          path: vendor
+          path: plugin-conflict-mapper/vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
