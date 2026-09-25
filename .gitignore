@@ -36,9 +36,14 @@ build/
 **/zig-out/
 **/.zig-cache/
 
-# 
+# ReScript compiler output (sources purged in 2966736; never commit build output)
 /lib/bs/
 **/lib/bs/
+/lib/ocaml/
+**/lib/ocaml/
+*.res.js
+*.res.mjs
+*.bs.js
 /.bsb.lock
 **/.bsb.lock
 
