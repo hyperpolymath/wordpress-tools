@@ -1,6 +1,5 @@
 # This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: MPL-2.0
-# This workflow is managed by gh actions-lock.
 name: Governance
 
 on:
@@ -10,14 +9,20 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
-  actions: read
+  actions: read      # required by the reusable workflow (staleness check reads workflow runs)
   contents: read
 
 jobs:
   governance:
-    uses: hyperpolymath/standards/.github/workflows/governance-reusable.yml@28f7a2cba34c51ebccbc4e99acd4cb7cbe07c71a
+    uses: hyperpolymath/standards/.github/workflows/governance-reusable.yml@da2c748aad55c1a1dcba00b60fe4a35017bc6540
+    # Optional credentialed live-policy audit. governance-reusable@da2c748
+    # declares HYPATIA_SCAN_PAT (fine-grained PAT, Administration: read) as an
+    # optional secret: without it the "Live Actions policy (credentialed
+    # advisory)" job reports a notice instead of running; with it, the live
+    # check actually executes. Passing an absent secret is a no-op.
     secrets:
-      # Optional credentialed live-policy audit ("Live Actions policy"
-      # advisory job). Absent secret => advisory notice, not a red run.
       HYPATIA_SCAN_PAT: ${{ secrets.HYPATIA_SCAN_PAT }}

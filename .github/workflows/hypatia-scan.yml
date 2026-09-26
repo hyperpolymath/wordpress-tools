@@ -1,6 +1,5 @@
 # This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: MPL-2.0
-# This workflow is managed by gh actions-lock.
 name: Hypatia Security Scan
 
 on:
@@ -12,11 +11,19 @@ on:
     - cron: '0 0 * * 0'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
-  actions: read
+  actions: read      # required by the reusable workflow (staleness check reads workflow runs)
   contents: read
+  # MUST be `write`, not `read`. hypatia-scan-reusable.yml declares
+  # `security-events: write` so it can upload SARIF. A called workflow may
+  # never request more than its caller grants: if it does, GitHub rejects the
+  # run at startup, before any job is created — `startup_failure`, zero jobs,
+  # and `gh run view --log-failed` returns "log not found" (standards#451).
   security-events: write
 
 jobs:
   hypatia:
-    uses: hyperpolymath/standards/.github/workflows/hypatia-scan-reusable.yml@84355587cb2a1f86e6882de83514a32db2646e7a
+    uses: hyperpolymath/standards/.github/workflows/hypatia-scan-reusable.yml@da2c748aad55c1a1dcba00b60fe4a35017bc6540
