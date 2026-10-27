@@ -28,7 +28,7 @@ web-sys = { version = "0.3", features = [
 ] }
 js-sys = "0.3"
 getrandom = { version = "0.2", features = ["js"] }
-capnp = "0.19"
+capnp = "0.27"
 capnp-rpc = "0.19"
 
 [profile.release]
